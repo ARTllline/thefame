@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use App\Models\SpecialOffer as SpecialOfferModel;
+use App\Nova\Filters\RegionFilter;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
@@ -74,6 +75,13 @@ class SpecialOffer extends Resource
             BelongsTo::make('Регион', 'region', Region::class)
                 ->sortable()
                 ->rules('required'),
+        ];
+    }
+
+    public function filters(Request $request)
+    {
+        return [
+            new RegionFilter,
         ];
     }
 }

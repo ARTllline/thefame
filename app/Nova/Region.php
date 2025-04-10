@@ -8,6 +8,7 @@ use Laravel\Nova\Resource;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\HasMany;
+use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 
 class Region extends Resource
 {
@@ -31,6 +32,11 @@ class Region extends Resource
     {
         return [
             ID::make()->sortable(),
+
+            Images::make('Изображение', 'main')
+                ->conversionOnIndexView('webp')
+                ->fullSize(),
+
 
             Text::make('Код', 'code')
                 ->sortable()

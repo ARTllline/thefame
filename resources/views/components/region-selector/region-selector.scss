@@ -9,12 +9,16 @@
     width: 100%;
     height: 100vh;
     z-index: 9999; // поверх всего
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     background-color: rgba(97, 76, 62, 0.5); // затемняющий фон
     backdrop-filter: blur(10px); // блюр заднего фона
     -webkit-backdrop-filter: blur(10px); // для Safari
+
+    &--active{
+        display: flex;
+    }
 
     &__content {
         display: flex;

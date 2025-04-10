@@ -13,7 +13,7 @@ class TeamMember extends Resource
     public static $model = \App\Models\TeamMember::class;
     public static $title = 'full_name';
     public static $search = [
-        'id', 'full_name', 'position'
+        'id', 'name', 'position'
     ];
 
     public static function label()

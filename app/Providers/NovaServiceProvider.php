@@ -41,27 +41,18 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         // Загружаем все регионы
         $regions = \App\Models\Region::orderBy('name')->get();
 
-        // Для каждого региона создаём пункт, ведущий на список сервисов через связь
-        $serviceItems = $regions->map(function (\App\Models\Region $region) {
-            return MenuItem::make($region->name)
-                ->path("/resources/services?viaResource=regions&viaResourceId={$region->id}&viaRelationship=services");
-        })->all();
 
         return [
             MenuSection::make(__('Контент'), [
                 MenuItem::resource(\App\Nova\Region::class),
-                MenuItem::resource(\App\Nova\ServiceCategory::class),
                 MenuItem::resource(\App\Nova\Service::class),
-
                 MenuItem::resource(\App\Nova\SpecialOffer::class),
+
+                MenuItem::resource(\App\Nova\ServiceCategory::class),
             ])
                 ->icon('briefcase')
                 ->collapsable(),
 
-            // Здесь динамические вкладки по регионам
-//            MenuSection::make(__('Услуги'), $serviceItems)
-//                ->icon('collection')
-//                ->collapsable(),
 
             MenuSection::make(__('Команда'), [
                 MenuItem::resource(\App\Nova\TeamMember::class),

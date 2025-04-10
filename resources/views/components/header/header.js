@@ -25,9 +25,11 @@ export function header() {
     function handleMenuOpen(){
         if ($container.classList.contains(`${classPrefix}--open`)){
             $container.classList.remove(`${classPrefix}--open`)
+            document.documentElement.classList.remove('no-scroll');
         }
         else {
             $container.classList.add(`${classPrefix}--open`)
+            document.documentElement.classList.add('no-scroll');
         }
     }
 

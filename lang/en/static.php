@@ -17,5 +17,6 @@ return [
     'team'        => 'Our team',
     'contacts'    => 'Contacts',
 
-    'select_locale' => 'Select language'
+    'select_locale' => 'Select language',
+    'select_region' => 'Select region'
 ];

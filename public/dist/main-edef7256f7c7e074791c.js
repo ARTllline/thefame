@@ -14470,8 +14470,10 @@ function header() {
   function handleMenuOpen() {
     if ($container.classList.contains(`${classPrefix}--open`)) {
       $container.classList.remove(`${classPrefix}--open`);
+      document.documentElement.classList.remove('no-scroll');
     } else {
       $container.classList.add(`${classPrefix}--open`);
+      document.documentElement.classList.add('no-scroll');
     }
   }
   function handleHeader() {
@@ -14875,12 +14877,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   regionSelector: function() { return /* binding */ regionSelector; }
 /* harmony export */ });
 const dataPrefix = 'data-region-selector';
-const container = document.querySelector(`[${dataPrefix}]`);
-if (container) {
+const classPrefix = 'region-selector';
+const $container = document.querySelector(`[${dataPrefix}]`);
+if ($container) {
   regionSelector();
 }
 function regionSelector() {
-  const flags = container.querySelectorAll('.region-selector__flag');
+  const flags = $container.querySelectorAll('.region-selector__flag');
   const form = document.getElementById('regionSelectorForm');
   const regionInput = document.getElementById('regionInput');
   flags.forEach(flag => {
@@ -14890,6 +14893,19 @@ function regionSelector() {
       form.submit();
     });
   });
+  const $openButtons = document.querySelectorAll('[data-region-open]');
+  $openButtons.forEach(button => {
+    button.addEventListener('click', e => {
+      e.preventDefault();
+      openModal();
+    });
+  });
+  function openModal() {
+    $container.classList.add(`${classPrefix}--active`);
+  }
+  function closeModal() {
+    $container.classList.remove(`${classPrefix}--active`);
+  }
 }
 
 /***/ }),
@@ -15566,4 +15582,4 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=main-ea75b483196e61338956.js.map
+//# sourceMappingURL=main-edef7256f7c7e074791c.js.map

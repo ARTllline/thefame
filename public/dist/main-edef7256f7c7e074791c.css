@@ -674,6 +674,9 @@ button:focus, input:focus, textarea:focus {
   .button-clip:hover .clip span:nth-child(2) {
     transform: translate(0%, -100%); }
 
+.no-scroll {
+  overflow: hidden; }
+
 /*!*********************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./resources/views/components/base/media-queries.scss ***!
   \*********************************************************************************************************************************************/
@@ -1006,6 +1009,9 @@ button:focus, input:focus, textarea:focus {
       color: var(--headerPinColor);
       fill: var(--headerPinColor);
       border-color: rgba(0, 0, 0, 0.2); }
+      .header--scrolled .header__setting-button--region svg {
+        fill: none;
+        stroke: var(--headerPinColor); }
     .header--scrolled .header__mobile-menu-button {
       color: var(--headerPinColor);
       fill: var(--headerPinColor);
@@ -1027,6 +1033,9 @@ button:focus, input:focus, textarea:focus {
     color: var(--headerPinColor);
     fill: var(--headerPinColor);
     border-color: rgba(0, 0, 0, 0.2); }
+    .header--dark .header__setting-button--region svg {
+      fill: none;
+      stroke: var(--headerPinColor); }
   .header--dark .header__mobile-menu-button {
     color: var(--headerPinColor);
     fill: var(--headerPinColor);
@@ -1092,6 +1101,9 @@ button:focus, input:focus, textarea:focus {
     .header--open .header__menu-list li:nth-child(5) {
       -webkit-animation-delay: 350ms;
       animation-delay: 350ms; } }
+  @media (max-width: 768px) {
+    .header--open .header__menu-list-item a {
+      color: #fff; } }
   .header--open .header__mobile-menu-button {
     z-index: 100; }
   .header--open .header__mobile-menu-wrapper-burger {
@@ -1309,6 +1321,14 @@ button:focus, input:focus, textarea:focus {
       border-color: var(--accent) !important;
       color: var(--accent) !important;
       fill: var(--accent) !important; }
+    .header__setting-button--region {
+      padding: 4px; }
+      .header__setting-button--region:hover svg {
+        stroke: var(--accent) !important; }
+      .header__setting-button--region svg {
+        transition: all 0.4s;
+        fill: none;
+        stroke: #fff; }
 
 /*!**********************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./resources/views/components/locale-selector/locale-selector.scss ***!
@@ -2183,12 +2203,14 @@ button:focus, input:focus, textarea:focus {
   width: 100%;
   height: 100vh;
   z-index: 9999;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   background-color: rgba(97, 76, 62, 0.5);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px); }
+  .region-selector--active {
+    display: flex; }
   .region-selector__content {
     display: flex;
     flex-direction: column;
@@ -2856,4 +2878,4 @@ button:focus, input:focus, textarea:focus {
   cursor: pointer; }
 
 
-/*# sourceMappingURL=main-ea75b483196e61338956.css.map*/
+/*# sourceMappingURL=main-edef7256f7c7e074791c.css.map*/

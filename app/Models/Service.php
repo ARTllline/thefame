@@ -20,6 +20,7 @@ class Service extends Model implements Sortable, HasMedia
     use SortableTrait;
     use InteractsWithMedia;
 
+
     protected $fillable = [
         'region_id',
         'category_id',

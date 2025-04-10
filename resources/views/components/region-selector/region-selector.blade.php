@@ -1,17 +1,22 @@
-@php($classPrefix = 'region-selector')
-@php($dataPrefix = 'data-region-selector')
+@php
+    $classPrefix = 'region-selector';
+    $dataPrefix = 'data-region-selector';
 
-<div {{$dataPrefix}} class="{{$classPrefix}}">
+    $regions = \App\Models\Region::all();
+@endphp
+
+<div {{$dataPrefix}} class="{{$classPrefix}}  @if(isset($showRegionModal) && $showRegionModal) {{$classPrefix}}--active  @endif">
     <div class="{{$classPrefix}}__content">
         <!-- Заголовок модального окна -->
-        <h2 class="{{$classPrefix}}__title">Выберите регион</h2>
+        <h2 class="{{$classPrefix}}__title">{{__('static.select_region')}}</h2>
         <div class="{{$classPrefix}}__flags">
-            <div class="{{$classPrefix}}__flag" data-region="ua">
-                <img src="/img/ua-flag.png" alt="Украина">
-            </div>
-            <div class="{{$classPrefix}}__flag" data-region="dubai">
-                <img src="/img/dubai-flag.png" alt="Дубай">
-            </div>
+            @foreach($regions as  $region)
+                <div class="{{$classPrefix}}__flag" data-region="{{$region->code}}">
+                    <img
+                        src="{{ $region->getFirstMediaUrl('main', 'webp')}}"
+                        alt="{{$region->name}}">
+                </div>
+            @endforeach
         </div>
     </div>
     <!-- Скрытая форма для отправки выбранного региона -->

@@ -17,5 +17,7 @@ return [
     'team' => 'Наша команда',
     'contacts' => 'Контакты',
 
-    'select_locale' => 'Выберите язык'
+    'select_locale' => 'Выберите язык',
+    'select_region' => 'Выберите регион'
+
 ];

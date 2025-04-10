@@ -1,12 +1,13 @@
 const dataPrefix = 'data-region-selector';
-const container = document.querySelector(`[${dataPrefix}]`);
+const classPrefix = 'region-selector';
+const $container = document.querySelector(`[${dataPrefix}]`);
 
-if (container) {
+if ($container) {
     regionSelector();
 }
 
 export function regionSelector() {
-    const flags = container.querySelectorAll('.region-selector__flag');
+    const flags = $container.querySelectorAll('.region-selector__flag');
     const form = document.getElementById('regionSelectorForm');
     const regionInput = document.getElementById('regionInput');
 
@@ -17,4 +18,21 @@ export function regionSelector() {
             form.submit();
         });
     });
+
+    const $openButtons = document.querySelectorAll('[data-region-open]');
+    $openButtons.forEach((button) => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal();
+        });
+    });
+
+
+    function openModal() {
+        $container.classList.add(`${classPrefix}--active`);
+    }
+
+    function closeModal() {
+        $container.classList.remove(`${classPrefix}--active`);
+    }
 }

@@ -28,6 +28,13 @@
         color: var(--headerPinColor);
         fill: var(--headerPinColor);
         border-color: rgba(0, 0, 0, 0.2);
+
+        &--region{
+            svg{
+                fill: none;
+                stroke: var(--headerPinColor);
+            }
+        }
     }
 
     .header__mobile-menu-button {
@@ -123,6 +130,14 @@
             }
 
         }
+    }
+    .header__menu-list-item {
+        @include mobile-screen {
+            a {
+                color: #fff;
+            }
+        }
+
     }
 
     .header__mobile-menu-button {
@@ -477,6 +492,21 @@
             border-color: var(--accent) !important;
             color: var(--accent) !important;
             fill: var(--accent) !important;
+        }
+
+        &--region{
+            padding: 4px;
+
+            &:hover {
+                svg{
+                    stroke:var(--accent) !important;
+                }
+            }
+            svg{
+                transition: all 0.4s;
+                fill: none;
+                stroke: #fff;
+            }
         }
     }
 }

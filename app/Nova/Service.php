@@ -16,36 +16,11 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Outl1ne\NovaSortable\Traits\HasSortableRows;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 
-
+use App\Nova\Filters\RegionFilter;
 class Service extends Resource
 {
     use HasSortableRows;
 
-//    public static function indexQuery(NovaRequest $request, $query)
-//    {
-//        // Пытаемся получить viaResourceId напрямую из query-параметров
-//        $viaResourceId = $request->query('viaResourceId');
-//
-//        // Если не найдено, пробуем извлечь из заголовка Referer
-//        if (!$viaResourceId) {
-//            $referer = $request->headers->get('referer');
-//            if ($referer) {
-//                $parsed = parse_url($referer);
-//                if (isset($parsed['query'])) {
-//                    parse_str($parsed['query'], $queryArray);
-//                    $viaResourceId = $queryArray['viaResourceId'] ?? null;
-//                }
-//            }
-//        }
-//
-//        \Log::info('ТЕСТ-----', [$viaResourceId]);
-//
-//        if ($viaResourceId) {
-//            $query->where('region_id', $viaResourceId);
-//        }
-//
-//        return $query;
-//    }
 
     public static $model = \App\Models\Service::class;
     public static $title = 'title';
@@ -61,6 +36,13 @@ class Service extends Resource
     public static function singularLabel()
     {
         return __('Услугу');
+    }
+
+    public function filters(Request $request)
+    {
+        return [
+            new RegionFilter,
+        ];
     }
 
 

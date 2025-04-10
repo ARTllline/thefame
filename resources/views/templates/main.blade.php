@@ -52,9 +52,8 @@
 
 @include('components.modal.modal')
 @include('components.locale-selector.locale-selector')
-@if(isset($showRegionModal) && $showRegionModal)
-    @include('components.region-selector.region-selector')
-@endif
+@include('components.region-selector.region-selector')
+
 
 <script src="/dist/{{ $js }}"></script>
 

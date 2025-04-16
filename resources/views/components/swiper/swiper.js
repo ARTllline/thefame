@@ -51,6 +51,7 @@ export function initOfferSlider(swiperClass) {
         }
     });
 }
+
 export function initReviewSlider(swiperClass) {
     console.log('initOfferSlider swiperINIT');
     const swiper = new Swiper("." + swiperClass, {
@@ -90,6 +91,7 @@ export function initReviewSlider(swiperClass) {
         }
     });
 }
+
 export function initCertSlider(swiperClass) {
     console.log('initOfferSlider swiperINIT');
     const swiper = new Swiper("." + swiperClass, {
@@ -134,7 +136,57 @@ export function initCertSlider(swiperClass) {
     });
 }
 
-export function initBannerSlider(swiperClass){
+export function initAboutSlider(swiperClass) {
+    const swiper = new Swiper("." + swiperClass, {
+        slidesPerView: 1,
+        spaceBetween: 0,
+
+        watchSlidesProgress: true,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+    });
+
+}
+
+export function initDeviceSlider(swiperClass, swiperPrevClass) {
+    console.log('initDeviceSlider swiperINIT');
+
+    const swiperPrev = new Swiper("." + swiperPrevClass, {
+        spaceBetween: 10,
+        slidesPerView: 4,
+        freeMode: true,
+        watchSlidesProgress: true,
+    });
+
+    const swiper = new Swiper("." + swiperClass, {
+        slidesPerView: 1,
+        spaceBetween: 15,
+        watchSlidesProgress: true,
+        effect: "fade",
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        thumbs: {
+            swiper: swiperPrev,
+        },
+    });
+
+
+}
+
+export function initBannerSlider(swiperClass) {
     console.log('initBannerSliderINIT')
 
     console.log(swiperClass)
@@ -156,7 +208,7 @@ export function initBannerSlider(swiperClass){
                 translate: [0, -400, 0],
             },
             next: {
-                translate: [0, "100%" , 0],
+                translate: [0, "100%", 0],
             },
         },
     });

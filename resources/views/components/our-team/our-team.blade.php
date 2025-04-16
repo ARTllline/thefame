@@ -30,6 +30,13 @@
                     <div class="{{$classPrefix}}__card-role">
                         {{$member->position}}
                     </div>
+                    @if($member->link)
+                        <a class="link {{$classPrefix}}__card-link" href="{{$member->link}}">{{__('static.more')}}
+                            <svg class="{{$classPrefix}}__card-link-icon">
+                                <use xlink:href="#link"></use>
+                            </svg>
+                        </a>
+                    @endif
                 </div>
             </div>
         @endforeach

@@ -15,6 +15,7 @@
                     <img
                         src="{{ $region->getFirstMediaUrl('main', 'webp')}}"
                         alt="{{$region->name}}">
+                    <span class="{{$classPrefix}}__name">{{$region->name}}</span>
                 </div>
             @endforeach
         </div>

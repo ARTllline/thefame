@@ -1,6 +1,6 @@
 
-const classPrefix = 'service-card'
-const dataPrefix = 'data-service-card'
+const classPrefix = 'special-offer-product'
+const dataPrefix = 'data-special-offer-product'
 
 const $container = document.querySelector(`[${dataPrefix}]`)
 

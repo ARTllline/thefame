@@ -114,6 +114,13 @@
             width: 100%;
             height: 100%;
         }
+
+        @include mobile-screen {
+            width: 270px;
+            height: 270px;
+            max-width: 270px;
+            max-height: 270px;
+        }
     }
     &__card-name{
         //background-color: #fafafa;
@@ -141,5 +148,38 @@
         line-height: 1.3;
         color: var(--secondaryText);
         text-align: center;
+    }
+
+    &__card-link {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 4px;
+
+        font-style: normal;
+        font-weight: 800;
+        font-size: 18px;
+        line-height: 25px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--accent);
+
+        svg{
+            width: 26px;
+            height: 26px;
+            stroke: var(--accent);
+            fill: none;
+        }
+
+        &:hover{
+            svg{
+                stroke: var(--link-hover-color);
+            }
+        }
+
+        @include mobile-screen {
+            //display: none;
+        }
     }
 }

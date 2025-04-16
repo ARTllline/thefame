@@ -1,7 +1,7 @@
 @extends('templates.main')
 
 @section('meta_title')
-   Главная
+    {{$offer->title}}
 @endsection
 
 @section('meta_description')

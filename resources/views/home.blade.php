@@ -1,7 +1,7 @@
 @extends('templates.main')
 
 @section('meta_title')
-    Главная
+    The Fame
 @endsection
 
 @section('meta_description')
@@ -11,7 +11,7 @@
     @include('components.main-banner.main-banner')
 
     @include('components.special-offer.special-offer', ['specialOffers' => $specialOffers])
-    @include('components.main-about.main-about')
+    @include('components.main-about.main-about', ['about'=>$about])
 {{--    @include('components.certificates.certificates')--}}
 {{--    @include('components.review.review')--}}
 

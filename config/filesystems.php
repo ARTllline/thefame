@@ -44,6 +44,22 @@ return [
             'throw' => false,
         ],
 
+        'banners' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
+        'abouts' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
         'categories' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
@@ -51,6 +67,15 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
+
+        'devices' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
         'regions' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

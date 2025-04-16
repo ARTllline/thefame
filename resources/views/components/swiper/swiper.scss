@@ -13,6 +13,19 @@
     @include mobile-screen {
         padding-bottom: 50px !important;
     }
+
+    &--hidden{
+        overflow: hidden!important;
+        padding-bottom: 0px !important;
+
+        .slider-button-prev {
+            left: 5px
+        }
+        .slider-button-next {
+            right: 5px
+        }
+    }
+
 }
 
 .swiper-wrapper {

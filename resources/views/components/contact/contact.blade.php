@@ -1,5 +1,13 @@
-@php($classPrefix ='contact')
-@php($dataPrefix ='data-contact')
+@php
+    $classPrefix ='contact';
+    $dataPrefix ='data-contact';
+  $links = \App\Models\SocialLink::where(function ($query) use ($currentRegion) {
+                $query->whereHas('region', function ($query) use ($currentRegion) {
+                    $query->where('code', $currentRegion);
+                })->orWhereDoesntHave('region');
+            })->get();
+   $callUs = \App\Models\CallUs::first();
+@endphp
 
 <div {{$dataPrefix}} class="{{$classPrefix}}">
     <h1 class="{{$classPrefix}}__title">
@@ -9,23 +17,29 @@
     <div class="{{$classPrefix}}__container">
         <div class="{{$classPrefix}}__container-top">
             <div class="{{$classPrefix}}__container-phone">
-                <a class="link link--anim"  href="#">+38 073 911 9111</a>
+                <a class="link link--anim"  href="#">
+                    @if($currentRegion == 'dubai')
+                        {{$callUs->phone_dubai}}
+                    @else
+                        {{$callUs->phone_ua}}
+                    @endif
+                </a>
             </div>
             <div class="{{$classPrefix}}__container-mail">
-                <a class="link link--anim" href="#">stalingrada@thefame.ua</a>
+                <a class="link link--anim" href="#">
+                    @if($currentRegion == 'dubai')
+                        {{$callUs->email_dubai}}
+                    @else
+                        {{$callUs->email_ua}}
+                    @endif
+                </a>
             </div>
         </div>
         <div class="{{$classPrefix}}__container-bot">
-            <a class="link link--anim {{$classPrefix}}__container-social" href="https://t.me/kulbachny" rel="nofollow, noindex" target="_blank">
-                Telegram</a>
-            <a class="link link--anim {{$classPrefix}}__container-social" href="https://www.instagram.com/" rel="nofollow, noindex" target="_blank">
-                Instagram</a>
-            <a class="link link--anim {{$classPrefix}}__container-social" href="https://www.facebook.com/" rel="nofollow, noindex" target="_blank">
-                Facebook</a>
-            <a class="link link--anim {{$classPrefix}}__container-social" href="https://www.whatsapp.com/" rel="nofollow, noindex" target="_blank">
-                WhatsApp</a>
-            <a class="link link--anim {{$classPrefix}}__container-social" href="https://www.viber.com/" rel="nofollow, noindex" target="_blank">
-                Viber</a>
+            @foreach($links as $link)
+                <a class="link link--anim {{$classPrefix}}__container-social" href="{{$link->url}}" rel="nofollow, noindex" target="_blank">
+                    {{$link->platform}}</a>
+            @endforeach
         </div>
     </div>
 

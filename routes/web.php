@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\RegionController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,12 +24,13 @@ Route::middleware(['check.region'])->group(function () {
     Route::get('/team', [\App\Http\Controllers\RouteController::class, 'showTeam'])->name('team');
     Route::get('/about', [\App\Http\Controllers\RouteController::class, 'showAbout'])->name('about');
     Route::get('/contact', [\App\Http\Controllers\RouteController::class, 'showContact'])->name('contact');
-
+    Route::get('/devices', [\App\Http\Controllers\RouteController::class, 'showDevices'])->name('devices');
     Route::get('/special-offer/{offer}', [\App\Http\Controllers\RouteController::class, 'showSpecialOffer'])->name('special-offer');
-
 });
 
 
+// Пример для веб-маршрутов
+Route::post('/appointment', [AppointmentController::class, 'store'])->name('appointments.store');
 
 Route::post('/select-locale', [\App\Http\Controllers\LanguageController::class, 'switchLanguage'])->name('locale.set');
 Route::post('/select-region', [RegionController::class, 'set'])->name('region.set');

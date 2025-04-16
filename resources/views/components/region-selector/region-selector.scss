@@ -40,6 +40,15 @@
         margin-top: 14px;
     }
 
+    &__name{
+        color: #fff;
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 1.2em;
+        letter-spacing: .4em;
+        text-transform: uppercase;
+    }
+
     &__flags {
         display: flex;
         gap: 50px;
@@ -47,22 +56,36 @@
         @include mobile-screen {
             flex-direction: column;
             gap: 20px;
+            align-items: start;
         }
     }
 
     &__flag {
         cursor: pointer;
         transition: transform 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        align-items: center;
+
         img {
             display: block;
             width: 250px;
             height: 100%;
             object-fit: cover;
             border-radius: 8px;
-            box-shadow: var(--basicShadow);
+            //box-shadow: var(--basicShadow);
         }
         &:hover {
             transform: scale(1.05);
+        }
+
+        @include mobile-screen {
+            flex-direction: row;
+            img {
+                width: 50px;
+                border-radius: 2px;
+            }
         }
     }
 }

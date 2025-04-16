@@ -2,7 +2,9 @@
 
 namespace App\Nova;
 
+use App\Nova\Filters\RegionFilter;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Laravel\Nova\Fields\Text;
@@ -26,6 +28,13 @@ class TeamMember extends Resource
         return __('Член команды');
     }
 
+    public function filters(Request $request)
+    {
+        return [
+            new RegionFilter,
+        ];
+    }
+
     public function fields(Request $request)
     {
         return [
@@ -42,6 +51,31 @@ class TeamMember extends Resource
             Text::make(__('Должность'), 'position')
                 ->sortable()
                 ->rules('required', 'max:255'),
+
+            Text::make('Ссылка', 'link')
+                ->displayUsing(function ($value) {
+                    if (!$value) return null;
+                    return "<a href=\"{$value}\" target=\"_blank\"
+            style=\"
+                display:inline-block;
+                background-color:#3490dc;
+                color:white;
+                padding:6px 12px;
+                border-radius:6px;
+                text-decoration:none;
+                box-shadow:0 2px 6px rgba(0,0,0,0.2);
+                font-weight:600;
+                font-size:14px;
+            \"
+        >
+            ПЕРЕЙТИ
+        </a>";
+                })
+                ->asHtml(),
+
+            BelongsTo::make('Регион', 'region', Region::class)
+                ->sortable()->nullable()
+
         ];
     }
 }

@@ -53,4 +53,17 @@ class Region extends Resource
             HasMany::make('Услуги', 'services', Service::class),
         ];
     }
+
+    public static function authorizedToCreate(Request $request)
+    {
+        return false;
+    }
+    public function authorizedToReplicate(Request $request)
+    {
+        return false;
+    }
+    public function authorizedToDelete(Request $request)
+    {
+        return false;
+    }
 }

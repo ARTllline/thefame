@@ -1,7 +1,7 @@
 @extends('templates.main')
 
 @section('meta_title')
-   Главная
+    {{__('static.team')}}
 @endsection
 
 @section('meta_description')

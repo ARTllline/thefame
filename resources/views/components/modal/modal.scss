@@ -57,6 +57,12 @@
         width: 510px;
         transition: transform cubic-bezier(.37, .72, .57, .98) 400ms;
         transform: translateY(200%);
+
+        @include mobile-screen {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+        }
     }
 
     &__container {
@@ -69,6 +75,12 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+
+        @include mobile-screen {
+            border-radius: 37px 37px 0 0 ;
+            padding: 50px 22px 60px;
+        }
+
     }
 
     &__container-close {

@@ -68,7 +68,7 @@
         flex-direction: column;
         text-align: center;
         margin: 0;
-        max-width: 360px;
+        max-width: 460px;
 
         @include mobile-screen {
             text-align: center;
@@ -80,7 +80,7 @@
     &__container-button {
         margin-top: 50px;
         height: 60px;
-        width: 240px !important;
+        width: fit-content;
         background-color: #cd76aa;
         padding: 0 64px;
         font-size: 18px;

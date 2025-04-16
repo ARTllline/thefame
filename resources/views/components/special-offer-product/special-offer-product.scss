@@ -33,12 +33,12 @@
     }
 }
 
-.service-card {
+.special-offer-product {
     display: flex;
     flex-direction: column;
     width: 100%;
     margin: 0 auto;
-    max-width: 1030px;
+    max-width: 1160px;
     align-items: center;
 
     @include mobile-screen {

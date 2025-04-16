@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Service;
 use App\Models\SpecialOffer;
 use App\Models\TeamMember;
+use App\Models\Device;
+use App\Models\About;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
@@ -18,26 +20,35 @@ class RouteController extends Controller
 
         $region = $request->session()->get('region', 'ua');
 
-        $specialOffers = SpecialOffer::whereHas('region', function ($query) use ($region) {
-            $query->where('code', $region);
-        })
-            ->ordered()
+        $specialOffers = SpecialOffer::where(function ($query) use ($region) {
+            $query->whereHas('region', function ($query) use ($region) {
+                $query->where('code', $region);
+            })->orWhereDoesntHave('region');
+        })->ordered()
             ->get();
 
-        return view('home', compact('specialOffers'));
+        $about = About::where('code', 'main')->first();
+
+        return view('home', compact('specialOffers', 'about'));
 
     }
 
-    public function showTeam()
+    public function showTeam(Request $request)
     {
-        $team = TeamMember::ordered()->get();
+        $region = $request->session()->get('region', 'ua');
+        $team = TeamMember::where(function ($query) use ($region) {
+            $query->whereHas('region', function ($query) use ($region) {
+                $query->where('code', $region);
+            })->orWhereDoesntHave('region');
+        })->ordered()->get();
         return view('team', compact('team'));
     }
 
     public function showAbout()
     {
+        $about = About::where('code', 'full')->first();
 
-        return view('about');
+        return view('about', compact('about'));
     }
 
     public function showContact()
@@ -50,13 +61,32 @@ class RouteController extends Controller
         $region = $request->session()->get('region', 'ua');
 
         $services = Service::with(['category', 'variants'])
-            ->whereHas('region', function ($query) use ($region) {
-                $query->where('code', $region);
+            ->where(function ($query) use ($region) {
+                $query->whereHas('region', function ($query) use ($region) {
+                    $query->where('code', $region);
+                })->orWhereDoesntHave('region');
             })
             ->ordered()
             ->get();
 
         return view('services', compact('services', 'region'));
+    }
+
+    public function showDevices(Request $request)
+    {
+
+        $region = $request->session()->get('region', 'ua');
+
+        $devices = Device::where(function ($query) use ($region) {
+                $query->whereHas('region', function ($query) use ($region) {
+                    $query->where('code', $region);
+                })->orWhereDoesntHave('region');
+            })
+            ->ordered()
+            ->get();
+
+        return view('devices', compact('devices'));
+
     }
 
     public function showService(Service $service, Request $request)

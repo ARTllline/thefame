@@ -180,7 +180,7 @@
     }
     &__product-button {
         height: 60px;
-        width: 240px !important;
+        width: fit-content;
         background-color: var(--brightAccent);
 
         @include mobile-screen {

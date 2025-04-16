@@ -73,8 +73,7 @@ class SpecialOffer extends Resource
                 ->alwaysShow(),
 
             BelongsTo::make('Регион', 'region', Region::class)
-                ->sortable()
-                ->rules('required'),
+                ->sortable()->nullable(),
         ];
     }
 

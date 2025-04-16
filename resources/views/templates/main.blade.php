@@ -45,6 +45,8 @@
 </head>
 <body>
 
+
+
 @include('parts.icon-sprite')
 @include('components.header.header')
 @yield('content')

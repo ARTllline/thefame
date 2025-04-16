@@ -25,7 +25,6 @@
             <path fill-rule="evenodd" clip-rule="evenodd"
                   d="M210.13 0.220271C287.534 3.51652 332.694 52.3801 378.436 123.332C420.64 188.796 477.185 259.225 456.651 336.924C436.774 412.134 352.563 423.074 290.225 457.116C227.939 491.13 146.035 521.764 80.5597 479.253C27.3351 444.696 29.313 386.646 13.5027 325.165C-7.63119 242.982 -5.26394 173.46 29.9304 108.491C71.3559 32.0186 131.096 -3.14541 210.13 0.220271Z"></path>
         </svg>
-
     </div>
 
     <div class="{{$classPrefix}}__product-content">
@@ -55,11 +54,11 @@
         <div class="{{$classPrefix}}__product-links">
             <button data-modal-open class="button button-clip {{$classPrefix}}__product-button">
              	<span class="clip">
-					<span>Записаться</span>
-					<span>Записаться</span>
+					<span>{{__('static.sign_up')}}</span>
+					<span>{{__('static.sign_up')}}</span>
 				</span>
             </button>
-            <a class="link {{$classPrefix}}__product-link" href="#prices">Узнать цены</a>
+            <a class="link {{$classPrefix}}__product-link" href="#prices">{{__('static.more_price')}}</a>
         </div>
     </div>
 </section>

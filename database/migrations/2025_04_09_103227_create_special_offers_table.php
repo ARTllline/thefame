@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('special_offers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('region_id')
+            $table->foreignId('region_id')->nullable()
                 ->constrained('regions')
                 ->cascadeOnDelete();
             $table->string('code')->nullable();

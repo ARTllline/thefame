@@ -34,12 +34,14 @@
 }
 
 .service-card {
+
     display: flex;
     flex-direction: column;
     width: 100%;
     margin: 0 auto;
-    max-width: 1030px;
+    max-width: 1130px;
     align-items: center;
+
 
     @include mobile-screen {
         margin: 74px auto 0;

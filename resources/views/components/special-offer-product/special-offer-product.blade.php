@@ -1,6 +1,6 @@
 @php
-    $classPrefix = 'service-card';
-    $dataPrefix = 'data-service-card';
+    $classPrefix = 'special-offer-product';
+    $dataPrefix = 'data-special-offer-product';
 @endphp
 
 

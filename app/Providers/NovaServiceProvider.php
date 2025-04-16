@@ -43,27 +43,32 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
 
 
         return [
+            MenuSection::make(__('Уведомления'), [
+                MenuItem::resource(\App\Nova\Appointment::class),
+            ])->icon('bell')
+                ->collapsable(),
+
             MenuSection::make(__('Контент'), [
                 MenuItem::resource(\App\Nova\Region::class),
                 MenuItem::resource(\App\Nova\Service::class),
+                MenuItem::resource(\App\Nova\Device::class),
                 MenuItem::resource(\App\Nova\SpecialOffer::class),
-
-                MenuItem::resource(\App\Nova\ServiceCategory::class),
-            ])
-                ->icon('briefcase')
+            ])->icon('briefcase')
                 ->collapsable(),
-
 
             MenuSection::make(__('Команда'), [
                 MenuItem::resource(\App\Nova\TeamMember::class),
-            ])
-                ->icon('user')
+                MenuItem::resource(\App\Nova\User::class),
+            ])->icon('user')
                 ->collapsable(),
 
-            MenuSection::make(__('Социальные ссылки'), [
+            MenuSection::make(__('Информация'), [
+                MenuItem::resource(\App\Nova\Banner::class),
                 MenuItem::resource(\App\Nova\SocialLink::class),
-            ])
-                ->icon('link')
+                MenuItem::resource(\App\Nova\Location::class),
+                MenuItem::resource(\App\Nova\About::class),
+                MenuItem::resource(\App\Nova\CallUs::class),
+            ])->icon('link')
                 ->collapsable(),
         ];
     }

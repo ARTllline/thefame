@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f01781a49e058bb9c4fce9ed70c3a156",
+    "content-hash": "1df5a132f0f5fe3f166da9c8a1e56f44",
     "packages": [
         {
             "name": "archtechx/enums",
@@ -4731,6 +4731,66 @@
                 }
             ],
             "time": "2025-03-24T10:02:05+00:00"
+        },
+        {
+            "name": "naif/toggle-switch-field",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/naifalshaye/toggle-switch-field.git",
+                "reference": "0db588c60117b33d24e8362a2d72eb624f94cbb5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/naifalshaye/toggle-switch-field/zipball/0db588c60117b33d24e8362a2d72eb624f94cbb5",
+                "reference": "0db588c60117b33d24e8362a2d72eb624f94cbb5",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/nova": "~4.0|~5.0",
+                "php": "^7.3|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Naif\\ToggleSwitchField\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Naif\\ToggleSwitchField\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Naif Alshaye",
+                    "email": "naif@naif.io",
+                    "homepage": "https://www.naif.io"
+                }
+            ],
+            "description": "A Toggle Switch Field for Nova 4.",
+            "homepage": "https://github.com/naifalshaye/toggle-switch-field",
+            "keywords": [
+                "field",
+                "fields",
+                "laravel",
+                "nova4",
+                "nova5",
+                "switch",
+                "toggle",
+                "toggle-switch"
+            ],
+            "support": {
+                "issues": "https://github.com/naifalshaye/toggle-switch-field/issues",
+                "source": "https://github.com/naifalshaye/toggle-switch-field/tree/2.0.0"
+            },
+            "time": "2025-01-05T15:57:26+00:00"
         },
         {
             "name": "nesbot/carbon",

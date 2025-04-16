@@ -20,7 +20,7 @@ class TeamMember extends Model implements Sortable, HasMedia
     use SortableTrait;
     use InteractsWithMedia;
 
-    protected $fillable = ['photo', 'name', 'position', 'order'];
+    protected $fillable = ['region_id', 'name', 'position', 'order', 'link'];
 
     public $sortable = [
         'order_column_name' => 'order',
@@ -43,5 +43,10 @@ class TeamMember extends Model implements Sortable, HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('main')->singleFile()->useDisk('members');
+    }
+
+    public function region()
+    {
+        return $this->belongsTo(Region::class);
     }
 }

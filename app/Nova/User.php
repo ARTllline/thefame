@@ -9,59 +9,38 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Naif\ToggleSwitchField\ToggleSwitchField;
 
 class User extends Resource
 {
-    /**
-     * The model the resource corresponds to.
-     *
-     * @var class-string<\App\Models\User>
-     */
+    public static function indexQuery(NovaRequest $request, $query)
+    {
+        return $query->where('id', '!=', 1);
+    }
+    public static function label()
+    {
+        return __('Пользователи');
+    }
+
+    public static function singularLabel()
+    {
+        return __('Пользователь');
+    }
     public static $model = \App\Models\User::class;
-
-    /**
-     * The single value that should be used to represent the resource when being displayed.
-     *
-     * @var string
-     */
     public static $title = 'name';
-
-    /**
-     * The columns that should be searched.
-     *
-     * @var array
-     */
     public static $search = [
         'id', 'name', 'email',
     ];
 
-    /**
-     * Get the fields displayed by the resource.
-     *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return array
-     */
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
+            Text::make('Id','telegram_id')->sortable(),
+            Text::make('Логин','telegram_login')->sortable(),
+            Text::make('Имя','telegram_name')->sortable(),
 
-            Gravatar::make()->maxWidth(50),
-
-            Text::make('Name')
-                ->sortable()
-                ->rules('required', 'max:255'),
-
-            Text::make('Email')
-                ->sortable()
-                ->rules('required', 'email', 'max:254')
-                ->creationRules('unique:users,email')
-                ->updateRules('unique:users,email,{{resourceId}}'),
-
-            Password::make('Password')
-                ->onlyOnForms()
-                ->creationRules('required', Rules\Password::defaults())
-                ->updateRules('nullable', Rules\Password::defaults()),
+            ToggleSwitchField::make('Отправлять уведомления','is_appointment')
+                ->color('#3AB95A'),
         ];
     }
 
@@ -107,5 +86,18 @@ class User extends Resource
     public function actions(NovaRequest $request)
     {
         return [];
+    }
+
+    public function authorizeToUpdate(Request $request)
+    {
+        return false;
+    }
+    public static function authorizedToCreate(Request $request)
+    {
+        return false;
+    }
+    public function authorizedToReplicate(Request $request)
+    {
+        return false;
     }
 }

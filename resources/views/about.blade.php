@@ -1,7 +1,7 @@
 @extends('templates.main')
 
 @section('meta_title')
-   Главная
+    {{__('static.about')}}
 @endsection
 
 @section('meta_description')
@@ -9,7 +9,7 @@
 
 @section('content')
 
-    @include('components.about.about')
+    @include('components.about.about', ['about'=>$about])
     @include('components.locations.locations')
     @include('components.call-us.call-us')
 

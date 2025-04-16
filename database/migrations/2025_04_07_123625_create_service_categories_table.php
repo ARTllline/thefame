@@ -25,9 +25,9 @@ return new class extends Migration
             $table->foreignId('region_id')
                 ->constrained('regions')
                 ->cascadeOnDelete();
-            $table->foreignId('category_id')
+            $table->foreignId('category_id')->nullable()
                 ->constrained('service_categories')
-                ->cascadeOnDelete()->nullable();
+                ->cascadeOnDelete();
             $table->string('code')->nullable();           // опционально, для внутренних ссылок
             $table->json('title');                        // мультиязычный заголовок
             $table->json('description')->nullable();      // мультиязычное описание

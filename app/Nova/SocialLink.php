@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 
@@ -35,7 +36,10 @@ class SocialLink extends Resource
 
             Text::make(__('URL'), 'url')
                 ->sortable()
-                ->rules('required', 'url', 'max:255'),
+                ->rules('required', 'max:255'),
+
+            BelongsTo::make('Регион', 'region', Region::class)
+                ->sortable()->nullable(),
         ];
     }
 }

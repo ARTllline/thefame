@@ -1,5 +1,11 @@
-@php($classPrefix ='about')
-@php($dataPrefix ='data-about')
+@php
+     $classPrefix ='about';
+     $dataPrefix ='data-about';
+     $mediaDir = 'main-ua';
+        if ( $currentRegion == 'dubai'){
+                $mediaDir = 'main-dubai';
+        }
+@endphp
 
 
 <div {{$dataPrefix}} class="{{$classPrefix}}">
@@ -10,23 +16,60 @@
     </h2>
     <div class="{{$classPrefix}}__description">
         <p class="{{$classPrefix}}__description-text">
-            The Fame – это когда вам делают не просто стрижку, а выстраивают целостный образ, основанный на детальной
-            консультации, который раскрывает вас и заставляет чувствовать себя превосходно. В котором вы будете
-            выглядеть максимально ярко и уверенно в себе.
+            @if($about)
+                {!! nl2br(e($about->text)) !!}
+            @else
+                The Fame – это когда вам делают не просто стрижку, а выстраивают целостный образ, основанный на
+                детальной
+                консультации, который раскрывает вас и заставляет чувствовать себя превосходно. В котором вы будете
+                выглядеть максимально ярко и уверенно в себе.
+            @endif
+
         </p>
         <p class="{{$classPrefix}}__description-accent">
-            ЭТО НЕ ПРОСТО САЛОН КРАСОТЫ, ЭТО ОБЩЕСТВО КРАСИВЫХ И УВЕРЕННЫХ В СЕБЕ ЛЮДЕЙ.
+            @if($about)
+                {!! nl2br(e($about->accent)) !!}
+            @else
+                ЭТО НЕ ПРОСТО САЛОН КРАСОТЫ, ЭТО ОБЩЕСТВО КРАСИВЫХ И УВЕРЕННЫХ В СЕБЕ ЛЮДЕЙ.
+            @endif
         </p>
     </div>
     <div class="{{$classPrefix}}__image">
-        <img src="{{ asset('img/xabout-img-1.jpg.webp.pagespeed.ic.VEqjki6pUh.webp')}}" alt="about us">
-        <div class="{{$classPrefix}}__image-shape">
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="ezo87kswz9yn1"
-                 viewBox="0 0 758 803" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
-                <path id="ezo87kswz9yn2"
-                      d="M 457.523 76.0347 C 363.095 40.2644 341.6402011839996 101.761723718 265.12620118399997 167.70272371800002 C 195.425201184 227.77172371799995 116.475678676 228.10958526800002 93.121768114 317.090140902 C 59.95821292 399.272196624 58.36341745399999 525.333469454 130.660473 590.472525 C 202.36047299999993 654.6815250000001 321.082498 755.331346072 415.733498 737.885346072 C 512.238498 720.096346072 597.7231969999999 723.86925 629.471197 630.97425 C 657.7801969999999 548.1432500000001 681.662715912 430.002806922 649.0527159119999 348.783806922 C 612.9997159119999 258.989806922 547.982 110.301 457.523 76.0347 Z"
-                      clip-rule="evenodd" fill-rule="evenodd" stroke="none" stroke-width="1"></path>
-            </svg>
+        <div {{$dataPrefix}}-image class="swiper swiper--hidden swiper--padding {{$classPrefix}}__swiper-image">
+            <div {{$dataPrefix}}-image-wrapper class="swiper-wrapper">
+                @foreach($about->getMedia($mediaDir) as $media)
+                    <div class="swiper-slide {{$classPrefix}}__swiper-image-slide">
+                        <img src="{{ $media->getUrl('webp') }}" class="{{$classPrefix}}__swiper-image-bg"
+                             alt=" {{__('static.about_us')}}"
+                             decoding="async"
+                             fetchpriority="high"/>
+                        <div class="{{$classPrefix}}__swiper-image-bg-fade">
+
+                        </div>
+                        <a href="{{ $media->getUrl() }}" class="glightbox {{$classPrefix}}__swiper-image-link"
+                           data-gallery="gallery{{ $about->id }}">
+                            <img src="{{ $media->getUrl('webp') }}"
+                                 alt=" {{__('static.about_us')}}"
+                                 decoding="async"
+                                 fetchpriority="high"/>
+                        </a>
+
+                    </div>
+                @endforeach
+            </div>
+            <div class="swiper-button-next slider-button-next {{$classPrefix}}__swiper-button-next">
+                <svg width="26" height="27" viewBox="0 0 26 27" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.43594 5.56387L1.68611 13.3137M1.68611 13.3137L9.43594 21.0635M1.68611 13.3137H24.3135"
+                          stroke-width="2" stroke-linecap="round"></path>
+                </svg>
+            </div>
+            <div class="swiper-button-prev slider-button-prev {{$classPrefix}}__swiper-button-prev">
+                <svg width="26" height="27" viewBox="0 0 26 27" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.43594 5.56387L1.68611 13.3137M1.68611 13.3137L9.43594 21.0635M1.68611 13.3137H24.3135"
+                          stroke-width="2" stroke-linecap="round"></path>
+                </svg>
+            </div>
+            <div class="swiper-pagination {{$classPrefix}}__swiper-pagination"></div>
         </div>
     </div>
 </div>

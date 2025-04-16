@@ -15,6 +15,7 @@
         "laravel/nova": "4.26.5",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
+        "naif/toggle-switch-field": "*",
         "outl1ne/nova-sortable": "^3.4",
         "outl1ne/nova-translatable": "^2.3",
         "spatie/nova-translatable": "^4.1"

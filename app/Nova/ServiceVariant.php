@@ -15,7 +15,7 @@ use Outl1ne\NovaSortable\Traits\HasSortableRows;
 class ServiceVariant extends Resource
 {
     use HasSortableRows;
-
+    public static $perPageViaRelationship = 15;
     public static $model  = \App\Models\ServiceVariant::class;
     public static $title  = 'title';
     public static $search = [

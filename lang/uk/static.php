@@ -21,10 +21,14 @@ return [
     'about' => 'Про The Fame',
     'team' => 'Наша Команда',
     'contacts' => 'Контакти',
+    'gallery' => 'Галерея',
+    'catalogue'=>'Каталог',
 
     'select_locale' => 'Оберiть мову',
     'select_region' => 'Оберiть регіон',
 
+    'less_read' => 'Приховати',
+    'more_read' => 'Читати ще',
     'more' => 'Детальніше',
     'more_price' => 'Дізнатись ціни',
 
@@ -35,4 +39,17 @@ return [
     'appointment_error_name' => 'Поле не може бути порожнім',
     'appointment_error_phone' => 'Неправильний номер телефону',
     'appointment_success' => 'Заявка надіслана!',
+
+
+    'nav_category' => 'За категорією',
+    'nav_ingredients' => 'За iнгредієнтами',
+    'nav_recommended' => 'Рекомендовані',
+    'nav_brand' => 'За брендом',
+    'nav_all' => 'Переглянути всi',
+
+
+    'prices' => 'Цiни',
+    'load_more' => 'Показати ще',
+
+
 ];

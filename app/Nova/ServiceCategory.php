@@ -17,9 +17,9 @@ class ServiceCategory extends Resource
     use HasSortableRows;
 
     public static $model  = \App\Models\ServiceCategory::class;
-    public static $title  = 'title';
+    public static $title  = 'id';
     public static $search = [
-        'id', 'title->en', 'title->ru', 'title->uk'
+        'id'
     ];
 
     public static function label()
@@ -36,23 +36,6 @@ class ServiceCategory extends Resource
     {
         return [
             ID::make()->sortable(),
-
-            Images::make('Изображение', 'main')
-                ->conversionOnIndexView('webp')
-                ->fullSize(),
-
-            Text::make('Код', 'code')
-                ->sortable()
-                ->rules('required', 'max:100'),
-
-            Text::make('Название', 'title')
-                ->translatable(),
-
-            Textarea::make('Описание', 'description')
-                ->translatable()
-                ->alwaysShow(),
-
-            HasMany::make('Услуги', 'services', Service::class),
         ];
     }
 }

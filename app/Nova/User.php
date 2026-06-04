@@ -39,7 +39,10 @@ class User extends Resource
             Text::make('Логин','telegram_login')->sortable(),
             Text::make('Имя','telegram_name')->sortable(),
 
-            ToggleSwitchField::make('Отправлять уведомления','is_appointment')
+            ToggleSwitchField::make('Отправлять уведомления (Київ)','is_appointment_ua')
+                ->color('#3AB95A'),
+
+            ToggleSwitchField::make('Отправлять уведомления (Dubai)','is_appointment_dubai')
                 ->color('#3AB95A'),
         ];
     }

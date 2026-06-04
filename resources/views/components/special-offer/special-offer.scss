@@ -15,7 +15,8 @@
         max-width: 100%;
         padding: 0 20px;
     }
-    &__title{
+
+    &__title {
         font-size: 58px;
         margin-left: -60px;
         line-height: 1.11;
@@ -28,34 +29,47 @@
             margin-left: 0px;
         }
     }
-    &__title-row{
+
+    &__title-row {
         display: block;
     }
-    &__title-left{
+
+    &__title-left {
 
     }
-    &__title-right{
+
+    &__title-right {
         margin-top: -5px;
         margin-left: 60px;
     }
 
-    &__swiper{
+    &__swiper {
         margin-top: 50px;
         @include mobile-screen {
             margin-top: 30px;
             //width: 300px!important;
+            overflow: hidden !important;
+            overflow-x: hidden !important;
 
-            .swiper-button-prev{
+            .swiper-button-prev {
                 display: none;
             }
-            .swiper-button-next{
+            .swiper-button-next {
                 display: none;
             }
         }
     }
 
-    .special-offer-card{
+
+    .special-offer-card {
     }
 
-
+    @include mobile-screen {
+        .special-offer__swiper {
+            .slider-button-prev,
+            .slider-button-next {
+                display: none; /* или left: 0; right: 0; если хотите оставить стрелки внутри */
+            }
+        }
+    }
 }

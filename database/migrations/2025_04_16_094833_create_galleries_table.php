@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->json('title')->nullable();
             $table->boolean('is_show')->default(0);
+            $table->foreignId('region_id')->nullable()
+                ->constrained('regions')
+                ->cascadeOnDelete();
             $table->timestamps();
         });
     }

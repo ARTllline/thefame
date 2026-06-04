@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Service;
 use App\Models\SpecialOffer;
 use App\Models\TeamMember;
 use App\Models\Device;
 use App\Models\About;
+use App\Models\Gallery;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
@@ -58,18 +60,49 @@ class RouteController extends Controller
 
     public function showServices(Request $request)
     {
-        $region = $request->session()->get('region', 'ua');
+        // Определяем текущий регион из сессии
+        $regionCode = $request->session()->get('region', 'ua');
 
-        $services = Service::with(['category', 'variants'])
-            ->where(function ($query) use ($region) {
-                $query->whereHas('region', function ($query) use ($region) {
-                    $query->where('code', $region);
-                })->orWhereDoesntHave('region');
+        // Загружаем категории, у которых есть хотя бы один сервис для данного региона,
+        // и жадно загружаем эти сервисы вместе с вариантами
+        $categories = Category::with(['services' => function ($serviceQuery) use ($regionCode) {
+            $serviceQuery
+                ->with('variants')
+                // фильтрация сервисов по региону
+                ->where(function ($q) use ($regionCode) {
+                    $q->whereHas('region', function ($r) use ($regionCode) {
+                        $r->where('code', $regionCode);
+                    })
+                        ->orWhereDoesntHave('region');
+                })
+                ->ordered();
+        }])
+            // гарантируем, что категория имеет хотя бы один сервис для этого региона
+            ->whereHas('services', function ($serviceQuery) use ($regionCode) {
+                $serviceQuery->where(function ($q) use ($regionCode) {
+                    $q->whereHas('region', function ($r) use ($regionCode) {
+                        $r->where('code', $regionCode);
+                    })
+                        ->orWhereDoesntHave('region');
+                });
             })
             ->ordered()
             ->get();
 
-        return view('services', compact('services', 'region'));
+        return view('services', compact('categories'));
+    }
+
+    public function showGallery(Request $request)
+    {
+        $region = $request->session()->get('region', 'ua');
+
+        $gallery = Gallery::where(function ($query) use ($region) {
+            $query->whereHas('region', function ($query) use ($region) {
+                $query->where('code', $region);
+            })->orWhereDoesntHave('region');
+        })->first();
+
+        return view('gallery', compact('gallery'));
     }
 
     public function showDevices(Request $request)
@@ -78,10 +111,10 @@ class RouteController extends Controller
         $region = $request->session()->get('region', 'ua');
 
         $devices = Device::where(function ($query) use ($region) {
-                $query->whereHas('region', function ($query) use ($region) {
-                    $query->where('code', $region);
-                })->orWhereDoesntHave('region');
-            })
+            $query->whereHas('region', function ($query) use ($region) {
+                $query->where('code', $region);
+            })->orWhereDoesntHave('region');
+        })
             ->ordered()
             ->get();
 

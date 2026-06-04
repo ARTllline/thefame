@@ -11,38 +11,34 @@
 <div {{$dataPrefix}} class="{{$classPrefix}}">
 
     <h2 class="{{$classPrefix}}__title">
-        Бьюти-клиника <br>
-        The Fame
+        {{__('static.about')}}
     </h2>
     <div class="{{$classPrefix}}__description">
         <p class="{{$classPrefix}}__description-text">
-            @if($about)
-                {!! nl2br(e($about->text)) !!}
+            @if($currentRegion == 'dubai')
+                {!! nl2br(e($about->text_dubai), false) !!}
             @else
-                The Fame – это когда вам делают не просто стрижку, а выстраивают целостный образ, основанный на
-                детальной
-                консультации, который раскрывает вас и заставляет чувствовать себя превосходно. В котором вы будете
-                выглядеть максимально ярко и уверенно в себе.
+                {!! nl2br(e($about->text_ua), false) !!}
             @endif
 
         </p>
         <p class="{{$classPrefix}}__description-accent">
-            @if($about)
-                {!! nl2br(e($about->accent)) !!}
+            @if($currentRegion == 'dubai')
+                {!! nl2br(e($about->accent_dubai), false) !!}
             @else
-                ЭТО НЕ ПРОСТО САЛОН КРАСОТЫ, ЭТО ОБЩЕСТВО КРАСИВЫХ И УВЕРЕННЫХ В СЕБЕ ЛЮДЕЙ.
+                {!! nl2br(e($about->accent_ua), false) !!}
             @endif
         </p>
     </div>
     <div class="{{$classPrefix}}__image">
-        <div {{$dataPrefix}}-image class="swiper swiper--hidden swiper--padding {{$classPrefix}}__swiper-image">
+        <div {{$dataPrefix}}-image class="swiper swiper--hidden {{$classPrefix}}__swiper-image">
             <div {{$dataPrefix}}-image-wrapper class="swiper-wrapper">
                 @foreach($about->getMedia($mediaDir) as $media)
                     <div class="swiper-slide {{$classPrefix}}__swiper-image-slide">
                         <img src="{{ $media->getUrl('webp') }}" class="{{$classPrefix}}__swiper-image-bg"
                              alt=" {{__('static.about_us')}}"
                              decoding="async"
-                             fetchpriority="high"/>
+                             fetchpriority="high">
                         <div class="{{$classPrefix}}__swiper-image-bg-fade">
 
                         </div>
@@ -51,7 +47,7 @@
                             <img src="{{ $media->getUrl('webp') }}"
                                  alt=" {{__('static.about_us')}}"
                                  decoding="async"
-                                 fetchpriority="high"/>
+                                 fetchpriority="high">
                         </a>
 
                     </div>

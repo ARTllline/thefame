@@ -26,8 +26,8 @@ class Region extends Model implements HasMedia
     {
         $this
             ->addMediaConversion('webp')
-            ->width(500)
-            ->height(500)
+            ->width(250)
+            ->height(250)
             ->format(Manipulations::FORMAT_WEBP);
     }
     public function registerMediaCollections(): void

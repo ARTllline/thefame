@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('platform');
             $table->string('url');
-            $table->string('order')->default(0);
+            $table->string('icon')->nullable();
+            $table->bigInteger('order')->default(0);
             $table->timestamps();
         });
     }

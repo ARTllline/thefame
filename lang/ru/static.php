@@ -21,10 +21,15 @@ return [
     'about' => 'О The Fame',
     'team' => 'Наша Команда',
     'contacts' => 'Контакты',
+    'gallery' => 'Галерея',
+    'catalogue'=>'Каталог',
+
 
     'select_locale' => 'Выберите язык',
     'select_region' => 'Выберите регион',
 
+    'less_read' => 'Cкрыть',
+    'more_read' => 'Читать подробнее',
     'more' => 'Подробнее',
     'more_price' => 'Узнать цены',
 
@@ -35,4 +40,13 @@ return [
     'appointment_error_name' => 'Поле не может быть пустым',
     'appointment_error_phone' => 'Неправильный номер телефона',
     'appointment_success' => 'Заявка отправлена!',
+
+    'nav_category' => 'По категории',
+    'nav_ingredients' => 'По ингредиентам',
+    'nav_recommended' => 'Рекомендуемые',
+    'nav_brand' => 'По бренду',
+    'nav_all' => 'Показать все',
+
+    'prices' => 'Цены',
+    'load_more' => 'Показать еще'
 ];

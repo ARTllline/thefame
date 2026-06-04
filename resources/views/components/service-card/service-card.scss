@@ -114,13 +114,18 @@
     &__prices-item {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: start;
         padding: 15px 0;
         border-top: 1px solid var(--serviceLineColor);
         transition: background-color 0.3s;
-
+        gap: 20px;
         &:hover {
             //   background-color: rgba(0, 0, 0, 0.03);
+        }
+
+
+        @include mobile-screen {
+            gap: 12px;
         }
     }
     &__prices-item:last-child {

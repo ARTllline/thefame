@@ -48,16 +48,16 @@ class Banner extends Resource
 
             Media::make('Видео Dubai', 'dubai_desktop') // media handles videos
             ->conversionOnIndexView('thumb')
-                ->singleMediaRules('max:50000'),
+                ->singleMediaRules('max:100000'),
             Media::make('Видео Dubai (моб)', 'dubai_mobile')
                 ->conversionOnIndexView('thumb')
-                ->singleMediaRules('max:50000'),
+                ->singleMediaRules('max:100000'),
             Media::make('Видео Київ', 'kyiv_desktop')
                 ->conversionOnIndexView('thumb')
-                ->singleMediaRules('max:50000'),
+                ->singleMediaRules('max:100000'),
             Media::make('Видео Київ (моб)', 'kyiv_mobile')
                 ->conversionOnIndexView('thumb')
-                ->singleMediaRules('max:50000'),
+                ->singleMediaRules('max:100000'),
 
             ToggleSwitchField::make('Текущий', 'is_show')
                 ->color('#3AB95A'),

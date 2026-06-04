@@ -4,10 +4,11 @@ namespace App\Nova\Dashboards;
 
 use App\Nova\Metrics\NewServicesTrend;
 use App\Nova\Metrics\TeamMembersCount;
+use App\Nova\Metrics\TotalProducts;
 use App\Nova\Metrics\TotalServices;
+use Instructions\VideoInstruction\VideoInstruction;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Dashboards\Main as Dashboard;
-
 class Main extends Dashboard
 {
     /**
@@ -18,9 +19,11 @@ class Main extends Dashboard
     public function cards()
     {
         return [
+            new TotalProducts,
             new TotalServices,
-            new NewServicesTrend,
             new TeamMembersCount,
+
+            new VideoInstruction()
         ];
     }
 }

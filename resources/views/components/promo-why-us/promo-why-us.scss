@@ -1,0 +1,114 @@
+@import "~frontend-scss-mixins/mixins";
+@import "../base/mixins";
+@import "../base/media-queries";
+
+.promo-why-us {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 120px 100px;
+    gap: 60px;
+
+    display: flex;
+    flex-direction: row;
+
+    @include mobile-screen {
+        padding: 60px 20px;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    &__content {
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+        max-width: 575px;
+
+        @include mobile-screen {
+            width: 100%;
+        }
+    }
+
+    &__media {
+        flex-shrink: 0;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+        gap: 20px;
+
+        img {
+            width: 100%;
+            height: 100%;
+            max-width: 605px;
+            max-height: 490px;
+            object-fit: cover;
+        }
+
+        @include mobile-screen {
+            width: 100%;
+        }
+    }
+
+
+    &__title {
+        font-weight: 300;
+        font-size: 58px;
+        line-height: 64.38px;
+
+        @include mobile-screen {
+            font-size: 32px;
+        }
+    }
+
+    &__subtitle {
+        font-weight: 200;
+        font-size: 24px;
+        line-height: 100%;
+        letter-spacing: 0.9px;
+        text-transform: uppercase;
+
+        @include mobile-screen {
+            font-size: 16px;
+            align-self: flex-end;
+            text-align: right;
+        }
+    }
+
+    &__line {
+        margin-top: 60px;
+        width: 100%;
+        height: 1px;
+        background: #A5A5A5;
+
+        @include mobile-screen {
+            margin-top: 20px;
+        }
+    }
+
+    &__text {
+        margin-top: 40px;
+        font-weight: 200;
+        font-size: 22px;
+        line-height: 29.7px;
+
+        @include mobile-screen {
+            margin-top: 30px;
+            font-size: 20px;
+        }
+    }
+
+    &__media {
+        width: 605px;
+        height: 490px;
+
+        @include mobile-screen {
+            width: 100%;
+            height: 340px;
+        }
+    }
+
+
+
+}

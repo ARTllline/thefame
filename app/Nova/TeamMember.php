@@ -18,6 +18,12 @@ class TeamMember extends Resource
         'id', 'name', 'position'
     ];
 
+    public static $perPageOptions = [
+        50,  // будет выбрано по умолчанию
+        100,
+        200,
+    ];
+
     public static function label()
     {
         return __('Члены команды');
@@ -39,6 +45,8 @@ class TeamMember extends Resource
     {
         return [
             ID::make()->sortable(),
+            Text::make(__('ТЕСТ порядок'), 'order')
+                ->sortable()->readonly(),
 
             Images::make('Изображение', 'main')
                 ->conversionOnIndexView('webp')

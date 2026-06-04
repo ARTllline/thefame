@@ -1,0 +1,141 @@
+@import "~frontend-scss-mixins/mixins";
+@import "../base/mixins";
+@import "../base/media-queries";
+
+.promo-banner {
+    width: 100%;
+    margin: 80px auto 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+
+    @include mobile-screen {
+        margin: 60px auto 0;
+    }
+
+    &__content {
+        width: 100%;
+        max-width: 1440px;
+        gap: 28px;
+        opacity: 1;
+        padding: 80px 100px 60px;
+        align-items: center!important;
+
+        @include flex-row;
+        justify-content: space-between;
+
+        @include mobile-screen {
+            gap: 40px;
+            flex-direction: column;
+            padding: 50px 20px 40px;
+        }
+
+    }
+    &__button{
+        margin-top: 32px;
+
+        @include mobile-screen {
+            margin-top: 24px;
+        }
+    }
+
+    &__title {
+        width: 100%;
+        max-width: 488px;
+        font-family: "Manrope", sans-serif;
+        font-weight: 300;
+        font-size: 60px;
+        line-height: 110.00000000000001%;
+        letter-spacing: -2%;
+
+
+        @include mobile-screen {
+            font-size: 32px;
+            max-width: 488px;
+        }
+
+        &--small{
+            font-size: 48px;
+            @include mobile-screen {
+                font-size: 28px;
+            }
+        }
+    }
+
+    &__info {
+        width: 100%;
+        max-width: 322px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+
+        @include mobile-screen {
+            gap: 16px;
+            max-width: 100%;
+        }
+    }
+
+    &__info-title {
+        font-family: "Manrope", sans-serif;
+        font-weight: 200;
+        font-size: 26px;
+        line-height: 45px;
+        letter-spacing: 0.9px;
+        text-align: right;
+        text-transform: uppercase;
+        color: #1A1A1A;
+        align-self: end;
+
+        @include mobile-screen {
+            font-size: 18px;
+        }
+    }
+
+    &__info-line {
+        width: 322px;
+        height: 1px;
+        background: #A5A5A5;
+        @include mobile-screen {
+            width: 100%;
+        }
+    }
+
+    &__info-text {
+        font-family: "Manrope", sans-serif;
+        font-weight: 200;
+        font-size: 22px;
+        line-height: 29.7px;
+        color: #1A1A1A;
+
+        @include mobile-screen {
+            font-size: 20px;
+            line-height: 130%;
+
+        }
+    }
+
+    &__media {
+        width: 100%;
+        height: 612px;
+        position: relative;
+        overflow: hidden;
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        @include mobile-screen {
+            height: 300px;
+        }
+    }
+
+
+}

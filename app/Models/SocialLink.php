@@ -9,7 +9,7 @@ class SocialLink extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['platform', 'url', 'region_id'];
+    protected $fillable = ['platform', 'url', 'region_id', 'icon'];
     public function region()
     {
         return $this->belongsTo(Region::class);

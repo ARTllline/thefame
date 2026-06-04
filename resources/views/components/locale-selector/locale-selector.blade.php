@@ -25,7 +25,7 @@
 
     <form action="{{ route('locale.set') }}" method="POST" {{$dataPrefix}}-form id="localeSelectorForm"
           style="display: none;">
-        @csrf
+        <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <input type="hidden" name="redirect_to" value="{{ url()->current() }}">
         <input type="hidden" name="locale" {{$dataPrefix}}-input id="localeInput">
     </form>

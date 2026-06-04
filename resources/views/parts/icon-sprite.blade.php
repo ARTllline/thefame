@@ -17,6 +17,13 @@
         <path d="M21.5236 29.375C11.3894 29.375 5.24091 22.3307 5 10.625H10.1327C10.2927 19.2237 14.1976 22.8674 17.1909 23.6167V10.625H22.1097V18.0457C24.997 17.7251 28.0191 14.3498 29.0349 10.625H33.8764C33.1015 15.2053 29.8115 18.5807 27.487 19.973C29.8133 21.0987 33.5564 24.0454 35 29.375H29.6785C28.5549 25.8123 25.8024 23.0529 22.1115 22.6783V29.375H21.5236Z" fill="#41B450"/>
     </symbol>
 
+    <symbol id="arrow-back" viewBox="0 0 14 10" fill="none" aria-hidden="true" focusable="false"
+            class="icon icon-arrow" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M8.537.808a.5.5 0 01.817-.162l4 4a.5.5 0 010 .708l-4 4a.5.5 0 11-.708-.708L11.793 5.5H1a.5.5 0 010-1h10.793L8.646 1.354a.5.5 0 01-.109-.546z"
+              fill="currentColor">
+        </path>
+    </symbol>
 
 
     <symbol id="check" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -1,56 +1,57 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
-use Spatie\Translatable\HasTranslations;
 
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Spatie\Image\Manipulations;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
-
-class ServiceCategory extends Model implements Sortable, HasMedia
+class ServiceCategory extends Model implements Sortable
 {
-    use HasFactory, HasTranslations;
-    use SortableTrait;
-    use InteractsWithMedia;
+    use HasFactory, SortableTrait;
 
-    protected $fillable = ['title', 'code', 'description', 'order'];
-    public $translatable = ['title', 'description'];
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'service_categories';
 
-    protected $casts = [
-        'description' => 'array',
-        'title' => 'array',
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'service_id',
+        'category_id',
+        'order',
     ];
 
-    public $sortable = [
-        'order_column_name' => 'order',
-        'sort_when_creating' => true,
-    ];
-    public function registerMediaConversions(Media $media = null): void
+    /**
+     * Configuration for the Spatie sortable trait.
+     *
+     * @var array<string, mixed>
+     */
+//    public $sortable = [
+//        'order_column_name'  => 'order',
+//        'sort_when_creating' => true,
+//    ];
+
+    /**
+     * Get the service associated with this pivot.
+     */
+    public function service()
     {
-        $this
-            ->addMediaConversion('webp')
-            ->width(500)
-            ->height(500)
-            ->format(Manipulations::FORMAT_WEBP);
-    }
-    public function registerMediaCollections(): void
-    {
-        $this->addMediaCollection('main')->singleFile()->useDisk('categories');
-    }
-    public function scopeOrdered($query)
-    {
-        return $query->orderBy('order');
+        return $this->belongsTo(Service::class);
     }
 
-    public function services()
+    /**
+     * Get the category associated with this pivot.
+     */
+    public function category()
     {
-        return $this->hasMany(Service::class, 'category_id');
+        return $this->belongsTo(Category::class);
     }
-
 }

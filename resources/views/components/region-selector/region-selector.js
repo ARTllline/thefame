@@ -15,6 +15,36 @@ export function regionSelector() {
         flag.addEventListener('click', function() {
             const selectedRegion = flag.getAttribute('data-region');
             regionInput.value = selectedRegion;
+
+            function getCookie(name) {
+                const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+                return v ? v.pop() : '';
+            }
+
+            flags.forEach(flag => {
+                flag.addEventListener('click', function() {
+                    const selectedRegion = flag.getAttribute('data-region');
+                    regionInput.value = selectedRegion;
+
+                    // Попробуем взять токен из meta
+                    const meta = document.querySelector('meta[name="csrf-token"]');
+                    if (meta) {
+                        const tokenInput = document.querySelector('input[name="_token"]');
+                        if (tokenInput) tokenInput.value = meta.getAttribute('content');
+                    } else {
+                        // fallback: взять из cookie XSRF-TOKEN (Laravel ставит его URL-encoded)
+                        const xsrf = getCookie('XSRF-TOKEN');
+                        if (xsrf) {
+                            const tokenInput = document.querySelector('input[name="_token"]');
+                            if (tokenInput) tokenInput.value = decodeURIComponent(xsrf);
+                        }
+                    }
+
+                    form.submit();
+                });
+            });
+
+
             form.submit();
         });
     });

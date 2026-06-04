@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
             $table->string('map_point')->nullable();
-            $table->string('order')->default(0);
+            $table->bigInteger('order')->default(0);
             $table->timestamps();
         });
     }

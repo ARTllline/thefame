@@ -30,7 +30,7 @@
     <div class="{{$classPrefix}}__content">
         <div class="{{$classPrefix}}__content-logo">
             @if($currentRegion == 'dubai')
-                <img src="{{ asset('img/logo-dubai.PNG')}}" alt="Logo">
+                <img src="{{ asset('img/logo-dubai.png')}}" alt="Logo">
             @else
                 <img src="{{ asset('svg/logo.svg')}}" alt="Logo">
             @endif
@@ -47,8 +47,8 @@
 					<span>{{ __('static.sign_up_site') }}</span>
 				</span>
             </div>
-            <a href="https://beautyprosoftware.com/b/997907"
-               class="button button-clip {{$classPrefix}}__content-button">
+            <a href="https://beautyprosoftware.com/b/997907" {{$dataPrefix}}-beautypro
+            class="button button-clip {{$classPrefix}}__content-button">
             	<span class="clip">
 					<span>{{ __('static.sign_up_online') }}</span>
 					<span>{{ __('static.sign_up_online') }}</span>

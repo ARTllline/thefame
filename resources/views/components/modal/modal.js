@@ -1,8 +1,11 @@
+import axios from "axios";
+import Notification from '../notification/notification-es';
+import { readUtmCookies } from '../utils/utm';
+
 const classPrefix = 'modal';
 const dataPrefix = 'data-modal';
 const $container = document.querySelector(`[${dataPrefix}]`);
-import axios from "axios";
-import Notification from '../notification/notification-es';
+
 if ($container) {
     modal();
 }
@@ -70,66 +73,119 @@ export function modal() {
     });
 
 
+    // перед добавлением слушателя (внутри modal())
+    if (!$submitButton) return;
+
+// Защита от многократной привязки обработчика
+    if ($submitButton.dataset.listenerAdded === 'true') {
+        return;
+    }
+    $submitButton.dataset.listenerAdded = 'true';
+
+    let isSubmitting = false;
 
     // Обработчик клика по кнопке отправки
     $submitButton.addEventListener('click', async (e) => {
         e.preventDefault();
+        await send();
+    });
+
+
+    async function send(){
+        if (isSubmitting) return; // уже отправляется
 
         // Сброс предыдущих ошибок
         $nameErr.style.opacity = '0';
         $phoneErr.style.opacity = '0';
 
-
-
-
         const name = $nameInput.value.trim();
         const phone = $phoneInput.value.trim();
-        const region = $regionInput.value.trim();
+        const region = $regionInput ? $regionInput.value.trim() : '';
 
-        console.log($regionInput)
-        console.log(region)
         let hasError = false;
 
-        // Простая валидация поля "Имя" — должно быть не пустым
         if (!name) {
             $nameErr.style.opacity = '1';
             hasError = true;
         }
 
-        // Простая валидация поля "Телефон" — можно добавить регулярное выражение, здесь просто проверка на непустоту
-        if (!phone) {
-            $phoneErr.style.opacity = '1';
-            hasError = true;
-        }
-        // Пример дополнительной проверки (если нужно, раскомментируйте и отредактируйте)
         const phonePattern = /^\+?\d{10,15}$/;
-        if (!phonePattern.test(phone)) {
+        if (!phone || !phonePattern.test(phone)) {
             $phoneErr.style.opacity = '1';
             hasError = true;
         }
 
-        // Если есть ошибка, не отправляем запрос
         if (hasError) {
             return;
         }
 
-        // Выполнение запроса
-        try {
-            const response = await axios.post('/appointment', { name, phone, region });
+        const utm = readUtmCookies();
 
-            if (response.status === 200) {
-                // Показываем попап успеха (можно изменить логику показа через добавление/удаление классов)
-                popup.success({
-                    message: `Success`
-                });
-                // Очищаем поля
+        // Блокировка кнопки и защита от дублей
+        isSubmitting = true;
+        $submitButton.disabled = true;
+
+        try {
+            const payload = {
+                name,
+                phone,
+                region,
+                // додаємо UTM поля (порожні рядки без значення)
+                utm_source: utm.utm_source || null,
+                utm_medium: utm.utm_medium || null,
+                utm_campaign: utm.utm_campaign || null,
+                utm_term: utm.utm_term || null,
+                utm_content: utm.utm_content || null,
+                referrer: utm.referrer || null,
+                landing_page: utm.landing_page || null,
+            };
+
+            const response = await axios.post('/appointment', payload);
+
+            if (response.data.success) {
+                popup.success({ message: `Success` });
                 $nameInput.value = '';
                 $phoneInput.value = '';
+
+                window.dataLayer = window.dataLayer || [];
+
+                window.dataLayer.push({
+                    event: 'form_submit_new',
+                    form: 'modal_appointment',
+                    region: region,
+                    appointment_id: response.data.appointment_id,
+                    timestamp: Date.now(),
+                    utm_source: payload.utm_source,
+                    utm_medium: payload.utm_medium,
+                    utm_campaign: payload.utm_campaign,
+                    utm_term: payload.utm_term,
+                    utm_content: payload.utm_content,
+                    referrer: payload.referrer,
+                    landing_page: payload.landing_page
+                });
+
+                window.dataLayer.push({
+                    event: 'form_submit',
+                    form: 'modal_appointment',
+                    region: region,
+                    appointment_id: response.data.appointment_id,
+                    timestamp: Date.now(),
+                    utm_source: payload.utm_source,
+                    utm_medium: payload.utm_medium,
+                    utm_campaign: payload.utm_campaign,
+                    utm_term: payload.utm_term,
+                    utm_content: payload.utm_content,
+                    referrer: payload.referrer,
+                    landing_page: payload.landing_page
+                });
+
+
                 closeModal();
+            } else {
+                popup.error({ message: `Unexpected response: ${response.status}` });
             }
         } catch (error) {
             if (error.response?.status === 422) {
-                // Если пришли ошибки валидации с сервера, можно пройтись по ним и отобразить
                 const errors = error.response.data.errors;
                 if (errors.name) {
                     $nameErr.textContent = errors.name[0];
@@ -140,10 +196,11 @@ export function modal() {
                     $phoneErr.style.opacity = '1';
                 }
             } else {
-                popup.error({
-                    message: `An error has occurred"`,
-                });
+                popup.error({ message: `An error has occurred` });
             }
+        } finally {
+            isSubmitting = false;
+            $submitButton.disabled = false;
         }
-    });
+    }
 }

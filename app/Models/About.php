@@ -17,15 +17,24 @@ class About extends Model implements HasMedia
     use InteractsWithMedia;
 
     protected $fillable = [
-        'text',
-        'accent',
+        'text_ua',
+        'text_dubai',
+        'accent_ua',
+        'accent_dubai'
     ];
 
-    public $translatable = ['text', 'accent'];
+    public $translatable = [
+        'text_ua',
+        'text_dubai',
+        'accent_ua',
+        'accent_dubai'
+    ];
 
     protected $casts = [
-        'text' => 'array',
-        'accent' => 'array',
+        'text_ua' => 'array',
+        'text_dubai' => 'array',
+        'accent_ua' => 'array',
+        'accent_dubai' => 'array',
     ];
 
     public function registerMediaConversions(Media $media = null): void

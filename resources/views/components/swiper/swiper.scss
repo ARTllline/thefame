@@ -19,10 +19,26 @@
         padding-bottom: 0px !important;
 
         .slider-button-prev {
-            left: 5px
+            left: 5px;
+            @include mobile-screen {
+                left: 0;
+            }
         }
         .slider-button-next {
-            right: 5px
+            right: 5px;
+            @include mobile-screen {
+                right: 0;
+            }
+        }
+    }
+
+    &--padding{
+        padding-bottom: 60px !important;
+        padding-left: 60px;
+        padding-right: 60px;
+        @include mobile-screen {
+            padding-left: 24px;
+            padding-right: 24px;
         }
     }
 

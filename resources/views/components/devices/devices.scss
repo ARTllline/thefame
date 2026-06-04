@@ -103,9 +103,6 @@
         cursor: pointer;
         width: 100%;
         height: 100%;
-        animation-timeline: auto;
-        animation-range-start: normal;
-        animation-range-end: normal;
         z-index: 1;
         position: relative;
         overflow: hidden;
@@ -201,10 +198,24 @@
     &__card-content-text{
         margin-top: 40px;
         font-size: 20px;
+        position: relative;
+        overflow: hidden;
+        max-height: 190px;
+        transition: max-height 0.4s ease;
 
         @include mobile-screen {
             margin-top: 20px;
         }
+    }
+    &__card-content-read-more{
+        font-size: 20px;
+        margin-top: 12px;
+        display: flex;
+    }
+    &__card-content-read-less{
+        font-size: 20px;
+        margin-top: 12px;
+        display: none;
     }
 
     &__card-links {

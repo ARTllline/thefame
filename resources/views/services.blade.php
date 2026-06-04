@@ -9,7 +9,7 @@
 
 @section('content')
 
-    @include('components.services.services', ['services' => $services])
+    @include('components.services.services', ['categories' => $categories])
   @include('components.call-us.call-us')
 
 @endsection

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
+use Datomatic\NovaIconField\NovaIconField;
 
 class SocialLink extends Resource
 {
@@ -37,6 +38,9 @@ class SocialLink extends Resource
             Text::make(__('URL'), 'url')
                 ->sortable()
                 ->rules('required', 'max:255'),
+
+            NovaIconField::make('Иконка', 'icon')
+                ->addButtonText('[ + ]'),
 
             BelongsTo::make('Регион', 'region', Region::class)
                 ->sortable()->nullable(),

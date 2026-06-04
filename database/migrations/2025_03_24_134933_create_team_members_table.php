@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('position');
-            $table->string('order')->default(0);
+            $table->bigInteger('order')->default(0);
             $table->timestamps();
         });
     }

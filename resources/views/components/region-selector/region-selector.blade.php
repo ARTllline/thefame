@@ -7,8 +7,7 @@
 
 <div {{$dataPrefix}} class="{{$classPrefix}}  @if(isset($showRegionModal) && $showRegionModal) {{$classPrefix}}--active  @endif">
     <div class="{{$classPrefix}}__content">
-        <!-- Заголовок модального окна -->
-        <h2 class="{{$classPrefix}}__title">{{__('static.select_region')}}</h2>
+{{--        <h2 class="{{$classPrefix}}__title">{{__('static.select_region')}}</h2>--}}
         <div class="{{$classPrefix}}__flags">
             @foreach($regions as  $region)
                 <div class="{{$classPrefix}}__flag" data-region="{{$region->code}}">
@@ -20,9 +19,8 @@
             @endforeach
         </div>
     </div>
-    <!-- Скрытая форма для отправки выбранного региона -->
     <form action="{{ route('region.set') }}" method="POST" id="regionSelectorForm" style="display: none;">
-        @csrf
+        <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <input type="hidden" name="redirect_to" value="{{ url()->current() }}">
         <input type="hidden" name="region" id="regionInput">
     </form>

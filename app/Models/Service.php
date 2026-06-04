@@ -41,6 +41,9 @@ class Service extends Model implements Sortable, HasMedia
         'order_column_name' => 'order',
         'sort_when_creating' => true,
     ];
+
+
+
     public function registerMediaConversions(Media $media = null): void
     {
         $this
@@ -64,11 +67,13 @@ class Service extends Model implements Sortable, HasMedia
         return $this->belongsTo(Region::class);
     }
 
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(ServiceCategory::class, 'category_id');
+        return $this->belongsToMany(Category::class, 'service_categories')
+            ->withPivot('order')
+            ->orderBy('service_categories.order')
+            ->withTimestamps();
     }
-
     public function variants()
     {
         return $this->hasMany(ServiceVariant::class);

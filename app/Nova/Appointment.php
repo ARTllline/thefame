@@ -6,6 +6,7 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Select;
@@ -47,8 +48,8 @@ class Appointment extends Resource
             Text::make('Имя', 'name'),
             Text::make('Телефон', 'phone'),
             Text::make('Регион', 'region'),
-            Text::make('Время отправки', 'created_at'),
-
+            //Text::make('Время отправки', 'created_at'),
+            DateTime::make('Время отправки', 'created_at')->sortable(),
         ];
     }
 

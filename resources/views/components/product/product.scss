@@ -87,9 +87,9 @@
     &__product-clip-path-effect {
         width: 100%;
         height: 100%;
-        animation-timeline: auto;
-        animation-range-start: normal;
-        animation-range-end: normal;
+        //animation-timeline: auto;
+        //animation-range-start: normal;
+        //animation-range-end: normal;
         z-index: 1;
         position: relative;
         overflow: hidden;
@@ -135,6 +135,7 @@
         line-height: 1.2em;
         display: flex;
         flex-direction: column;
+        word-break: break-all;
 
         @include mobile-screen {
             font-weight: 400;

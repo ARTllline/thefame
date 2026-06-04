@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1df5a132f0f5fe3f166da9c8a1e56f44",
+    "content-hash": "59a4e14f6e347aaf6afdec2b256cffbe",
     "packages": [
         {
             "name": "archtechx/enums",
@@ -573,6 +573,59 @@
                 }
             ],
             "time": "2024-09-19T14:15:21+00:00"
+        },
+        {
+            "name": "datomatic/nova-icon-field",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/datomatic/nova-icon-field.git",
+                "reference": "0389e51a5ad59877a277ed0218908de92b613757"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/datomatic/nova-icon-field/zipball/0389e51a5ad59877a277ed0218908de92b613757",
+                "reference": "0389e51a5ad59877a277ed0218908de92b613757",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/nova": "^4.0",
+                "outl1ne/nova-translations-loader": "^5.0",
+                "php": "^8.0|^8.1|^8.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Datomatic\\NovaIconField\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Datomatic\\NovaIconField\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A icon selector field for Laravel Nova 4",
+            "keywords": [
+                "FontAwesome",
+                "Heroicons",
+                "icon",
+                "icons",
+                "laravel",
+                "nova",
+                "nova 4",
+                "svg"
+            ],
+            "support": {
+                "issues": "https://github.com/datomatic/nova-icon-field/issues",
+                "source": "https://github.com/datomatic/nova-icon-field/tree/v1.0.2"
+            },
+            "time": "2023-04-27T14:11:32+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -6399,6 +6452,60 @@
             "time": "2025-02-18T12:50:31+00:00"
         },
         {
+            "name": "scadini/nova-icon",
+            "version": "v0.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/scadini/nova-icon.git",
+                "reference": "5bda076c7650482be6fee4c36e8c68e8ea1dfc99"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/scadini/nova-icon/zipball/5bda076c7650482be6fee4c36e8c68e8ea1dfc99",
+                "reference": "5bda076c7650482be6fee4c36e8c68e8ea1dfc99",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "NovaIcon\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "NovaIcon\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "João Santos",
+                    "email": "joaoecoceanus@gmail.com"
+                }
+            ],
+            "description": "A Laravel Nova icon field.",
+            "keywords": [
+                "field",
+                "icon",
+                "laravel",
+                "nova",
+                "svg"
+            ],
+            "support": {
+                "issues": "https://github.com/scadini/nova-icon/issues",
+                "source": "https://github.com/scadini/nova-icon/tree/v0.2.1"
+            },
+            "time": "2019-09-22T10:51:07+00:00"
+        },
+        {
             "name": "spatie/eloquent-sortable",
             "version": "4.4.2",
             "source": {
@@ -9617,6 +9724,61 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "ziffmedia/nova-select-plus",
+            "version": "v2.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ziffmedia/nova-select-plus.git",
+                "reference": "459ec8258ba467f53ea8ef355ca13cdb2ce39d88"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ziffmedia/nova-select-plus/zipball/459ec8258ba467f53ea8ef355ca13cdb2ce39d88",
+                "reference": "459ec8258ba467f53ea8ef355ca13cdb2ce39d88",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/nova": "^4.0",
+                "php": "^7.3|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ZiffMedia\\NovaSelectPlus\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ZiffMedia\\NovaSelectPlus\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ralph Schindler",
+                    "email": "ralph.schindler@ziffmedia.com"
+                }
+            ],
+            "description": "A Nova select field for simple and complex select inputs",
+            "keywords": [
+                "ajax",
+                "laravel",
+                "nova",
+                "select",
+                "vue-select"
+            ],
+            "support": {
+                "issues": "https://github.com/ziffmedia/nova-select-plus/issues",
+                "source": "https://github.com/ziffmedia/nova-select-plus/tree/v2.0.6"
+            },
+            "time": "2024-01-03T18:01:29+00:00"
         }
     ],
     "packages-dev": [

@@ -62,18 +62,23 @@ class About extends Resource
                 ->conversionOnIndexView('webp')
                 ->fullSize(),
 
+            Textarea::make('Текст Дубай', 'text_dubai')
+                ->translatable()
+                ->alwaysShow(),
+            Textarea::make('Акцент Дубай', 'accent_dubai')
+                ->translatable()
+                ->alwaysShow(),
+
             Images::make('Изображения Киев', 'main-ua')
                 ->conversionOnIndexView('webp')
                 ->fullSize(),
 
-            Textarea::make('Текст', 'text')
+            Textarea::make('Текст Киев', 'text_ua')
                 ->translatable()
                 ->alwaysShow(),
-            Textarea::make('Акцент', 'accent')
+            Textarea::make('Акцент Киев', 'accent_ua')
                 ->translatable()
                 ->alwaysShow(),
-
-
         ];
     }
 

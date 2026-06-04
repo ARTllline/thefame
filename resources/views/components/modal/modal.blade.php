@@ -7,7 +7,7 @@
         {
             $currentRegionName = 'Dubai';
         }
-
+    $callUs = \App\Models\CallUs::first();
 @endphp
 
 <div {{$dataPrefix}} class="{{$classPrefix}}">
@@ -44,7 +44,12 @@
 
             <p class="{{$classPrefix}}__container-subtitle">
                 {{__('static.appointment_call')}}
-                <a href="tel:+380739119111" class="link">+38 073 911 9111</a>
+
+                @if($currentRegion == 'dubai')
+                    <a href="tel:{{$callUs->phone_dubai}}" class="link">{{$callUs->phone_dubai}}</a>
+                @else
+                    <a href="tel:{{$callUs->phone_ua}}" class="link">{{$callUs->phone_ua}}</a>
+                @endif
             </p>
         </div>
     </div>

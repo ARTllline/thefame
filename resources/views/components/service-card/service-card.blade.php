@@ -10,7 +10,7 @@
     <section id="prices" class="{{$classPrefix}}__prices">
         <div>
             <h4 class="{{$classPrefix}}__prices-title fadeInUp fadeInUp-active">
-                Цены
+                {{__('static.prices')}}
             </h4>
         </div>
         <div class="{{$classPrefix}}__prices-list fadeInUp fadeInUp-active">

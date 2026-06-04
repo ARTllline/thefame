@@ -11,27 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('service_categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('code')->unique();             // 'botulotoxins', 'hairdressing', 'hardware'
-            $table->json('title');                        // мультиязычный заголовок
-            $table->json('description')->nullable();      // мультиязычное описание
-            $table->integer('order')->default(0);
-            $table->timestamps();
-        });
-
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->foreignId('region_id')
                 ->constrained('regions')
                 ->cascadeOnDelete();
-            $table->foreignId('category_id')->nullable()
-                ->constrained('service_categories')
-                ->cascadeOnDelete();
-            $table->string('code')->nullable();           // опционально, для внутренних ссылок
-            $table->json('title');                        // мультиязычный заголовок
-            $table->json('description')->nullable();      // мультиязычное описание
-            $table->integer('order')->default(0);
+            $table->string('code')->nullable();
+            $table->json('title');
+            $table->json('description')->nullable();
+            $table->bigInteger('order')->default(0);
             $table->timestamps();
         });
     }

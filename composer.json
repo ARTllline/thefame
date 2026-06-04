@@ -8,6 +8,7 @@
         "php": "^8.1",
         "badinansoft/nova-language-switch": "^3.0",
         "bocanhcam/nova-breadcrumb": "^1.0",
+        "datomatic/nova-icon-field": "^1.0",
         "ebess/advanced-nova-media-library": "^4.4",
         "guzzlehttp/guzzle": "^7.2",
         "laravel-lang/common": "^6.7",
@@ -15,10 +16,12 @@
         "laravel/nova": "4.26.5",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-        "naif/toggle-switch-field": "*",
+        "naif/toggle-switch-field": "^2.0",
         "outl1ne/nova-sortable": "^3.4",
         "outl1ne/nova-translatable": "^2.3",
-        "spatie/nova-translatable": "^4.1"
+        "scadini/nova-icon": "^0.2.1",
+        "spatie/nova-translatable": "^4.1",
+        "ziffmedia/nova-select-plus": "^2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

@@ -5,6 +5,7 @@
 @endsection
 
 @section('meta_description')
+    The Fame — клініка сучасної естетики. Ми поєднуємо медичний підхід із турботою про комфорт та естетику.
 @endsection
 
 @section('content')

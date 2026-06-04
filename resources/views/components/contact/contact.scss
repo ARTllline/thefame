@@ -116,15 +116,34 @@
         }
     }
     &__container-social{
+        display: flex;
+        flex-direction: row;
         font-size: 22px;
         font-style: normal;
         font-weight: 500;
         width: max-content;
         position: relative;
         transition: 0.2s ease-in-out;
+        align-items: center;
+        gap: 12px;
+        padding-bottom: 5px;
 
         @include mobile-screen {
             font-size: 20px;
+        }
+
+        svg{
+            width: 30px;
+            height: 30px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        &:hover {
+
+
+            svg{
+                fill: var(--link-hover-color);
+            }
         }
     }
 }

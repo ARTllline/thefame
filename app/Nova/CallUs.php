@@ -49,8 +49,8 @@ class CallUs extends Resource
                 ->alwaysShow(),
             Text::make('Телефон Київ', 'phone_ua'),
             Text::make('Почта Київ', 'email_ua'),
-            Text::make('Телефон Dubai', 'phone_dubai'),
-            Text::make('Почта Dubai', 'email_dubai'),
+//            Text::make('Телефон Dubai', 'phone_dubai'),
+//            Text::make('Почта Dubai', 'email_dubai'),
         ];
     }
 

@@ -1,10 +1,7 @@
 @php
-     $classPrefix ='about';
-     $dataPrefix ='data-about';
-     $mediaDir = 'main-ua';
-        if ( $currentRegion == 'dubai'){
-                $mediaDir = 'main-dubai';
-        }
+    $classPrefix ='about';
+    $dataPrefix ='data-about';
+    $mediaDir = 'main-ua';
 @endphp
 
 
@@ -15,19 +12,10 @@
     </h2>
     <div class="{{$classPrefix}}__description">
         <p class="{{$classPrefix}}__description-text">
-            @if($currentRegion == 'dubai')
-                {!! nl2br(e($about->text_dubai), false) !!}
-            @else
-                {!! nl2br(e($about->text_ua), false) !!}
-            @endif
-
+            {!! nl2br(e($about->text_ua), false) !!}
         </p>
         <p class="{{$classPrefix}}__description-accent">
-            @if($currentRegion == 'dubai')
-                {!! nl2br(e($about->accent_dubai), false) !!}
-            @else
-                {!! nl2br(e($about->accent_ua), false) !!}
-            @endif
+            {!! nl2br(e($about->accent_ua), false) !!}
         </p>
     </div>
     <div class="{{$classPrefix}}__image">

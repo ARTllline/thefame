@@ -1,42 +1,35 @@
 import { initBannerSlider } from "../swiper/swiper";
-import { persistUtmFromUrl, readUtmCookies } from "../utils/utm"; // путь может отличаться
+import { persistUtmFromUrl, readUtmCookies } from "../utils/utm";
 
-const classPrefix = 'main-banner'
-const dataPrefix = 'data-main-banner'
-const $container = document.querySelector(`[${dataPrefix}]`)
+const classPrefixBanner = 'main-banner';
+const dataPrefixBanner = 'data-main-banner';
+const $bannerContainer = document.querySelector(`[${dataPrefixBanner}]`);
 
-// Сохраняем UTM при первом заходе
+// Сохраняем UTM-метки
 persistUtmFromUrl();
 
-if ($container) {
-    mainBanner()
+if ($bannerContainer) {
+    mainBanner();
 }
 
 export function mainBanner() {
+    const $backgroundVideo = $bannerContainer.querySelector(`[${dataPrefixBanner}-background-video]`);
+    const $backgroundLoader = $bannerContainer.querySelector(`[${dataPrefixBanner}-background-loader]`);
+    const $beautyProButton = $bannerContainer.querySelector(`[${dataPrefixBanner}-beautypro]`);
 
-    const $background = $container.querySelector(`[${dataPrefix}-background]`)
-    const $backgroundVideo = $container.querySelector(`[${dataPrefix}-background-video]`)
-    const $backgroundLoader = $container.querySelector(`[${dataPrefix}-background-loader]`)
-
-    const region = $container.getAttribute('data-region');
     const mediaQuery = window.matchMedia('(max-width: 767px)');
     let currentMode = mediaQuery.matches ? 'mobile' : 'desktop';
+    let beautyProLink = 'https://beautyprosoftware.com/b/997907';
 
-
-    const $beautyProButton = $container.querySelector(`[${dataPrefix}-beautypro]`)
-    let beautyProLink = 'https://beautyprosoftware.com/b/997907'
-
+    // 1. Логика кнопки BeautyPro
     if ($beautyProButton) {
-        // Защита от двойного клика
         let isClicking = false;
-
         $beautyProButton.addEventListener('click', async (e) => {
             e.preventDefault();
             if (isClicking) return;
             isClicking = true;
             $beautyProButton.setAttribute('aria-disabled', 'true');
 
-            // Берём UTM сначала из URL (если есть), иначе из cookie
             const urlParams = new URLSearchParams(window.location.search);
             const cookieUtm = readUtmCookies();
 
@@ -48,20 +41,16 @@ export function mainBanner() {
             const referrer = document.referrer || cookieUtm.referrer || '';
             const landing_page = window.location.href || cookieUtm.landing_page || '';
 
-            // Тело запроса
             const payload = {
                 target: beautyProLink,
                 utm_source, utm_medium, utm_campaign, utm_term, utm_content,
                 referrer, landing_page
             };
 
-            // CSRF токен из meta (убедитесь, что в layout/meta есть <meta name="csrf-token" content="{{ csrf_token() }}">)
             const tokenMeta = document.querySelector('meta[name="csrf-token"]');
             const csrf = tokenMeta ? tokenMeta.getAttribute('content') : '';
 
-            // Попробуем записать на сервер, но не будем задерживать редирект слишком долго
             try {
-                // Устанавливаем таймаут fallback (1.2 сек)
                 const controller = new AbortController();
                 const signal = controller.signal;
                 const fetchPromise = fetch('/track-beautypro-click', {
@@ -75,41 +64,35 @@ export function mainBanner() {
                     signal
                 }).then(r => r.ok ? r.json().catch(()=>null) : null);
 
-                // ждем либо fetch, либо таймаут
                 const timeoutMs = 1200;
                 const timeoutPromise = new Promise(resolve => setTimeout(() => resolve(null), timeoutMs));
-
                 const result = await Promise.race([fetchPromise, timeoutPromise]);
 
-                // Если fetch завершился раньше таймаута и вернул uuid — добавим в ссылку
                 let destination = beautyProLink;
                 if (result && result.success && result.uuid) {
-                    // корректно добавляем параметр
                     const sep = destination.includes('?') ? '&' : '?';
                     destination = `${destination}${sep}ref_uuid=${encodeURIComponent(result.uuid)}`;
                 }
 
-                // Редиректим
                 window.location.href = destination;
 
             } catch (err) {
-                // В любом случае редиректим, чтобы не портить UX
                 window.location.href = beautyProLink;
             } finally {
-                // (редирект произойдёт и страница перезагрузится — эти строки для порядка)
                 isClicking = false;
                 $beautyProButton.removeAttribute('aria-disabled');
             }
         });
     }
 
-
-    if ($backgroundVideo)
-    {
-        init();
+    // 2. Логика фонового видео
+    if ($backgroundVideo) {
+        initVideo();
     }
-    function init(){
+
+    function initVideo() {
         setVideoSource(currentMode);
+        $backgroundVideo.addEventListener('loadeddata', hideLoader);
 
         mediaQuery.addEventListener('change', (e) => {
             const newMode = e.matches ? 'mobile' : 'desktop';
@@ -118,20 +101,12 @@ export function mainBanner() {
                 setVideoSource(currentMode);
             }
         });
-
-        $backgroundVideo.addEventListener('loadeddata', hideLoader);
     }
 
     function getVideoUrl(mode) {
-        if (region === 'dubai') {
-            return mode === 'mobile'
-                ? $container.getAttribute('data-dubai-mobile')
-                : $container.getAttribute('data-dubai-desktop');
-        } else {
-            return mode === 'mobile'
-                ? $container.getAttribute('data-kyiv-mobile')
-                : $container.getAttribute('data-kyiv-desktop');
-        }
+        return mode === 'mobile'
+            ? $bannerContainer.getAttribute('data-kyiv-mobile')
+            : $bannerContainer.getAttribute('data-kyiv-desktop');
     }
 
     function setVideoSource(mode) {
@@ -139,9 +114,10 @@ export function mainBanner() {
 
         if ($backgroundVideo.getAttribute('src') !== videoUrl) {
             $backgroundVideo.src = videoUrl;
-            $backgroundVideo.load(); // Перезагрузить видео с новым источником
+            $backgroundVideo.load();
         }
     }
+
     function hideLoader() {
         if ($backgroundLoader) {
             $backgroundLoader.style.display = 'none';

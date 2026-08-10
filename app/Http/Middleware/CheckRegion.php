@@ -11,7 +11,6 @@ class CheckRegion
 {
     public function handle(Request $request, Closure $next)
     {
-        // Если регион не выбран, делимся переменной для показа модального окна
         if (!$request->session()->has('region')) {
             View::share('showRegionModal', true);
         } else {

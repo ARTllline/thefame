@@ -76,6 +76,7 @@ class AppointmentController extends Controller
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:30',
             'region' => 'nullable|string|max:255',
+            'treatment' => 'nullable|string|max:1000',
 
             // UTM-поля
             'utm_source' => 'nullable|string|max:255',
@@ -87,42 +88,27 @@ class AppointmentController extends Controller
             'referrer' => 'nullable|string|max:1000',
         ]);
 
-        // Сохраняем заявку в БД
         $appointment = Appointment::create($validatedData);
 
-        // Формирование текста уведомления
-        // Используем HTML-форматирование (напр., <b> для выделения)
-        $text = "<b>Нова заявка</b>\n\n";
-        $text .= "Регіон: " . htmlspecialchars($appointment->region) . "\n";
-        $text .= "Ім'я: " . htmlspecialchars($appointment->name) . "\n";
-        $text .= "Телефон: " . htmlspecialchars($appointment->phone) . "\n";
-
-        // Получаем всех пользователей, у которых установлена подписка (is_appointment == true)
-        // и заполнено поле telegram_id
-
-        $subscribedUsers = [];
-
-        if ($appointment->region == 'Dubai')
-        {
-            $subscribedUsers = User::where('is_appointment_dubai', true)
-                ->whereNotNull('telegram_id')
-                ->get();
-        }
-        if ($appointment->region == 'Київ')
-        {
-            $subscribedUsers = User::where('is_appointment_ua', true)
-                ->whereNotNull('telegram_id')
-                ->get();
-        }
+//        $text = "<b>Нова заявка</b>\n\n";
+//        $text .= "Регіон: " . htmlspecialchars($appointment->region) . "\n";
+//        $text .= "Ім'я: " . htmlspecialchars($appointment->name) . "\n";
+//        $text .= "Телефон: " . htmlspecialchars($appointment->phone) . "\n";
 
 
-        // Отправляем уведомление каждому подписанному пользователю
-        foreach ($subscribedUsers as $user) {
-            $sent = $telegramService->sendCustomMessage($user, $text);
-            if (!$sent) {
-                Log::error("Ошибка отправки Telegram-уведомления пользователю с telegram_id: {$user->telegram_id}");
-            }
-        }
+       // $subscribedUsers = [];
+
+
+//        $subscribedUsers = User::where('is_appointment_dubai', true)
+//            ->whereNotNull('telegram_id')
+//            ->get();
+//
+//        foreach ($subscribedUsers as $user) {
+//            $sent = $telegramService->sendCustomMessage($user, $text);
+//            if (!$sent) {
+//                Log::error("Ошибка отправки Telegram-уведомления пользователю с telegram_id: {$user->telegram_id}");
+//            }
+//        }
 
         // Можно вернуть JSON-ответ (при AJAX-запросе)
         return response()->json([
@@ -147,10 +133,10 @@ class AppointmentController extends Controller
         }
 
         return response()->json([
-            'success'  => true,
+            'success' => true,
             'statuses' => [
                 'dubai' => (bool)$user->is_appointment_dubai,
-                'ua'    => (bool)$user->is_appointment_ua,
+                'ua' => (bool)$user->is_appointment_ua,
             ],
         ]);
     }
@@ -160,7 +146,7 @@ class AppointmentController extends Controller
     {
         $data = $request->validate([
             'telegram_id' => 'required|numeric',
-            'region'      => 'required|string|in:dubai,ua',
+            'region' => 'required|string|in:dubai,ua',
         ]);
 
         $user = User::where('telegram_id', $data['telegram_id'])->first();
@@ -183,11 +169,11 @@ class AppointmentController extends Controller
         $user->save();
 
         return response()->json([
-            'success'  => true,
-            'message'  => 'Уведомления для ' . strtoupper($data['region']) . ' ' . ($status ? 'включены' : 'отключены'),
+            'success' => true,
+            'message' => 'Уведомления для ' . strtoupper($data['region']) . ' ' . ($status ? 'включены' : 'отключены'),
             'statuses' => [
                 'dubai' => (bool)$user->is_appointment_dubai,
-                'ua'    => (bool)$user->is_appointment_ua,
+                'ua' => (bool)$user->is_appointment_ua,
             ],
         ]);
     }

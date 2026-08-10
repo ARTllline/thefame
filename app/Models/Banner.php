@@ -28,8 +28,6 @@ class Banner extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('dubai_desktop')->singleFile()->useDisk('banners');
-        $this->addMediaCollection('dubai_mobile')->singleFile()->useDisk('banners');
         $this->addMediaCollection('kyiv_desktop')->singleFile()->useDisk('banners');
         $this->addMediaCollection('kyiv_mobile')->singleFile()->useDisk('banners');
     }

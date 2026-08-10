@@ -1,12 +1,15 @@
 @php
     $classPrefix ='devices';
-   $dataPrefix ='data-devices';
+    $dataPrefix ='data-devices';
 @endphp
 
 <div {{$dataPrefix}} class="{{$classPrefix}}">
-    <h1 class="{{$classPrefix}}__title">
-        {{__('static.devices')}}
-    </h1>
+    <div class="{{$classPrefix}}__header">
+        <h2 class="{{$classPrefix}}__title">{{ __('static.devices') }}</h2>
+        <p class="{{$classPrefix}}__subtitle">
+            {{ __('static.devices_subtitle') }}
+        </p>
+    </div>
     <div {{$dataPrefix}}-list class="{{$classPrefix}}__list">
         @foreach($devices as $device)
             <div {{$dataPrefix}}-card-index="{{$loop->index + 1}}" {{$dataPrefix}}-card class="{{$classPrefix}}__card">
@@ -74,10 +77,10 @@
 
                     <div class="{{$classPrefix}}__card-links">
                         <button data-modal-open class="button button-clip {{$classPrefix}}__card-button">
-             	        <span class="clip">
-					        <span>{{__('static.sign_up')}}</span>
-					       <span>{{__('static.sign_up')}}</span>
-				        </span>
+                        <span class="clip">
+                            <span>{{__('static.sign_up')}}</span>
+                           <span>{{__('static.sign_up')}}</span>
+                        </span>
                         </button>
                         @if($device->link)
                             <a class="link {{$classPrefix}}__card-link" href="{{$device->link}}">{{__('static.more')}}
@@ -89,12 +92,13 @@
 
                     </div>
 
-
                 </div>
             </div>
         @endforeach
     </div>
+    @if($devices->count() > 4)
+        <div class="show-more-wrapper">
+            <button type="button" data-load-more="devices" class="btn-show-more">{{ __('static.show_more_devices') }}</button>
+        </div>
+    @endif
 </div>
-
-
-

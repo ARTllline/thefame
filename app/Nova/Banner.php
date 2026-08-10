@@ -46,12 +46,12 @@ class Banner extends Resource
             Text::make('Название', 'title')
                 ->translatable(),
 
-            Media::make('Видео Dubai', 'dubai_desktop') // media handles videos
-            ->conversionOnIndexView('thumb')
-                ->singleMediaRules('max:100000'),
-            Media::make('Видео Dubai (моб)', 'dubai_mobile')
-                ->conversionOnIndexView('thumb')
-                ->singleMediaRules('max:100000'),
+//            Media::make('Видео Dubai', 'dubai_desktop') // media handles videos
+//            ->conversionOnIndexView('thumb')
+//                ->singleMediaRules('max:100000'),
+//            Media::make('Видео Dubai (моб)', 'dubai_mobile')
+//                ->conversionOnIndexView('thumb')
+//                ->singleMediaRules('max:100000'),
             Media::make('Видео Київ', 'kyiv_desktop')
                 ->conversionOnIndexView('thumb')
                 ->singleMediaRules('max:100000'),

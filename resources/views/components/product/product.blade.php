@@ -2,10 +2,6 @@
     $classPrefix = 'product';
     $dataPrefix = 'data-product';
     $currency = 'грн';
-    if (session('region') === 'dubai')
-        {
-              $currency = 'AED';
-        }
 
 @endphp
 

@@ -23,7 +23,7 @@
                 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-5KV8H8D4');</script>
+        })(window,document,'script','dataLayer','GTM-THZV23T2');</script>
     <!-- End Google Tag Manager -->
 
     <?php
@@ -48,7 +48,7 @@
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5KV8H8D4"
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-THZV23T2"
                   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
@@ -56,10 +56,10 @@
 @include('parts.icon-sprite')
 @include('components.header.header')
 @yield('content')
-@include('components.footer.footer')
+
 
 @include('components.modal.modal')
-@include('components.cart-widget.cart-widget')
+{{--@include('components.cart-widget.cart-widget')--}}
 @include('components.locale-selector.locale-selector')
 @include('components.region-selector.region-selector')
 

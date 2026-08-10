@@ -31,8 +31,7 @@
     max-width: 1060px;
     width: 100%;
     margin: 100px auto 0;
-    min-height: 100vh;
-    padding: 80px 0 0;
+    position: relative;
 
     @include mobile-screen {
         margin: 110px auto 0;
@@ -40,53 +39,75 @@
         padding: 0 20px;
     }
 
-    &__title {
-        font-size: 60px;
-        margin-left: -60px;
-        line-height: 1.11;
-        font-weight: 300;
-        display: flex;
-        flex-direction: column;
+    &__header {
         text-align: center;
+        margin-bottom: 30px;
 
         @include mobile-screen {
-            font-weight: 400;
-            font-size: 30px;
-            line-height: 1.2em;
-            margin-left: 0px;
-            margin-bottom: 0px;
+            margin-bottom: 10px;
+            text-align: left;
         }
     }
 
-    &__list{
+    &__title {
+        font-size: 54px;
+        line-height: 1.15;
+        font-weight: 300;
+        margin-bottom: 16px;
+        color: #111;
+
+        @include mobile-screen {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+    }
+
+    &__subtitle {
+        font-size: 18px;
+        line-height: 1.5;
+        color: #666;
+        max-width: 760px;
+        margin: 0 auto;
+
+        @include mobile-screen {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+    }
+
+    // Стили для нового контейнера-карусели
+    &__slider {
         margin-top: 60px;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
         width: 100%;
-        gap: 100px 80px;
+        padding-bottom: 60px; // Отступ для пагинации (точек) внизу
+        overflow: hidden; // Swiper сам добавит нужные классы, но лучше подстраховаться
+        position: relative;
 
         @include mobile-screen {
-            grid-template-columns: 1fr;
-            grid-gap: 50px 0;
             margin-top: 30px;
+            padding-bottom: 40px;
         }
     }
-    &__card{
-        width: 100%;
-    }
-    &__card-fade{
-        color: unset;
 
+    // Swiper переопределяет ширину слайда автоматически через breakpoints,
+    // поэтому &__card оставляем height: auto и width: 100% для заполнения выделенной колонки
+    &__card {
+        width: 100%;
+        height: auto;
+    }
+
+    &__card-fade {
+        color: unset;
         display: flex;
         flex-direction: column;
         align-items: center;
         transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
         transition-delay: 0.2s;
-
         transform: translate(0, 0);
         opacity: 1;
     }
-    &__card-img{
+
+    &__card-img {
         display: flex;
         position: relative;
         min-height: 315px;
@@ -94,13 +115,15 @@
         justify-content: center;
         margin-bottom: 10px;
     }
-    &__card-moving-svg{
+
+    &__card-moving-svg {
         position: absolute;
         z-index: 0;
         width: 249px;
         height: 315px;
     }
-    &__card-clip-path{
+
+    &__card-clip-path {
         z-index: 1;
         position: relative;
         overflow: hidden;
@@ -122,8 +145,8 @@
             max-height: 270px;
         }
     }
-    &__card-name{
-        //background-color: #fafafa;
+
+    &__card-name {
         transition: background-color linear 400ms;
         background-color: transparent;
         box-shadow: none;
@@ -133,15 +156,14 @@
         justify-content: unset;
         padding: 0;
         width: auto;
-
         font-size: 22px;
         font-style: normal;
         font-weight: 500;
         text-align: center;
     }
-    &__card-role{
-        margin-top: 15px;
 
+    &__card-role {
+        margin-top: 15px;
         font-size: 17px;
         font-style: normal;
         font-weight: 400;
@@ -156,7 +178,6 @@
         justify-content: space-between;
         align-items: center;
         gap: 4px;
-
         font-style: normal;
         font-weight: 800;
         font-size: 18px;
@@ -165,21 +186,59 @@
         text-transform: uppercase;
         color: var(--accent);
 
-        svg{
+        svg {
             width: 26px;
             height: 26px;
             stroke: var(--accent);
             fill: none;
         }
 
-        &:hover{
-            svg{
+        &:hover {
+            svg {
                 stroke: var(--link-hover-color);
             }
         }
+    }
+
+    // Стили кнопок навигации карусели
+    &__swiper-button-prev,
+    &__swiper-button-next {
+        position: absolute;
+        top: 40%;
+        transform: translateY(-50%);
+        z-index: 10;
+        cursor: pointer;
+
+        // Добавляем hover-эффект для стрелок, если у вас его нет в глобальных стилях
+        &:hover svg path {
+            stroke: var(--accent);
+        }
+    }
+
+
+    &__swiper-button-prev {
+        left: -40px; // Вынесите за пределы карточек, настройте по вкусу
+
 
         @include mobile-screen {
-            //display: none;
+            left: 0px;
+        }
+    }
+
+    &__swiper-button-next {
+        right: -40px;
+
+        @include mobile-screen {
+            right: 0px;
+        }
+    }
+
+    &__swiper-pagination {
+        bottom: 0 !important;
+
+        // Стилизуйте точки под ваш дизайн
+        .swiper-pagination-bullet-active {
+            background-color: var(--accent);
         }
     }
 }

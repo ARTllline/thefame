@@ -11,5 +11,5 @@
 
     @include('components.service-card.service-card', ['service'=>$service])
     @include('components.call-us.call-us')
-
+    @include('components.footer.footer')
 @endsection

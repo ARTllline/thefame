@@ -10,7 +10,6 @@
     width: 100%;
     margin: 100px auto 0;
     //min-height: 100vh;
-    padding: 80px 0 0;
 
     @include mobile-screen {
         margin: 80px auto 0;
@@ -18,18 +17,57 @@
         max-width: 100%;
     }
 
-    &__title {
-        font-size: 60px;
-        line-height: 1.11;
-        font-weight: 300;
-        display: flex;
-        flex-direction: column;
+    &__header {
         text-align: center;
+        margin-bottom: 30px;
 
         @include mobile-screen {
-            font-size: 30px;
+            margin-bottom: 10px;
+            text-align: left;
         }
     }
+
+    &__title {
+        font-size: 54px;
+        line-height: 1.15;
+        font-weight: 300;
+        margin-bottom: 16px;
+        color: #111;
+
+        @include mobile-screen {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+    }
+
+    &__subtitle {
+        font-size: 18px;
+        line-height: 1.5;
+        color: #666;
+        max-width: 760px;
+        margin: 0 auto;
+
+        @include mobile-screen {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+    }
+
+    &__subtitle-bottom {
+        font-size: 14px;
+        line-height: 1.5;
+        color: #666;
+        max-width: 760px;
+        margin: 0 auto;
+        margin-top: 8px;
+
+        @include mobile-screen {
+            font-size: 14px;
+            line-height: 1.4;
+            margin-top: 6px;
+        }
+    }
+
     &__list {
         margin-top: 80px;
         display: flex;

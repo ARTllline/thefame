@@ -44,26 +44,14 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
 
         return [
             MenuSection::make(__('Уведомления'), [
-                MenuItem::resource(\App\Nova\Order::class),
                 MenuItem::resource(\App\Nova\Appointment::class),
             ])->icon('bell')
                 ->collapsable(),
 
-            MenuSection::make(__('Продукция'), [
-                MenuItem::resource(\App\Nova\Product::class),
-                MenuItem::resource(\App\Nova\ProductCategory::class),
-                MenuItem::resource(\App\Nova\ProductBrand::class),
-                MenuItem::resource(\App\Nova\Ingredient::class),
-                MenuItem::resource(\App\Nova\Variant::class),
-            ])->icon('shopping-cart')
-                ->collapsable(),
-
             MenuSection::make(__('Контент'), [
-                MenuItem::resource(\App\Nova\Region::class),
                 MenuItem::resource(\App\Nova\Category::class),
                 MenuItem::resource(\App\Nova\Service::class),
                 MenuItem::resource(\App\Nova\Device::class),
-                MenuItem::resource(\App\Nova\SpecialOffer::class),
                 MenuItem::resource(\App\Nova\Gallery::class),
             ])->icon('briefcase')
                 ->collapsable(),

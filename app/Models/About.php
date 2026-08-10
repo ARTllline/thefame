@@ -20,14 +20,19 @@ class About extends Model implements HasMedia
         'text_ua',
         'text_dubai',
         'accent_ua',
-        'accent_dubai'
+        'accent_dubai',
+        'label_dubai',
+        'label_ua',
     ];
 
     public $translatable = [
         'text_ua',
         'text_dubai',
         'accent_ua',
-        'accent_dubai'
+        'accent_dubai',
+        'label_dubai',
+        'label_ua',
+
     ];
 
     protected $casts = [
@@ -35,6 +40,8 @@ class About extends Model implements HasMedia
         'text_dubai' => 'array',
         'accent_ua' => 'array',
         'accent_dubai' => 'array',
+        'label_dubai' => 'array',
+        'label_ua' => 'array',
     ];
 
     public function registerMediaConversions(Media $media = null): void

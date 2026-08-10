@@ -54,16 +54,5 @@ class Region extends Resource
         ];
     }
 
-    public static function authorizedToCreate(Request $request)
-    {
-        return false;
-    }
-    public function authorizedToReplicate(Request $request)
-    {
-        return false;
-    }
-    public function authorizedToDelete(Request $request)
-    {
-        return false;
-    }
+
 }

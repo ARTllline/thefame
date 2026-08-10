@@ -3,20 +3,16 @@
 @import "../base/media-queries";
 
 .locations {
-    margin-top: 200px;
     max-width: 1060px;
     margin-left: auto;
     margin-right: auto;
-    padding-right: 0;
-    padding-left: 0;
     position: relative;
-    padding-bottom: 80px;
+    padding: 80px 0 80px;
     width: 100%;
 
     @include mobile-screen {
-        margin: 60px auto 0;
+        padding: 60px 20px 0;
         max-width: 100%;
-        padding: 0 20px;
     }
 
     &__title {
@@ -39,9 +35,9 @@
     &__list-item{
         display: grid;
         grid-template-areas:
-        "num content"
-        ". map";
-        grid-template-columns: 35px auto;
+        "content"
+        "map";
+        grid-template-columns: auto;
         gap: 30px 90px;
         padding: 30px 0px;
         position: relative;

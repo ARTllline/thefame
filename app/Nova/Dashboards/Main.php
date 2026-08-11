@@ -23,7 +23,7 @@ class Main extends Dashboard
             new TotalServices,
             new TeamMembersCount,
 
-            new VideoInstruction()
+            //new VideoInstruction()
         ];
     }
 }

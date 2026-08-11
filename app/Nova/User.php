@@ -3,13 +3,8 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rules;
-use Laravel\Nova\Fields\Gravatar;
-use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Naif\ToggleSwitchField\ToggleSwitchField;
 
 class User extends Resource
 {
@@ -17,40 +12,39 @@ class User extends Resource
     {
         return $query->where('id', '!=', 1);
     }
+
     public static function label()
     {
-        return __('Пользователи');
+        return __('Telegram-профили');
     }
 
     public static function singularLabel()
     {
-        return __('Пользователь');
+        return __('Telegram-профиль');
     }
+
     public static $model = \App\Models\User::class;
-    public static $title = 'name';
+
+    public static $title = 'telegram_login';
+
     public static $search = [
-        'id', 'name', 'email',
+        'id', 'telegram_id', 'telegram_login', 'telegram_name',
     ];
 
     public function fields(NovaRequest $request)
     {
         return [
-            Text::make('Id','telegram_id')->sortable(),
-            Text::make('Логин','telegram_login')->sortable(),
-            Text::make('Имя','telegram_name')->sortable(),
-
-            ToggleSwitchField::make('Отправлять уведомления (Київ)','is_appointment_ua')
-                ->color('#3AB95A'),
-
-            ToggleSwitchField::make('Отправлять уведомления (Dubai)','is_appointment_dubai')
-                ->color('#3AB95A'),
+            Text::make('Telegram ID', 'telegram_id')->sortable(),
+            Text::make('Логин', 'telegram_login')
+                ->displayUsing(fn ($login) => $login ? '@'.ltrim($login, '@') : '—')
+                ->sortable(),
+            Text::make('Имя', 'telegram_name')->sortable(),
         ];
     }
 
     /**
      * Get the cards available for the request.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
     public function cards(NovaRequest $request)
@@ -61,7 +55,6 @@ class User extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
     public function filters(NovaRequest $request)
@@ -72,7 +65,6 @@ class User extends Resource
     /**
      * Get the lenses available for the resource.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
     public function lenses(NovaRequest $request)
@@ -83,7 +75,6 @@ class User extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
     public function actions(NovaRequest $request)
@@ -95,10 +86,12 @@ class User extends Resource
     {
         return false;
     }
+
     public static function authorizedToCreate(Request $request)
     {
         return false;
     }
+
     public function authorizedToReplicate(Request $request)
     {
         return false;

@@ -13,93 +13,105 @@ if ($container) {
 export function modal() {
     if (!$container) return;
 
-    const $form = $container.querySelector(`[${dataPrefix}-form]`);
-    const $nameContainer = $form.querySelector(`[${dataPrefix}-name]`);
-    const $phoneContainer = $form.querySelector(`[${dataPrefix}-phone]`);
-    const $closeButton = $container.querySelector(`[${dataPrefix}-close]`);
-    const $submitButton = $form.querySelector(`[${dataPrefix}-submit]`);
+    const $formWrapper = $container.querySelector(`[${dataPrefix}-form]`);
+    const $successPage = $container.querySelector(`[${dataPrefix}-success]`);
 
-    // Поиск полей ввода внутри контейнеров
+    const $nameContainer = $formWrapper.querySelector(`[${dataPrefix}-name]`);
+    const $phoneContainer = $formWrapper.querySelector(`[${dataPrefix}-phone]`);
+    const $treatmentContainer = $formWrapper.querySelector(`[${dataPrefix}-treatment]`);
+
+    const $closeButtons = $container.querySelectorAll(`[${dataPrefix}-close], [${dataPrefix}-success-close]`);
+    const $submitButton = $formWrapper.querySelector(`[${dataPrefix}-submit]`);
+
+    // Поля ввода
     const $nameInput = $nameContainer.querySelector('input[name="name"]');
     const $phoneInput = $phoneContainer.querySelector('input[name="phone"]');
+    const $treatmentInput = $treatmentContainer.querySelector('textarea[name="treatment"]');
     const $regionInput = $container.querySelector(`[${dataPrefix}-region]`);
 
     // Ошибочные сообщения
     const $nameErr = $nameContainer.querySelector(`.${classPrefix}__container-input-err-message`);
     const $phoneErr = $phoneContainer.querySelector(`.${classPrefix}__container-input-err-message`);
 
-    const popup = Notification({
-        position: 'top-left',
-        duration: 2000,
-        isHidePrev: false,
-        isHideTitle: true,
-        maxOpened: 3,
-    });
+    const $promoSubtitle = $container.querySelector(`[${dataPrefix}-promo-subtitle]`);
+    const $formTypeInput = $container.querySelector(`[${dataPrefix}-form-type]`);
 
-    // Закрытие модального окна
-    const closeModal = () => {
-        $container.classList.remove(`${classPrefix}--active`);
+    // Сброс модалки в исходное состояние
+    const resetModalState = () => {
+        $formWrapper.style.display = '';
+        $formWrapper.style.opacity = '';
+        $formWrapper.style.transform = '';
+        $formWrapper.style.transition = '';
+
+        $successPage.style.display = 'none';
+        $successPage.classList.remove(`${classPrefix}__success-page--active`);
+
+        $nameInput.value = '';
+        $phoneInput.value = '';
+        if ($treatmentInput) $treatmentInput.value = '';
+
+        // Прячем промо-заголовок и возвращаем тип формы по умолчанию
+        if ($promoSubtitle) $promoSubtitle.style.display = 'none';
+        if ($formTypeInput) $formTypeInput.value = 'standard';
     };
 
-    const openModal = () => {
+    const closeModal = () => {
+        $container.classList.remove(`${classPrefix}--active`);
+        // Даем время на анимацию закрытия перед сбросом контента
+        setTimeout(resetModalState, 400);
+    };
+
+    const openModal = (isPromo = false) => {
+        if (isPromo) {
+            if ($promoSubtitle) $promoSubtitle.style.display = 'block';
+            if ($formTypeInput) $formTypeInput.value = 'promo_appointment';
+        }
         $container.classList.add(`${classPrefix}--active`);
     };
 
-    if ($closeButton) {
-        $closeButton.addEventListener('click', closeModal);
-    }
+    $closeButtons.forEach(btn => btn.addEventListener('click', closeModal));
 
-    // Закрытие окна при клике вне контейнера формы
     $container.addEventListener('click', (e) => {
         if (e.target === $container) {
             closeModal();
         }
     });
 
-    // Закрытие окна по нажатию клавиши Esc
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && $container.classList.contains(`${classPrefix}--active`)) {
             closeModal();
         }
     });
 
-    // Привязка открытия модального окна к элементам с data-modal-open
     const openButtons = document.querySelectorAll('[data-modal-open]');
     openButtons.forEach((button) => {
         button.addEventListener('click', (e) => {
             e.preventDefault();
-            openModal();
+            // Проверяем, нажата ли именно плашка
+            const isPromo = button.getAttribute('data-modal-open') === 'promo';
+            openModal(isPromo);
         });
     });
 
-
-    // перед добавлением слушателя (внутри modal())
-    if (!$submitButton) return;
-
-// Защита от многократной привязки обработчика
-    if ($submitButton.dataset.listenerAdded === 'true') {
-        return;
-    }
+    if (!$submitButton || $submitButton.dataset.listenerAdded === 'true') return;
     $submitButton.dataset.listenerAdded = 'true';
 
     let isSubmitting = false;
 
-    // Обработчик клика по кнопке отправки
     $submitButton.addEventListener('click', async (e) => {
         e.preventDefault();
         await send();
     });
 
+    async function send() {
+        if (isSubmitting) return;
 
-    async function send(){
-        if (isSubmitting) return; // уже отправляется
-
-        // Сброс предыдущих ошибок
         $nameErr.style.opacity = '0';
         $phoneErr.style.opacity = '0';
 
         const name = $nameInput.value.trim();
         const phone = $phoneInput.value.trim();
+        const treatment = $treatmentInput ? $treatmentInput.value.trim() : '';
         const region = $regionInput ? $regionInput.value.trim() : '';
 
         let hasError = false;
@@ -115,22 +127,22 @@ export function modal() {
             hasError = true;
         }
 
-        if (hasError) {
-            return;
-        }
+        if (hasError) return;
 
         const utm = readUtmCookies();
 
-        // Блокировка кнопки и защита от дублей
         isSubmitting = true;
         $submitButton.disabled = true;
+
+        const from_page_value = $formTypeInput ? $formTypeInput.value : 'standard';
 
         try {
             const payload = {
                 name,
                 phone,
+                treatment,
                 region,
-                // додаємо UTM поля (порожні рядки без значення)
+                from_page: from_page_value,
                 utm_source: utm.utm_source || null,
                 utm_medium: utm.utm_medium || null,
                 utm_campaign: utm.utm_campaign || null,
@@ -140,47 +152,32 @@ export function modal() {
                 landing_page: utm.landing_page || null,
             };
 
+            $nameInput.value = '';
+            $phoneInput.value = '';
+
+            $formWrapper.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            $formWrapper.style.opacity = '0';
+            $formWrapper.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                $formWrapper.style.display = 'none';
+                $successPage.style.display = 'block';
+
+                void $successPage.offsetWidth;
+
+                $successPage.classList.add(`${classPrefix}__success-page--active`);
+            }, 300);
+
+
             const response = await axios.post('/appointment', payload);
 
             if (response.data.success) {
-                popup.success({ message: `Success` });
                 $nameInput.value = '';
                 $phoneInput.value = '';
 
+                $formWrapper.style.display = 'none';
+                $successPage.style.display = 'block';
+
                 window.dataLayer = window.dataLayer || [];
-
-                window.dataLayer.push({
-                    event: 'form_submit_new',
-                    form: 'modal_appointment',
-                    region: region,
-                    appointment_id: response.data.appointment_id,
-                    timestamp: Date.now(),
-                    utm_source: payload.utm_source,
-                    utm_medium: payload.utm_medium,
-                    utm_campaign: payload.utm_campaign,
-                    utm_term: payload.utm_term,
-                    utm_content: payload.utm_content,
-                    referrer: payload.referrer,
-                    landing_page: payload.landing_page
-                });
-
-                window.dataLayer.push({
-                    event: 'form_submit',
-                    form: 'modal_appointment',
-                    region: region,
-                    appointment_id: response.data.appointment_id,
-                    timestamp: Date.now(),
-                    utm_source: payload.utm_source,
-                    utm_medium: payload.utm_medium,
-                    utm_campaign: payload.utm_campaign,
-                    utm_term: payload.utm_term,
-                    utm_content: payload.utm_content,
-                    referrer: payload.referrer,
-                    landing_page: payload.landing_page
-                });
-
-
-                closeModal();
             } else {
                 popup.error({ message: `Unexpected response: ${response.status}` });
             }

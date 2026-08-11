@@ -21,13 +21,8 @@
                         @foreach($variant->prices as $price)
                             <div class="{{$classPrefix}}__prices-item">
                                 <span class="{{$classPrefix}}__prices-item-name">{{ $price->name }}</span>
-                                <span class="{{$classPrefix}}__prices-item-num">
-                {{ number_format($price->price, 0, '.', '') }}     @if(session('region') === 'dubai')
-                                        AED
-                                    @else
-                                        грн
-                                    @endif
-              </span>
+                                <span class="{{$classPrefix}}__prices-item-num">{{ number_format($price->price, 0, '.', '') }} AED
+                                </span>
                             </div>
                         @endforeach
                     </div>

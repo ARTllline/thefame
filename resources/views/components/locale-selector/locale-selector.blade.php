@@ -2,31 +2,41 @@
     $classPrefix = 'locale-selector';
     $dataPrefix = 'data-locale-selector';
 
+    if (!function_exists('getLocalizedUrl')) {
+        function getLocalizedUrl($newLocale) {
+            $segments = request()->segments();
+            $urlLocales = ['ru', 'ua', 'en'];
+
+            if (count($segments) > 0 && in_array($segments[0], $urlLocales)) {
+                $segments[0] = $newLocale;
+            } else {
+                array_unshift($segments, $newLocale);
+            }
+
+            return url(implode('/', $segments)) . (request()->getQueryString() ? '?' . request()->getQueryString() : '');
+        }
+    }
 @endphp
 
 <div {{$dataPrefix}} class="{{$classPrefix}}">
     <div class="{{$classPrefix}}__content">
-        <!-- Заголовок модального окна -->
         <h2 class="{{$classPrefix}}__title">{{__('static.select_locale')}}</h2>
         <div {{$dataPrefix}}-locales class="{{$classPrefix}}__locales">
-            <div  {{$dataPrefix}}-locale class="{{$classPrefix}}__locale" data-locale="uk">
-                Українська
-            </div>
-            @if($currentRegion !== 'ua')
-                <div {{$dataPrefix}}-locale class="{{ $classPrefix }}__locale" data-locale="ru">
-                    Русский
-                </div>
-            @endif
-            <div {{$dataPrefix}}-locale class="{{$classPrefix}}__locale" data-locale="en">
+
+            <a href="{{ getLocalizedUrl('en') }}" class="{{$classPrefix}}__locale">
                 English
-            </div>
+            </a>
+
+            <a href="{{ getLocalizedUrl('ua') }}" class="{{$classPrefix}}__locale">
+                Українська
+            </a>
+
+            @if($currentRegion !== 'ua')
+                <a href="{{ getLocalizedUrl('ru') }}" class="{{ $classPrefix }}__locale">
+                    Русский
+                </a>
+            @endif
+
         </div>
     </div>
-
-    <form action="{{ route('locale.set') }}" method="POST" {{$dataPrefix}}-form id="localeSelectorForm"
-          style="display: none;">
-        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        <input type="hidden" name="redirect_to" value="{{ url()->current() }}">
-        <input type="hidden" name="locale" {{$dataPrefix}}-input id="localeInput">
-    </form>
 </div>

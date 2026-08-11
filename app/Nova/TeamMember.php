@@ -45,12 +45,9 @@ class TeamMember extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make(__('ТЕСТ порядок'), 'order')
-                ->sortable()->readonly(),
 
             Images::make('Изображение', 'main')
-                ->conversionOnIndexView('webp')
-                ->rules('required')->fullSize(),
+                ->conversionOnIndexView('webp')->fullSize(),
 
             Text::make(__('Полное имя'), 'name')
                 ->sortable()

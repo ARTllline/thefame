@@ -3,5 +3,5 @@
 
 
 <footer {{$dataPrefix}} class="{{$classPrefix}}">
-    <div class="{{$classPrefix}}__copyright">All Rights Reserved - 2025 © The Fame</div>
+    <div class="{{$classPrefix}}__copyright">All Rights Reserved - {{date('Y')}} © The Fame</div>
 </footer>

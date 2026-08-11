@@ -6,27 +6,18 @@
 
 <div {{$dataPrefix}} class="{{$classPrefix}}">
     <h4 class="{{$classPrefix}}__title">
-        {{__('static.locations')}}
+        {{ __('static.address_title') }}
     </h4>
 
     <div class="{{$classPrefix}}__list">
         @foreach($locations as $location)
             <div class="{{$classPrefix}}__list-item">
-                <div class="{{$classPrefix}}__list-item-num">
-                    0{{ $loop->index + 1 }}
-                </div>
                 <div class="{{$classPrefix}}__list-item-content">
-                    <div class="{{$classPrefix}}__list-item-content-street">
+                    <a href="https://maps.app.goo.gl/XvMEX9bdjVNrCsbV7" class="{{$classPrefix}}__list-item-content-street link link--anim">
                         {{$location->title}}
-                    </div>
+                    </a>
                     <div class="{{$classPrefix}}__list-item-content-district">
                         {{$location->subtitle}}
-                    </div>
-                    <div class="{{$classPrefix}}__list-item-content-phone">
-                        <a class="link link--anim"  href="#">{{$location->phone}}</a>
-                    </div>
-                    <div class="{{$classPrefix}}__list-item-content-mail">
-                        <a class="link link--anim" href="#">{{$location->email}}</a>
                     </div>
                 </div>
 

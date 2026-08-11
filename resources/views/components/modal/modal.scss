@@ -67,7 +67,7 @@
 
     &__container {
         width: 100%;
-        max-width: 510px;
+        max-width: 810px;
         padding: 80px 70px 60px;
         border-radius: 37px;
         background-color: var(--popupBg);
@@ -79,6 +79,15 @@
         @include mobile-screen {
             border-radius: 37px 37px 0 0 ;
             padding: 50px 22px 60px;
+        }
+
+        &--success {
+            padding: 60px 50px;
+            text-align: center;
+
+            @include mobile-screen {
+                padding: 50px 22px 40px;
+            }
         }
 
     }
@@ -132,10 +141,24 @@
         font-weight: 400;
     }
 
+    &__promo-subtitle {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--accent);
+        text-align: center;
+        margin-top: -20px;
+        margin-bottom: 25px;
+        width: 100%;
+
+        @include mobile-screen {
+            font-size: 16px;
+            margin-top: -15px;
+        }
+    }
+
     &__container-input {
         width: 100% !important;
         position: relative;
-
 
         input{
             width: 100%;
@@ -149,6 +172,30 @@
             border: 1px solid rgba(0, 0, 0, .1);
             color: var(--secondaryText);
             padding: 0 20px;
+        }
+
+        textarea {
+            width: 100%;
+            font-family: "Manrope", sans-serif;
+            -webkit-appearance: none;
+            -webkit-tap-highlight-color: transparent;
+            font-size: 17px;
+            border-radius: 20px; // Чуть меньше скругление для textarea смотрится лучше
+            min-height: 100px;
+            background-color: var(--inputBg);
+            border: 1px solid rgba(0, 0, 0, .1);
+            color: var(--secondaryText);
+            padding: 18px 20px;
+            resize: none; // Запрещаем растягивать вручную
+            outline: none;
+
+            &:focus {
+                border-color: rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        &--textarea {
+            margin-bottom: 25px; // Задаем точный отступ перед кнопкой
         }
         span{
             font-size: 13px;
@@ -190,13 +237,13 @@
         }
     }
 
-    &__container-button{
+    &__container-button {
         height: 60px;
+        margin-top: 0; // Убираем отступ сверху, он теперь контролируется нижним марджином textarea
         margin-bottom: 30px;
         width: 100%;
         padding-top: 13px;
         padding-bottom: 13px;
-
         color: #fff;
         background-color: var(--brightAccent);
     }
@@ -213,6 +260,137 @@
         a{
             margin: 8px;
         }
+    }
+
+
+    &__input-label {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 10px;
+        padding-left: 20px;
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--secondaryText);
+    }
+
+    &__success-page {
+        width: 100%;
+        max-width: 680px; // Сделали шире на десктопе (было 510px)
+
+        // Стартовое состояние для анимации
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+
+        @include mobile-screen {
+            max-width: 100%;
+            position: absolute;
+            bottom: 0;
+        }
+
+        // Класс, который добавляется через JS для плавного появления
+        &--active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    &__container--success {
+        padding: 70px 60px 60px; // Даем больше "воздуха" на десктопе
+        text-align: center;
+
+        @include mobile-screen {
+            padding: 30px 22px 10px;
+        }
+    }
+
+    // Слегка увеличим шрифты для широкой версии
+    &__success-title {
+        font-family: "Twentieth Century", sans-serif;
+        font-size: 46px;
+        font-weight: 700;
+        color: var(--accent);
+        margin-bottom: 12px;
+
+        @include mobile-screen {
+            font-size: 38px;
+        }
+    }
+
+    &__success-wa-btn {
+        margin-top: 10px;
+        background-color: #25D366;
+        color: #fff;
+        border-radius: 30px;
+        padding: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: opacity 0.3s ease;
+
+        width: fit-content;
+        align-self: center;
+
+        &:hover {
+            opacity: 0.85;
+        }
+    }
+
+    &__success-subtitle {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 24px;
+
+        @include mobile-screen {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+    }
+
+    &__success-desc {
+        font-size: 17px;
+        line-height: 1.5;
+        color: var(--secondaryText);
+        margin-bottom: 35px;
+
+        @include mobile-screen {
+            font-size: 15px;
+            margin-bottom: 25px;
+        }
+    }
+
+    &__success-contacts {
+        background: rgba(0, 0, 0, 0.03);
+        border-radius: 24px;
+        padding: 30px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-bottom: 35px;
+
+        &-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .contact-link {
+            font-size: 16px;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:hover {
+                color: var(--accent);
+            }
+        }
+    }
+    @keyframes fade-in {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
 }

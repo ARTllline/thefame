@@ -37,7 +37,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \Badinansoft\LanguageSwitch\Http\Middleware\LanguageSwitch::class,
-            \App\Http\Middleware\CheckRegion::class,
+            //\App\Http\Middleware\CheckRegion::class,
             \App\Http\Middleware\SetLocale::class,
         ],
 

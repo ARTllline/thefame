@@ -24,8 +24,6 @@ class User extends Authenticatable
         'telegram_id',
         'telegram_login',
         'telegram_name',
-        'is_appointment_dubai',
-        'is_appointment_ua'
     ];
 
     /**

@@ -58,25 +58,18 @@ class About extends Resource
                 return '-';
             }),
 
-            Images::make('Изображения Дубай', 'main-dubai')
+            Images::make('Изображения', 'main-dubai')
                 ->conversionOnIndexView('webp')
                 ->fullSize(),
 
-            Textarea::make('Текст Дубай', 'text_dubai')
-                ->translatable()
-                ->alwaysShow(),
-            Textarea::make('Акцент Дубай', 'accent_dubai')
-                ->translatable()
-                ->alwaysShow(),
 
-            Images::make('Изображения Киев', 'main-ua')
-                ->conversionOnIndexView('webp')
-                ->fullSize(),
-
-            Textarea::make('Текст Киев', 'text_ua')
+            Textarea::make('Заголовок', 'label_dubai')
                 ->translatable()
                 ->alwaysShow(),
-            Textarea::make('Акцент Киев', 'accent_ua')
+            Textarea::make('Текст', 'text_dubai')
+                ->translatable()
+                ->alwaysShow(),
+            Textarea::make('Акцент', 'accent_dubai')
                 ->translatable()
                 ->alwaysShow(),
         ];

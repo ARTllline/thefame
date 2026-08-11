@@ -2,9 +2,9 @@
     use Illuminate\Support\Facades\Storage;
     $classPrefix ='contact';
     $dataPrefix ='data-contact';
-  $links = \App\Models\SocialLink::where(function ($query) use ($currentRegion) {
-                $query->whereHas('region', function ($query) use ($currentRegion) {
-                    $query->where('code', $currentRegion);
+  $links = \App\Models\SocialLink::where(function ($query) {
+                $query->whereHas('region', function ($query)  {
+                    $query->where('code', 'dubai');
                 })->orWhereDoesntHave('region');
             })->get();
    $callUs = \App\Models\CallUs::first();
@@ -18,21 +18,13 @@
     <div class="{{$classPrefix}}__container">
         <div class="{{$classPrefix}}__container-top">
             <div class="{{$classPrefix}}__container-phone">
-                <a class="link link--anim" href="#">
-                    @if($currentRegion == 'dubai')
-                        {{$callUs->phone_dubai}}
-                    @else
-                        {{$callUs->phone_ua}}
-                    @endif
+                <a class="link link--hover " href="tel:{{$callUs->phone_dubai}}">
+                    {{$callUs->phone_dubai}}
                 </a>
             </div>
             <div class="{{$classPrefix}}__container-mail">
                 <a class="link link--anim" href="#">
-                    @if($currentRegion == 'dubai')
-                        {{$callUs->email_dubai}}
-                    @else
-                        {{$callUs->email_ua}}
-                    @endif
+                    {{$callUs->email_dubai}}
                 </a>
             </div>
         </div>
@@ -40,7 +32,7 @@
             @foreach($links as $link)
                 @php
                     $parts = explode(' ', $link->icon);
-$style = $parts[0] ?? 'default'; // или null
+$style = $parts[0] ?? 'default';
 $icon  = $parts[1] ?? null;
            $svg = Storage::disk('nova-icon-field')
                           ->get("{$style}/{$icon}.svg");

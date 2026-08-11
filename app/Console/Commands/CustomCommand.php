@@ -27,6 +27,7 @@ class CustomCommand extends Command
      */
     public function handle()
     {
+
         $ingredients = Ingredient::query()
             ->whereNull('slug')
             ->orWhere('slug', '')

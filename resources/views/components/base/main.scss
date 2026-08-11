@@ -476,7 +476,6 @@
     --serviceGradient: linear-gradient(180deg, rgba(37, 35, 35, 0.4) 0%, rgba(0, 0, 0, 0.02) 100%);
 
 
-
     --catalogue-width: 1530px;
     --catalogue-grid: 5;
     --catalogue-big-card-columns: 2;
@@ -505,7 +504,6 @@
     --catalogue-card-big-height: calc(var(--catalogue-card-big-height-part-of-cards) + var(--catalogue-card-big-height-part-of-desc));
 
 
-
     @media (max-width: 1600px) {
         --catalogue-width: 100dvw;
     }
@@ -517,12 +515,12 @@
         --catalogue-grid: 2;
     }
     @media (max-width: 768px) {
-        --catalogue-filter-width: 0px!important;
-        --catalogue-filter-gap: 0px!important;
+        --catalogue-filter-width: 0px !important;
+        --catalogue-filter-gap: 0px !important;
     }
 }
 
-.filter-active{
+.filter-active {
     --catalogue-filter-width: 255px;
     --catalogue-filter-gap: 32px;
 }
@@ -575,6 +573,7 @@ html {
     overflow-x: hidden !important;
     overflow-y: scroll;
     scroll-behavior: smooth;
+    //scroll-padding-top: 70px;
 }
 
 body {
@@ -619,6 +618,14 @@ img {
 
     }
 
+    &--hover {
+        color: rgb(37, 35, 35);
+
+        &:hover {
+            color: var(--accent) !important;
+
+        }
+    }
 
     &--anim {
         color: rgb(37, 35, 35);
@@ -788,4 +795,68 @@ button:focus, input:focus, textarea:focus {
     }
 }
 
+// Начальное состояние для эффекта появления блоков
+.reveal-section {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform, opacity;
 
+    // Класс активации, который повесит JS при скролле
+    &--visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Стили для универсальной премиальной кнопки "Show More"
+.show-more-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    clear: both;
+}
+
+.btn-show-more {
+    height: 54px;
+    padding: 0 40px;
+    border-radius: 50px;
+    border: 2px solid var(--accent);
+    background-color: transparent;
+    color: var(--text, #000);
+    font-family: "Twentieth Century", sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        background-color: var(--accent);
+        border-color: var(--brightAccent);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(190, 82, 147, 0.2);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+// Вспомогательный класс для скрытия карточек
+.card-hidden-load {
+    display: none !important;
+}
+
+.footer-section {
+    background-color: #f4e4e8;
+    position: relative;
+    z-index: 1;
+}

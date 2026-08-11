@@ -11,28 +11,27 @@ use Laravel\Nova\NovaApplicationServiceProvider;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
 {
-
     public function boot()
     {
         parent::boot();
 
         Nova::withBreadcrumbs();
 
-//        Nova::serving(function () {
-//            Nova::provideToScript([
-//                'customLocaleDisplay' => [
-//                    'en' => '<img src = "/flag-en.png" />',
-//                    'et' => '<img src = "/flag-et.png" />',
-//                ]
-//            ]);
-//        });
+        //        Nova::serving(function () {
+        //            Nova::provideToScript([
+        //                'customLocaleDisplay' => [
+        //                    'en' => '<img src = "/flag-en.png" />',
+        //                    'et' => '<img src = "/flag-et.png" />',
+        //                ]
+        //            ]);
+        //        });
 
         Nova::mainMenu(function (Request $request) {
             return $this->menu($request);
         });
 
         Nova::footer(function ($request) {
-            return '<p class="text-center text-xs text-gray-500">&copy; ' . date('Y') . ' All Rights Reserved - 2025 © The Fame.</p>';
+            return '<p class="text-center text-xs text-gray-500">&copy; '.date('Y').' All Rights Reserved - 2025 © The Fame.</p>';
         });
     }
 
@@ -41,29 +40,17 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         // Загружаем все регионы
         $regions = \App\Models\Region::orderBy('name')->get();
 
-
         return [
             MenuSection::make(__('Уведомления'), [
-                MenuItem::resource(\App\Nova\Order::class),
                 MenuItem::resource(\App\Nova\Appointment::class),
+                MenuItem::resource(\App\Nova\AppointmentNotificationSetting::class),
             ])->icon('bell')
                 ->collapsable(),
 
-            MenuSection::make(__('Продукция'), [
-                MenuItem::resource(\App\Nova\Product::class),
-                MenuItem::resource(\App\Nova\ProductCategory::class),
-                MenuItem::resource(\App\Nova\ProductBrand::class),
-                MenuItem::resource(\App\Nova\Ingredient::class),
-                MenuItem::resource(\App\Nova\Variant::class),
-            ])->icon('shopping-cart')
-                ->collapsable(),
-
             MenuSection::make(__('Контент'), [
-                MenuItem::resource(\App\Nova\Region::class),
                 MenuItem::resource(\App\Nova\Category::class),
                 MenuItem::resource(\App\Nova\Service::class),
                 MenuItem::resource(\App\Nova\Device::class),
-                MenuItem::resource(\App\Nova\SpecialOffer::class),
                 MenuItem::resource(\App\Nova\Gallery::class),
             ])->icon('briefcase')
                 ->collapsable(),
@@ -75,6 +62,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 ->collapsable(),
 
             MenuSection::make(__('Информация'), [
+                MenuItem::resource(\App\Nova\PromoBanner::class),
                 MenuItem::resource(\App\Nova\Banner::class),
                 MenuItem::resource(\App\Nova\SocialLink::class),
                 MenuItem::resource(\App\Nova\Location::class),
@@ -132,7 +120,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function tools()
     {
         return [
-            new \Badinansoft\LanguageSwitch\LanguageSwitch(),
+            new \Badinansoft\LanguageSwitch\LanguageSwitch,
         ];
     }
 

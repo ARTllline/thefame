@@ -2,7 +2,6 @@
 @import "../base/mixins";
 @import "../base/media-queries";
 
-// Миксин для общих стилей, используемых в темных модификаторах
 
 @keyframes menuItemAppear {
     0% {
@@ -35,6 +34,12 @@
                 stroke: var(--headerPinColor);
             }
         }
+    }
+    .header__action-button {
+        color: var(--headerPinColor);
+        fill: var(--headerPinColor);
+        border-color: rgba(0, 0, 0, 0.2);
+
     }
 
     .header__mobile-menu-button {
@@ -230,9 +235,9 @@
     z-index: 10;
     display: flex;
     align-items: center;
-    transition: all ease-in-out 250ms;
+    transition: background-color 250ms ease-in-out, box-shadow 250ms ease-in-out, transform 250ms ease-in-out;
     background: transparent;
-
+    will-change: transform, background-color;
     &--hidden {
         transform: translateY(-100%);
         pointer-events: none !important;
@@ -354,20 +359,25 @@
         transition: transform cubic-bezier(0.72, 0.1, 0.28, 0.89) 400ms, opacity cubic-bezier(0.72, 0.1, 0.28, 0.89) 400ms, backdrop-filter 0.5s ease-in-out, -webkit-filter 0.5s ease-in-out;
 
         @include mobile-screen {
-            transform: translateY(-100%);
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
+            width: 100%;
+            height: calc(100dvh - var(--promo-offset, 0px));
             z-index: 99;
             color: rgb(255, 255, 255);
+
             display: flex;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 70px 20px 40px;
+            transform: translateY(-100%);
             opacity: 0;
-            padding: 40px 0 0;
-
             pointer-events: none;
+            transition: transform 400ms cubic-bezier(0.72, 0.1, 0.28, 0.89),
+            opacity 400ms ease,
+            backdrop-filter 0.5s ease;
         }
     }
 
@@ -391,21 +401,16 @@
         display: flex;
         flex-direction: row;
         padding: 0;
-        flex-grow: unset;
-        height: 100%;
-        counter-reset: menuItems;
         gap: 30px;
 
-
         @include mobile-screen {
-            display: flex;
             flex-direction: column;
-            counter-reset: menuItems;
-            flex-grow: 1;
-
-            padding-top: 40px;
+            align-items: center; // Центрируем пункты меню на мобилках
             width: 100%;
-            gap: 0;
+            gap: 20px; // Даем воздух между пунктами
+            //margin-bottom: 40px; // Отступ до соцсетей/языков снизу
+            flex-grow: 0;
+            margin-top: auto;
         }
     }
 
@@ -489,24 +494,16 @@
                 position: relative;
                 display: flex;
                 align-items: center;
-                height: 60px;
                 font-weight: 500;
-                font-size: 26px;
+                height: auto;
+                padding: 10px 0;
+                font-size: 22px;
                 line-height: 1.2em;
                 pointer-events: none;
+
             }
             &::before {
-                counter-increment: menuItems;
-                content: counter(menuItems);
-                margin-left: 20px;
-                margin-right: 25px;
-                font-size: 16px;
-                position: relative;
-                display: flex;
-                align-items: center;
-                height: 60px;
-                font-weight: 500;
-                line-height: 1.2em;
+                display: none;
             }
         }
     }
@@ -592,7 +589,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: calc(100vh - 70px);
+            height: calc(100dvh - 70px - var(--promo-offset, 0px));
             background: white;
             transform: translateX(200%); // «спрятать» вправо
             transition: transform 0.3s ease-in-out;
@@ -696,14 +693,16 @@
 
     &__menu-bottom {
         display: flex;
-        justify-content: space-between;
-        width: fit-content;
+        align-items: center;
+        gap: 30px;
 
         @include mobile-screen {
             width: 100%;
-            display: flex;
             justify-content: space-between;
-            padding: 0 var(--paddingX) 20px;
+            flex-direction: column;
+            gap: 25px;
+            padding: 0;
+            margin-top: auto;
         }
     }
 
@@ -726,6 +725,39 @@
         }
     }
 
+    &__action-button {
+        height: 50px;
+        width: fit-content;
+        padding: 0 25px;
+        border-radius: 50px;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 14px;
+        color: #fff;
+        transition: all 0.3s ease;
+        cursor: pointer;
+
+        margin-top: 0!important;
+
+        &:hover {
+            border-color: var(--accent);
+        }
+
+        @include mobile-screen {
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 22px;
+            letter-spacing: .06em;
+            height: 50px; // Возвращаем крупный размер для мобильного меню
+            padding: 0 25px;
+            border-radius: 50px;
+            margin-top: 15px; // Даем отступ от выбора языка на мобилке
+        }
+    }
+
     &__menu-settings {
         display: flex;
         align-self: flex-end;
@@ -741,6 +773,8 @@
         @include mobile-screen {
             display: flex;
             align-self: flex-end;
+            width: 100%;
+            justify-content: space-between;
         }
     }
 
@@ -784,6 +818,7 @@
             }
 
             svg {
+                flex-shrink: 0;
                 transition: all 0.4s;
                 fill: none;
                 stroke: #fff;

@@ -31,6 +31,26 @@
             }
         }
     }
+    &--contained {
+        overflow: hidden !important;
+        // padding-bottom мы не трогаем, он наследуется от базового .swiper (70px/50px),
+        // чтобы точки пагинации не обрезались.
+
+        // Возвращаем кнопки внутрь контейнера, чтобы их не обрезало
+        .slider-button-prev {
+            left: 10px;
+            @include mobile-screen {
+                left: 0;
+            }
+        }
+
+        .slider-button-next {
+            right: 10px;
+            @include mobile-screen {
+                right: 0;
+            }
+        }
+    }
 
     &--padding{
         padding-bottom: 60px !important;

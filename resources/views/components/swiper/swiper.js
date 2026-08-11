@@ -1,25 +1,26 @@
 import Swiper from 'swiper/bundle';
+
 export function initOfferSlider(swiperClass) {
     console.log('initOfferSlider swiperINIT');
-    const swiper = new Swiper("." + swiperClass, {
+    const container = document.querySelector("." + swiperClass);
+    if (!container) return;
+
+    const swiper = new Swiper(container, {
         slidesPerView: 1,
         spaceBetween: 15,
         watchSlidesProgress: true,
         freeMode: true,
         pagination: {
-            el: ".swiper-pagination",
+            el: container.querySelector(".swiper-pagination"),
             clickable: true,
-
         },
         navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
+            nextEl: container.querySelector(".swiper-button-next"),
+            prevEl: container.querySelector(".swiper-button-prev"),
         },
         on: {
             progress: function () {
                 this.slides.forEach(slide => {
-                    // Если слайд полностью виден, оставляем opacity 1,
-                    // иначе - задаём затемнение (например, 0.5)
                     if (slide.classList.contains('swiper-slide-visible')) {
                         slide.style.opacity = '1';
                     } else {
@@ -34,7 +35,6 @@ export function initOfferSlider(swiperClass) {
             }
         },
         breakpoints: {
-            // Если ширина экрана меньше 768px
             768: {
                 spaceBetween: 60,
                 slidesPerView: 3,
@@ -42,20 +42,22 @@ export function initOfferSlider(swiperClass) {
         }
     });
 }
+
 export function initReviewSlider(swiperClass) {
-    console.log('initOfferSlider swiperINIT');
-    const swiper = new Swiper("." + swiperClass, {
+    console.log('initReviewSlider swiperINIT');
+    const container = document.querySelector("." + swiperClass);
+    if (!container) return;
+
+    const swiper = new Swiper(container, {
         spaceBetween: 20,
         slidesPerView: 1.05,
         watchSlidesProgress: true,
         freeMode: true,
         pagination: {
-            el: ".swiper-pagination",
+            el: container.querySelector(".swiper-pagination"),
             clickable: true,
-
         },
         breakpoints: {
-            // Если ширина экрана меньше 768px
             768: {
                 spaceBetween: 60,
                 slidesPerView: 1,
@@ -64,8 +66,6 @@ export function initReviewSlider(swiperClass) {
         on: {
             progress: function () {
                 this.slides.forEach(slide => {
-                    // Если слайд полностью виден, оставляем opacity 1,
-                    // иначе - задаём затемнение (например, 0.5)
                     if (slide.classList.contains('swiper-slide-visible')) {
                         slide.style.opacity = '1';
                     } else {
@@ -81,34 +81,34 @@ export function initReviewSlider(swiperClass) {
         }
     });
 }
+
 export function initCertSlider(swiperClass) {
-    console.log('initOfferSlider swiperINIT');
-    const swiper = new Swiper("." + swiperClass, {
+    console.log('initCertSlider swiperINIT');
+    const container = document.querySelector("." + swiperClass);
+    if (!container) return;
+
+    const swiper = new Swiper(container, {
         spaceBetween: 15,
         slidesPerView: 1.05,
         watchSlidesProgress: true,
         freeMode: true,
         pagination: {
-            el: ".swiper-pagination",
+            el: container.querySelector(".swiper-pagination"),
             clickable: true,
-
         },
         breakpoints: {
-            // Если ширина экрана меньше 768px
             768: {
                 spaceBetween: 60,
                 slidesPerView: 3,
             }
         },
         navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
+            nextEl: container.querySelector(".swiper-button-next"),
+            prevEl: container.querySelector(".swiper-button-prev"),
         },
         on: {
             progress: function () {
                 this.slides.forEach(slide => {
-                    // Если слайд полностью виден, оставляем opacity 1,
-                    // иначе - задаём затемнение (например, 0.5)
                     if (slide.classList.contains('swiper-slide-visible')) {
                         slide.style.opacity = '1';
                     } else {
@@ -124,59 +124,105 @@ export function initCertSlider(swiperClass) {
         }
     });
 }
-export function initAboutSlider(swiperClass) {
-    const swiper = new Swiper("." + swiperClass, {
+
+export function initAboutSlider(swiperContainer) {
+    if (!swiperContainer) return;
+
+    const nextBtn = swiperContainer.querySelector('.swiper-button-next');
+    const prevBtn = swiperContainer.querySelector('.swiper-button-prev');
+    const paginationEl = swiperContainer.querySelector('.swiper-pagination');
+
+    return new Swiper(swiperContainer, {
         slidesPerView: 1,
         spaceBetween: 0,
-
-        watchSlidesProgress: true,
+        loop: true,
+        navigation: {
+            nextEl: nextBtn,
+            prevEl: prevBtn,
+        },
         pagination: {
-            el: ".swiper-pagination",
+            el: paginationEl,
             clickable: true,
         },
+        preventClicks: true,
+        preventClicksPropagation: true,
+        watchOverflow: true,
+        on: {
+            imagesReady(swiper) {
+                swiper.update();
+            }
+        }
+    });
+}
+
+export function initGallerySlider(swiperClass) {
+    const swiperContainer = document.querySelector("." + swiperClass);
+    if (!swiperContainer) return null;
+
+    return new Swiper(swiperContainer, {
+        loop: true, // Включаем бесконечную прокрутку
+        slidesPerView: 1,
+        spaceBetween: 30,
+        watchSlidesProgress: true,
+        breakpoints: {
+            768: {
+                spaceBetween: 30,
+                slidesPerView: 3,
+            }
+        },
+        pagination: {
+            el: swiperContainer.querySelector(".swiper-pagination"),
+            clickable: true,
+            dynamicBullets: true, // Включает ограничение по количеству видимых точек
+            dynamicMainBullets: 3 // Максимальное количество больших точек (опционально)
+        },
         navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
+            nextEl: swiperContainer.querySelector(".swiper-button-next"),
+            prevEl: swiperContainer.querySelector(".swiper-button-prev"),
         },
     });
-
 }
+
 export function initDeviceSlider(swiperClass, swiperPrevClass) {
     console.log('initDeviceSlider swiperINIT');
 
-    const swiperPrev = new Swiper("." + swiperPrevClass, {
+    const containerMain = document.querySelector("." + swiperClass);
+    const containerPrev = document.querySelector("." + swiperPrevClass);
+
+    if (!containerMain || !containerPrev) return;
+
+    const swiperPrev = new Swiper(containerPrev, {
         spaceBetween: 10,
         slidesPerView: 4,
         freeMode: true,
         watchSlidesProgress: true,
     });
 
-    const swiper = new Swiper("." + swiperClass, {
+    const swiper = new Swiper(containerMain, {
         slidesPerView: 1,
         spaceBetween: 15,
         watchSlidesProgress: true,
         effect: "fade",
         pagination: {
-            el: ".swiper-pagination",
+            el: containerMain.querySelector(".swiper-pagination"),
             clickable: true,
-
         },
         navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
+            nextEl: containerMain.querySelector(".swiper-button-next"),
+            prevEl: containerMain.querySelector(".swiper-button-prev"),
         },
         thumbs: {
             swiper: swiperPrev,
         },
     });
 }
+
 export function initBannerSlider(swiperClass) {
-    console.log('initBannerSliderINIT')
+    console.log('initBannerSliderINIT');
+    const container = document.querySelector("." + swiperClass);
+    if (!container) return;
 
-    console.log(swiperClass)
-
-    let swiperBanner = new Swiper("." + swiperClass, {
-        //direction: "vertical",
+    let swiperBanner = new Swiper(container, {
         effect: "creative",
         direction: "vertical",
         slidesPerView: 1,
@@ -201,34 +247,36 @@ export function initBannerSlider(swiperClass) {
 export function initProductSwiper(swiperClass, swiperPrevClass) {
     console.log('initProductSwiper swiperINIT');
 
-    const swiperPrev = new Swiper("." + swiperPrevClass, {
+    const containerMain = document.querySelector("." + swiperClass);
+    const containerPrev = document.querySelector("." + swiperPrevClass);
+
+    if (!containerMain || !containerPrev) return;
+
+    const swiperPrev = new Swiper(containerPrev, {
         spaceBetween: 10,
         slidesPerView: 3,
         freeMode: true,
         watchSlidesProgress: true,
-
         breakpoints: {
-            // при ширине экрана >=768px — 3 слайда
             768: {
                 slidesPerView: 4,
             },
         },
     });
 
-    const swiper = new Swiper("." + swiperClass, {
+    const swiper = new Swiper(containerMain, {
         slidesPerView: 1,
         spaceBetween: 15,
         watchSlidesProgress: true,
         effect: "fade",
         autoHeight: true,
         pagination: {
-            el: ".swiper-pagination",
+            el: containerMain.querySelector(".swiper-pagination"),
             clickable: true,
-
         },
         navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
+            nextEl: containerMain.querySelector(".swiper-button-next"),
+            prevEl: containerMain.querySelector(".swiper-button-prev"),
         },
         thumbs: {
             swiper: swiperPrev,
@@ -236,46 +284,21 @@ export function initProductSwiper(swiperClass, swiperPrevClass) {
     });
 }
 
-export function initGallerySlider(swiperClass) {
-    const swiper = new Swiper("." + swiperClass, {
-        slidesPerView: 1,
-        spaceBetween: 30,
-        watchSlidesProgress: true,
-        breakpoints: {
-            // Если ширина экрана меньше 768px
-            768: {
-                spaceBetween: 30,
-                slidesPerView: 3,
-            }
-        },
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-        },
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        },
-    });
-}
-
-
-
 export function initGoogleReviewSlider(swiperClass) {
     console.log('initgoogleSlider swiperINIT');
-    const swiper = new Swiper("." + swiperClass, {
+    const container = document.querySelector("." + swiperClass);
+    if (!container) return;
+
+    const swiper = new Swiper(container, {
         spaceBetween: 20,
         slidesPerView: 1.2,
         watchSlidesProgress: true,
         freeMode: true,
-
         pagination: {
-            el: ".swiper-pagination",
+            el: container.querySelector(".swiper-pagination"),
             clickable: true,
-
         },
         breakpoints: {
-            // Если ширина экрана меньше 768px
             768: {
                 spaceBetween: 20,
                 slidesPerView: 3,

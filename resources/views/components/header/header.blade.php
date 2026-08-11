@@ -1,16 +1,8 @@
 @php
     $classPrefix = 'header';
     $dataPrefix = 'data-header';
-    $links = \App\Models\SocialLink::where(function ($query) use ($currentRegion) {
-                $query->whereHas('region', function ($query) use ($currentRegion) {
-                    $query->where('code', $currentRegion);
-                })->orWhereDoesntHave('region');
-            })->get();
 
-    $navProductsTypes = \App\Models\ProductCategory::where('is_active', 1)->where('is_show_nav', 1)->orderBy('order', 'asc')->take(20)->get();
-    $navBrands = \App\Models\ProductBrand::where('is_active', 1)->where('is_show_nav', 1)->orderBy('order', 'asc')->take(20)->get();
-    $navIngredients = \App\Models\Ingredient::where('is_active', 1)->where('is_show_nav', 1)->orderBy('order', 'asc')->take(20)->get();
-    $navVariants = \App\Models\Variant::where('is_active', 1)->where('is_show_nav', 1)->orderBy('order', 'asc')->take(20)->get();
+    $links = \App\Models\SocialLink::all();
 @endphp
 
 <div
@@ -34,206 +26,68 @@
             </svg>
         </button>
         <div class="{{$classPrefix}}__mobile-menu-logo">
-            <a href="/">
-                @if($currentRegion == 'dubai')
-                    <img src="{{ asset('img/logo-dubai.png')}}" alt="Logo">
-                @else
-                    <svg width="200" height="53" viewBox="0 0 200 53" xmlns="http://www.w3.org/2000/svg">
-                        <path class="{{$classPrefix}}__menu-logo-icon-letter" fill-rule="evenodd" clip-rule="evenodd"
-                              d="M0 1.57951C0 0.707125 0.694578 0 1.55148 0L30.8886 0C31.7455 0 32.4401 0.707125 32.4401 1.57951V9.62063C32.4401 10.493 31.7455 11.2001 30.8886 11.2001L16.9252 11.2001L16.9252 17.231H27.2214C28.0783 17.231 28.7729 17.9381 28.7729 18.8105V26.8516C28.7729 27.724 28.0783 28.4311 27.2214 28.4311H16.9252L16.9252 41.2108C16.9252 42.0831 16.2307 42.7903 15.3738 42.7903H1.55148C0.694578 42.7903 0 42.0831 0 41.2108L0 1.57951ZM1.55148 1.43592C1.47354 1.43592 1.41044 1.50016 1.41044 1.57951L1.41044 41.2108C1.41044 41.2901 1.47354 41.3544 1.55148 41.3544H15.3738C15.4517 41.3544 15.5148 41.2901 15.5148 41.2108L15.5148 27.7132C15.5148 27.3166 15.8305 26.9952 16.22 26.9952H27.2214C27.2994 26.9952 27.3625 26.931 27.3625 26.8516V18.8105C27.3625 18.7311 27.2994 18.6669 27.2214 18.6669H16.22C15.8305 18.6669 15.5148 18.3455 15.5148 17.9489L15.5148 10.4822C15.5148 10.0857 15.8305 9.76422 16.22 9.76422L30.8886 9.76422C30.9665 9.76422 31.0296 9.69998 31.0296 9.62063V1.57951C31.0296 1.50016 30.9665 1.43592 30.8886 1.43592L1.55148 1.43592Z"
-                              fill="white"></path>
-                        <path class="{{$classPrefix}}__menu-logo-icon-letter" fill-rule="evenodd" clip-rule="evenodd"
-                              d="M167.56 1.57951C167.56 0.707598 168.253 0 169.111 0L198.449 0C199.307 0 200 0.707598 200 1.57951V9.62063C200 10.4925 199.307 11.2001 198.449 11.2001L184.485 11.2001V15.7951L194.781 15.7951C195.64 15.7951 196.333 16.5027 196.333 17.3746V25.4157C196.333 26.2876 195.64 26.9952 194.781 26.9952H184.485V31.5901L198.449 31.5901C199.307 31.5901 200 32.2977 200 33.1696V41.2108C200 42.0827 199.307 42.7903 198.449 42.7903L169.111 42.7903C168.253 42.7903 167.56 42.0827 167.56 41.2108V1.57951ZM169.111 1.43592C169.033 1.43592 168.97 1.4997 168.97 1.57951V41.2108C168.97 41.2906 169.033 41.3544 169.111 41.3544L198.449 41.3544C198.527 41.3544 198.59 41.2906 198.59 41.2108V33.1696C198.59 33.0898 198.527 33.0261 198.449 33.0261L183.78 33.0261C183.39 33.0261 183.075 32.7046 183.075 32.3081V26.2772C183.075 25.8807 183.39 25.5593 183.78 25.5593H194.781C194.86 25.5593 194.922 25.4955 194.922 25.4157V17.3746C194.922 17.2948 194.86 17.231 194.781 17.231H183.78C183.39 17.231 183.075 16.9095 183.075 16.513V10.4822C183.075 10.0857 183.39 9.76422 183.78 9.76422L198.449 9.76422C198.527 9.76422 198.59 9.70044 198.59 9.62063V1.57951C198.59 1.4997 198.527 1.43592 198.449 1.43592L169.111 1.43592Z"
-                              fill="white"></path>
-                        <path class="{{$classPrefix}}__menu-logo-icon-letter" fill-rule="evenodd" clip-rule="evenodd"
-                              d="M59.1663 42.7903H42.7744C41.5872 42.7903 40.8398 41.4883 41.4227 40.4352L62.8695 1.69703C63.4632 0.625216 64.979 0.625216 65.5727 1.69712L87.0195 40.4352C87.6023 41.4881 86.8552 42.7903 85.668 42.7903H69.1828L64.9118 50.5049C64.5882 51.0896 63.7611 51.0896 63.4373 50.5049L59.1663 42.7903ZM64.0981 2.40228C64.1522 2.30472 64.2899 2.30469 64.3439 2.40218L85.7908 41.1403C85.8438 41.2362 85.7756 41.3544 85.668 41.3544H69.9777L72.2079 37.326C72.5262 36.7517 72.1185 36.0415 71.4709 36.0415L56.8782 36.0415C56.2308 36.0415 55.8232 36.7517 56.1411 37.326L58.3713 41.3544H42.7744C42.6663 41.3544 42.5984 41.236 42.6514 41.1402L64.0981 2.40228Z"
-                              fill="white"></path>
-                        <path class="{{$classPrefix}}__menu-logo-icon-letter" fill-rule="evenodd" clip-rule="evenodd"
-                              d="M101.834 1.57951C101.834 0.707125 102.528 0 103.385 0L117.583 0C118.122 0 118.618 0.28465 118.901 0.747651L118.902 0.749088L127.645 15.1476L136.387 0.749088L136.388 0.747651C136.671 0.284641 137.167 0 137.707 0L151.904 0C152.762 0 153.456 0.707598 153.456 1.57951V41.2108C153.456 42.0827 152.762 42.7903 151.904 42.7903L138.082 42.7903C137.224 42.7903 136.53 42.0827 136.53 41.2108V28.8039L128.964 41.2637C128.359 42.2633 126.931 42.2633 126.325 41.2637L118.759 28.8039V41.2108C118.759 42.0827 118.066 42.7903 117.207 42.7903H103.385C102.528 42.7903 101.834 42.0831 101.834 41.2108V1.57951ZM103.385 1.43592C103.307 1.43592 103.244 1.50016 103.244 1.57951V41.2108C103.244 41.2901 103.307 41.3544 103.385 41.3544H117.207C117.286 41.3544 117.348 41.2906 117.348 41.2108V26.2772C117.348 25.9563 117.558 25.6743 117.861 25.5866C118.164 25.4989 118.488 25.6267 118.653 25.8997L127.525 40.5093L127.525 40.5099C127.58 40.6 127.709 40.6 127.764 40.5099L127.764 40.5093L136.636 25.8997C136.801 25.6267 137.125 25.4989 137.428 25.5866C137.732 25.6743 137.941 25.9563 137.941 26.2772V41.2108C137.941 41.2906 138.003 41.3544 138.082 41.3544L151.904 41.3544C151.982 41.3544 152.045 41.2906 152.045 41.2108V1.57951C152.045 1.4997 151.982 1.43592 151.904 1.43592L137.707 1.43592C137.66 1.43592 137.614 1.46009 137.587 1.50508L137.586 1.50557L128.244 16.8905C128.116 17.1022 127.889 17.231 127.645 17.231C127.4 17.231 127.173 17.1022 127.045 16.8905L117.703 1.50557L117.703 1.50522C117.675 1.46014 117.63 1.43592 117.583 1.43592L103.385 1.43592Z"
-                              fill="white"></path>
-                        <path
-                            d="M73.4702 36.7174L64.8694 52.2823C64.488 52.9728 63.513 52.9728 63.1312 52.2823L54.5304 36.7174C54.1556 36.039 54.6361 35.2002 55.3992 35.2002H72.6014C73.3648 35.2002 73.8453 36.039 73.4702 36.7174Z"
-                            fill="#FDB4EE"></path>
-                    </svg>
-                @endif
-
+            <a @if(Request::route()->getName() == 'home')href="#hero"@else href="{{route('home')}}"@endif>
+                <img src="{{ asset('img/logo-dubai.png')}}" alt="Logo">
             </a>
         </div>
         <button {{$dataPrefix}}-menu-open
-                class="button-round {{$classPrefix}}__mobile-menu-button  {{$classPrefix}}__mobile-menu-wrapper">
-                <span class="{{$classPrefix}}__mobile-menu-wrapper-burger">
-                    <span class="line"></span>
-                    <span class="line"></span>
-                    <span class="line"></span>
-                </span>
+                class="button-round {{$classPrefix}}__mobile-menu-button {{$classPrefix}}__mobile-menu-wrapper">
+            <span class="{{$classPrefix}}__mobile-menu-wrapper-burger">
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
+            </span>
         </button>
     </div>
 
     <div class="{{$classPrefix}}__menu">
-        <a href="/" class="{{$classPrefix}}__menu-logo">
-            @if($currentRegion == 'dubai')
-                <img src="{{ asset('img/logo-dubai.png')}}" alt="Logo">
-            @else
-                <svg class="{{$classPrefix}}__menu-logo-icon" width="200" height="53" viewBox="0 0 200 53" fill="none"
-                     xmlns="http://www.w3.org/2000/svg">
-                    <path class="{{$classPrefix}}__menu-logo-icon-letter" fill-rule="evenodd" clip-rule="evenodd"
-                          d="M0 1.57951C0 0.707125 0.694578 0 1.55148 0L30.8886 0C31.7455 0 32.4401 0.707125 32.4401 1.57951V9.62063C32.4401 10.493 31.7455 11.2001 30.8886 11.2001L16.9252 11.2001L16.9252 17.231H27.2214C28.0783 17.231 28.7729 17.9381 28.7729 18.8105V26.8516C28.7729 27.724 28.0783 28.4311 27.2214 28.4311H16.9252L16.9252 41.2108C16.9252 42.0831 16.2307 42.7903 15.3738 42.7903H1.55148C0.694578 42.7903 0 42.0831 0 41.2108L0 1.57951ZM1.55148 1.43592C1.47354 1.43592 1.41044 1.50016 1.41044 1.57951L1.41044 41.2108C1.41044 41.2901 1.47354 41.3544 1.55148 41.3544H15.3738C15.4517 41.3544 15.5148 41.2901 15.5148 41.2108L15.5148 27.7132C15.5148 27.3166 15.8305 26.9952 16.22 26.9952H27.2214C27.2994 26.9952 27.3625 26.931 27.3625 26.8516V18.8105C27.3625 18.7311 27.2994 18.6669 27.2214 18.6669H16.22C15.8305 18.6669 15.5148 18.3455 15.5148 17.9489L15.5148 10.4822C15.5148 10.0857 15.8305 9.76422 16.22 9.76422L30.8886 9.76422C30.9665 9.76422 31.0296 9.69998 31.0296 9.62063V1.57951C31.0296 1.50016 30.9665 1.43592 30.8886 1.43592L1.55148 1.43592Z"
-                          fill="white"></path>
-                    <path class="{{$classPrefix}}__menu-logo-icon-letter" fill-rule="evenodd" clip-rule="evenodd"
-                          d="M167.56 1.57951C167.56 0.707598 168.253 0 169.111 0L198.449 0C199.307 0 200 0.707598 200 1.57951V9.62063C200 10.4925 199.307 11.2001 198.449 11.2001L184.485 11.2001V15.7951L194.781 15.7951C195.64 15.7951 196.333 16.5027 196.333 17.3746V25.4157C196.333 26.2876 195.64 26.9952 194.781 26.9952H184.485V31.5901L198.449 31.5901C199.307 31.5901 200 32.2977 200 33.1696V41.2108C200 42.0827 199.307 42.7903 198.449 42.7903L169.111 42.7903C168.253 42.7903 167.56 42.0827 167.56 41.2108V1.57951ZM169.111 1.43592C169.033 1.43592 168.97 1.4997 168.97 1.57951V41.2108C168.97 41.2906 169.033 41.3544 169.111 41.3544L198.449 41.3544C198.527 41.3544 198.59 41.2906 198.59 41.2108V33.1696C198.59 33.0898 198.527 33.0261 198.449 33.0261L183.78 33.0261C183.39 33.0261 183.075 32.7046 183.075 32.3081V26.2772C183.075 25.8807 183.39 25.5593 183.78 25.5593H194.781C194.86 25.5593 194.922 25.4955 194.922 25.4157V17.3746C194.922 17.2948 194.86 17.231 194.781 17.231H183.78C183.39 17.231 183.075 16.9095 183.075 16.513V10.4822C183.075 10.0857 183.39 9.76422 183.78 9.76422L198.449 9.76422C198.527 9.76422 198.59 9.70044 198.59 9.62063V1.57951C198.59 1.4997 198.527 1.43592 198.449 1.43592L169.111 1.43592Z"
-                          fill="white"></path>
-                    <path class="{{$classPrefix}}__menu-logo-icon-letter" fill-rule="evenodd" clip-rule="evenodd"
-                          d="M59.1663 42.7903H42.7744C41.5872 42.7903 40.8398 41.4883 41.4227 40.4352L62.8695 1.69703C63.4632 0.625216 64.979 0.625216 65.5727 1.69712L87.0195 40.4352C87.6023 41.4881 86.8552 42.7903 85.668 42.7903H69.1828L64.9118 50.5049C64.5882 51.0896 63.7611 51.0896 63.4373 50.5049L59.1663 42.7903ZM64.0981 2.40228C64.1522 2.30472 64.2899 2.30469 64.3439 2.40218L85.7908 41.1403C85.8438 41.2362 85.7756 41.3544 85.668 41.3544H69.9777L72.2079 37.326C72.5262 36.7517 72.1185 36.0415 71.4709 36.0415L56.8782 36.0415C56.2308 36.0415 55.8232 36.7517 56.1411 37.326L58.3713 41.3544H42.7744C42.6663 41.3544 42.5984 41.236 42.6514 41.1402L64.0981 2.40228Z"
-                          fill="white"></path>
-                    <path class="{{$classPrefix}}__menu-logo-icon-letter" fill-rule="evenodd" clip-rule="evenodd"
-                          d="M101.834 1.57951C101.834 0.707125 102.528 0 103.385 0L117.583 0C118.122 0 118.618 0.28465 118.901 0.747651L118.902 0.749088L127.645 15.1476L136.387 0.749088L136.388 0.747651C136.671 0.284641 137.167 0 137.707 0L151.904 0C152.762 0 153.456 0.707598 153.456 1.57951V41.2108C153.456 42.0827 152.762 42.7903 151.904 42.7903L138.082 42.7903C137.224 42.7903 136.53 42.0827 136.53 41.2108V28.8039L128.964 41.2637C128.359 42.2633 126.931 42.2633 126.325 41.2637L118.759 28.8039V41.2108C118.759 42.0827 118.066 42.7903 117.207 42.7903H103.385C102.528 42.7903 101.834 42.0831 101.834 41.2108V1.57951ZM103.385 1.43592C103.307 1.43592 103.244 1.50016 103.244 1.57951V41.2108C103.244 41.2901 103.307 41.3544 103.385 41.3544H117.207C117.286 41.3544 117.348 41.2906 117.348 41.2108V26.2772C117.348 25.9563 117.558 25.6743 117.861 25.5866C118.164 25.4989 118.488 25.6267 118.653 25.8997L127.525 40.5093L127.525 40.5099C127.58 40.6 127.709 40.6 127.764 40.5099L127.764 40.5093L136.636 25.8997C136.801 25.6267 137.125 25.4989 137.428 25.5866C137.732 25.6743 137.941 25.9563 137.941 26.2772V41.2108C137.941 41.2906 138.003 41.3544 138.082 41.3544L151.904 41.3544C151.982 41.3544 152.045 41.2906 152.045 41.2108V1.57951C152.045 1.4997 151.982 1.43592 151.904 1.43592L137.707 1.43592C137.66 1.43592 137.614 1.46009 137.587 1.50508L137.586 1.50557L128.244 16.8905C128.116 17.1022 127.889 17.231 127.645 17.231C127.4 17.231 127.173 17.1022 127.045 16.8905L117.703 1.50557L117.703 1.50522C117.675 1.46014 117.63 1.43592 117.583 1.43592L103.385 1.43592Z"
-                          fill="white"></path>
-                    <path
-                        d="M73.4702 36.7174L64.8694 52.2823C64.488 52.9728 63.513 52.9728 63.1312 52.2823L54.5304 36.7174C54.1556 36.039 54.6361 35.2002 55.3992 35.2002H72.6014C73.3648 35.2002 73.8453 36.039 73.4702 36.7174Z"
-                        fill="#FDB4EE"></path>
-                </svg>
-            @endif
-
+        <a @if(Request::route()->getName() == 'home')href="#hero"@else href="{{route('home')}}"@endif class="{{$classPrefix}}__menu-logo">
+            <img src="{{ asset('img/logo-dubai.png')}}" alt="Logo">
         </a>
-        <ul class="{{$classPrefix}}__menu-list">
 
-            <li class="{{$classPrefix}}__menu-list-item {{$classPrefix}}__menu-list-item--catalogue {{ Request::route()->getName() == 'catalogue.resolve' ? $classPrefix . '__menu-list-item--current' : '' }}">
-                <a class="{{$classPrefix}}__menu-list-item-title">
-                    {{__('static.catalogue')}}
-                    <svg class="m-hide {{$classPrefix}}__menu-list-item-title-wrap-icon" aria-hidden="true"
-                         focusable="false" class="icon icon-caret" viewBox="0 0 10 6">
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                              d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z"
-                              fill="currentColor">
-                        </path>
-                    </svg>
-                </a>
-                <div {{$dataPrefix}}-body-menu="products" class="{{$classPrefix}}__menu-list-item-body">
-                    <div {{$dataPrefix}}-body-menu-close="products"
-                         class="{{$classPrefix}}__menu-list-item-body-header">
-                        <svg>
-                            <use href="#arrow-back"></use>
-                        </svg>
-                        {{__('static.catalogue')}}
-                    </div>
-                    <div class="{{$classPrefix}}__menu-list-item-body-container">
-                        <div class="{{$classPrefix}}__menu-list-item-body-label">
-                            {{__('static.nav_category')}}
-                        </div>
-                        <ul class="{{$classPrefix}}__menu-list-item-body-list">
-                            <a href="/catalogue" class="{{$classPrefix}}__menu-list-item-body-item">
-                                   {{__('static.nav_all')}}
-                            </a>
-                            @foreach($navProductsTypes as $nav)
-                                <a href="/catalogue/category/{{$nav->slug}}"
-                                   class="{{$classPrefix}}__menu-list-item-body-item">
-                                    {{$nav->name}}
-                                </a>
-                            @endforeach
-                        </ul>
-                    </div>
-                    <div class="{{$classPrefix}}__menu-list-item-body-container">
-                        <div class="{{$classPrefix}}__menu-list-item-body-label">
-                            {{__('static.nav_brand')}}
-                        </div>
-                        <ul class="{{$classPrefix}}__menu-list-item-body-list">
-                            <a href="/catalogue" class="{{$classPrefix}}__menu-list-item-body-item">
-                                   {{__('static.nav_all')}}
-                            </a>
-                            @foreach($navBrands as $nav)
-                                <a href="/catalogue/brand/{{$nav->slug}}"
-                                   class="{{$classPrefix}}__menu-list-item-body-item">
-                                    {{$nav->name}}
-                                </a>
-                            @endforeach
-                        </ul>
-                    </div>
-                    <div class="{{$classPrefix}}__menu-list-item-body-container">
-                        <div class="{{$classPrefix}}__menu-list-item-body-label">
-                            {{__('static.nav_recommended')}}
-                        </div>
-                        <ul class="{{$classPrefix}}__menu-list-item-body-list">
-                            <a href="/catalogue" class="{{$classPrefix}}__menu-list-item-body-item">
-                                   {{__('static.nav_all')}}
-                            </a>
-                            @foreach($navVariants as $nav)
-                                <a href="/catalogue/discovery/{{$nav->slug}}"
-                                   class="{{$classPrefix}}__menu-list-item-body-item">
-                                    {{$nav->name}}
-                                </a>
-                            @endforeach
-                        </ul>
-                    </div>
-                    <div class="{{$classPrefix}}__menu-list-item-body-container">
-                        <div class="{{$classPrefix}}__menu-list-item-body-label">
-                            {{__('static.nav_ingredients')}}
-                        </div>
-                        <ul class="{{$classPrefix}}__menu-list-item-body-list">
-                            <a href="/catalogue" class="{{$classPrefix}}__menu-list-item-body-item">
-                                   {{__('static.nav_all')}}
-                            </a>
-                            @foreach($navIngredients as $nav)
-                                <a href="/catalogue/ingredient/{{$nav->slug}}"
-                                   class="{{$classPrefix}}__menu-list-item-body-item">
-                                    {{$nav->name}}
-                                </a>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-            </li>
-            <li class="{{$classPrefix}}__menu-list-item {{ Request::route()->getName() == 'devices' ? $classPrefix . '__menu-list-item--current' : '' }}">
-                <a href="{{ url(route('devices')) }}">{{__('static.devices')}}</a></li>
-            <li class="{{$classPrefix}}__menu-list-item {{ Request::route()->getName() == 'services' ? $classPrefix . '__menu-list-item--current' : '' }}">
-                <a href="{{ url(route('services')) }}">{{__('static.services')}}</a></li>
-            <li class="{{$classPrefix}}__menu-list-item {{ Request::route()->getName() == 'about' ? $classPrefix . '__menu-list-item--current' : '' }}">
-                <a href="{{ url(route('about')) }}">{{__('static.about')}}</a></li>
-            <li class="{{$classPrefix}}__menu-list-item {{ Request::route()->getName() == 'gallery' ? $classPrefix . '__menu-list-item--current' : '' }}">
-                <a href="{{ url(route('gallery')) }}">{{__('static.gallery')}}</a></li>
-            <li class="{{$classPrefix}}__menu-list-item {{ Request::route()->getName() == 'team' ? $classPrefix . '__menu-list-item--current' : '' }}">
-                <a href="{{ url(route('team')) }}">{{__('static.team')}}</a></li>
-            <li class="{{$classPrefix}}__menu-list-item {{ Request::route()->getName() == 'contact' ? $classPrefix . '__menu-list-item--current' : '' }}">
-                <a href="{{ url(route('contact')) }}">{{__('static.contacts')}}</a></li>
+        <ul class="{{$classPrefix}}__menu-list">
+            @if(Request::route()->getName() == 'home')
+                <li class="{{$classPrefix}}__menu-list-item"><a href="#About_The_Fame" class="{{$classPrefix}}__menu-list-item-title">{{__('static.about')}}</a></li>
+                <li class="{{$classPrefix}}__menu-list-item"><a href="#Services_&_Price" class="{{$classPrefix}}__menu-list-item-title">{{__('static.services')}}</a></li>
+                <li class="{{$classPrefix}}__menu-list-item"><a href="#Our_Devices" class="{{$classPrefix}}__menu-list-item-title">{{__('static.devices')}}</a></li>
+                <li class="{{$classPrefix}}__menu-list-item"><a href="#Before_After" class="{{$classPrefix}}__menu-list-item-title">{{__('static.gallery')}}</a></li>
+                <li class="{{$classPrefix}}__menu-list-item"><a href="#Our_Team" class="{{$classPrefix}}__menu-list-item-title">{{__('static.team')}}</a></li>
+                <li class="{{$classPrefix}}__menu-list-item"><a href="#Contacts" class="{{$classPrefix}}__menu-list-item-title">{{__('static.locations')}}</a></li>
+            @endif
         </ul>
+
         <div class="{{$classPrefix}}__menu-bottom">
             <div class="{{$classPrefix}}__menu-social">
                 @foreach($links as $link)
                     <a target="_blank" href="{{$link->url}}" class="link"> {{$link->platform}}</a>
                 @endforeach
             </div>
+
             <div class="{{$classPrefix}}__menu-settings">
-                <div data-region-open {{$dataPrefix}}-btn-dark
-                     class="button-round {{$classPrefix}}__setting-button {{$classPrefix}}__setting-button--region">
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M19.5 6L18.0333 7.1C17.6871 7.35964 17.2661 7.5 16.8333 7.5H13.475C12.8775 7.5 12.3312 7.83761 12.064 8.37206V8.37206C11.7342 9.03161 11.9053 9.83161 12.476 10.2986L14.476 11.9349C16.0499 13.2227 16.8644 15.22 16.6399 17.2412L16.6199 17.4206C16.5403 18.1369 16.3643 18.8392 16.0967 19.5083L15.5 21"/>
-                        <path
-                            d="M2.5 10.5L5.7381 9.96032C7.09174 9.73471 8.26529 10.9083 8.03968 12.2619L7.90517 13.069C7.66434 14.514 8.3941 15.9471 9.70437 16.6022V16.6022C10.7535 17.1268 11.2976 18.3097 11.0131 19.4476L10.5 21.5"/>
+                <div data-modal-open class="button button-clip {{$classPrefix}}__action-button m-hide">
+                    <span class="clip">
+                        <span>{{ __('static.sign_up') }}</span>
+                        <span>{{ __('static.sign_up') }}</span>
+                    </span>
+                </div>
+
+                <a data-region-open target="_self" {{$dataPrefix}}-btn-dark
+                   class="button-round {{$classPrefix}}__setting-button {{$classPrefix}}__setting-button--region">
+                    <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19.5 6L18.0333 7.1C17.6871 7.35964 17.2661 7.5 16.8333 7.5H13.475C12.8775 7.5 12.3312 7.83761 12.064 8.37206V8.37206C11.7342 9.03161 11.9053 9.83161 12.476 10.2986L14.476 11.9349C16.0499 13.2227 16.8644 15.22 16.6399 17.2412L16.6199 17.4206C16.5403 18.1369 16.3643 18.8392 16.0967 19.5083L15.5 21"/>
+                        <path d="M2.5 10.5L5.7381 9.96032C7.09174 9.73471 8.26529 10.9083 8.03968 12.2619L7.90517 13.069C7.66434 14.514 8.3941 15.9471 9.70437 16.6022V16.6022C10.7535 17.1268 11.2976 18.3097 11.0131 19.4476L10.5 21.5"/>
                         <circle cx="12" cy="12" r="9.5"/>
                     </svg>
-                </div>
+                </a>
+
+
                 <div data-locale-open class="button-round {{$classPrefix}}__setting-button"
                      data-lang="{{ $currentLocale }}">
                     {{ $languages[$currentLocale] ?? 'Язык' }}
                 </div>
-                <div data-cart-widget-open
-                     class="button-round {{$classPrefix}}__setting-button {{$classPrefix}}__setting-button--cart">
-                    <div data-cart-count class="{{$classPrefix}}__cart-count"></div>
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M3.86376 16.4552C3.00581 13.0234 2.57684 11.3075 3.47767 10.1538C4.3785 9 6.14721 9 9.68462 9H14.3153C17.8527 9 19.6214 9 20.5222 10.1538C21.4231 11.3075 20.9941 13.0234 20.1362 16.4552C19.5905 18.6379 19.3176 19.7292 18.5039 20.3646C17.6901 21 16.5652 21 14.3153 21H9.68462C7.43476 21 6.30983 21 5.49605 20.3646C4.68227 19.7292 4.40943 18.6379 3.86376 16.4552Z"
-                            stroke="currentColor" stroke-width="1.2"/>
-                        <path
-                            d="M19.5 9.5L18.7896 6.89465C18.5157 5.89005 18.3787 5.38775 18.0978 5.00946C17.818 4.63273 17.4378 4.34234 17.0008 4.17152C16.5619 4 16.0413 4 15 4M4.5 9.5L5.2104 6.89465C5.48432 5.89005 5.62128 5.38775 5.90221 5.00946C6.18199 4.63273 6.56216 4.34234 6.99922 4.17152C7.43808 4 7.95872 4 9 4"
-                            stroke="currentColor" stroke-width="1.2"/>
-                        <path
-                            d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4C15 4.55228 14.5523 5 14 5H10C9.44772 5 9 4.55228 9 4Z"
-                            stroke="currentColor" stroke-width="1"/>
-                    </svg>
-                </div>
+
 
             </div>
         </div>
     </div>
-
 </div>

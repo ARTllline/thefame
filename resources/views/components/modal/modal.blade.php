@@ -2,10 +2,23 @@
     $classPrefix ='modal';
     $dataPrefix ='data-modal';
     $currentRegionName = 'Київ';
+    $callUs = \App\Models\CallUs::first();
+    $location = \App\Models\Location::first();
+    $socialLinks = \App\Models\SocialLink::where(function ($query) {
+        $query->whereHas('region', fn ($regionQuery) => $regionQuery->where('code', 'ua'))
+            ->orWhereDoesntHave('region');
+    })->get();
+    $whatsApp = $socialLinks->first(fn ($link) => strcasecmp((string) $link->platform, 'WhatsApp') === 0);
+    $instagram = $socialLinks->first(fn ($link) => strcasecmp((string) $link->platform, 'Instagram') === 0);
+    $phone = $callUs?->phone_ua ?: $location?->phone;
+    $email = $callUs?->email_ua ?: $location?->email;
+    $phoneHref = $phone ? preg_replace('/[^\d+]/', '', $phone) : null;
 @endphp
 
-<div {{$dataPrefix}} class="{{$classPrefix}}">
-    <div {{$dataPrefix}}-form class="{{$classPrefix}}__form">
+<div {{$dataPrefix}}
+     data-modal-request-error="{{ __('static.appointment_request_error') }}"
+     class="{{$classPrefix}}">
+    <form {{$dataPrefix}}-form class="{{$classPrefix}}__form" novalidate>
         <div class="{{$classPrefix}}__container">
             <div {{$dataPrefix}}-close class="{{$classPrefix}}__container-close"></div>
 
@@ -32,14 +45,14 @@
 
             <input {{$dataPrefix}}-region type="hidden" name="region" value="{{$currentRegionName}}">
 
-            <button {{$dataPrefix}}-submit class="button button-clip {{$classPrefix}}__container-button">
+            <button type="submit" {{$dataPrefix}}-submit class="button button-clip {{$classPrefix}}__container-button">
                 <span class="clip">
                     <span>{{__('static.sign_up')}}</span>
                     <span>{{__('static.sign_up')}}</span>
                 </span>
             </button>
         </div>
-    </div>
+    </form>
 
     <div {{$dataPrefix}}-success class="{{$classPrefix}}__success-page" style="display: none;">
         <div class="{{$classPrefix}}__container {{$classPrefix}}__container--success">
@@ -54,17 +67,27 @@
 
             <div class="{{$classPrefix}}__success-contacts">
                 <p class="{{$classPrefix}}__success-contacts-title">{{__('static.modal_success_contacts_title')}}</p>
-                <a href="tel:+971525776016" class="contact-link">📞 +971 52 577 6016</a>
-                <a href="mailto:thefameclinicdmcc@gmail.com" class="contact-link">✉️ thefameclinicdmcc@gmail.com</a>
-                <span class="contact-link">📍 Україна, Київ, вул. Глибочицька,73, ЖК Podil Plaza</span>
+                @if($phone)
+                    <a href="tel:{{ $phoneHref }}" class="contact-link">📞 {{ $phone }}</a>
+                @endif
+                @if($email)
+                    <a href="mailto:{{ $email }}" class="contact-link">✉️ {{ $email }}</a>
+                @endif
+                @if($location)
+                    <span class="contact-link">📍 {{ $location->title }}</span>
+                @endif
 
-                <a href="https://wa.me/971525776016" target="_blank" class="button {{$classPrefix}}__success-wa-btn">{{__('static.modal_success_wa_btn')}}</a>
+                @if($whatsApp)
+                    <a href="{{ $whatsApp->url }}" target="_blank" rel="noopener noreferrer" class="button {{$classPrefix}}__success-wa-btn">{{__('static.modal_success_wa_btn')}}</a>
+                @endif
             </div>
 
-            <div class="{{$classPrefix}}__success-social">
+            @if($instagram)
+              <div class="{{$classPrefix}}__success-social">
                 <p>{{__('static.modal_success_social_title')}}</p>
-                <a href="https://instagram.com/the.fame.dubai" target="_blank" class="social-link">@the.fame</a>
-            </div>
+                <a href="{{ $instagram->url }}" target="_blank" rel="noopener noreferrer" class="social-link">Instagram</a>
+              </div>
+            @endif
         </div>
     </div>
 </div>

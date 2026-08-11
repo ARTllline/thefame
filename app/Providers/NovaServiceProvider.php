@@ -11,28 +11,27 @@ use Laravel\Nova\NovaApplicationServiceProvider;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
 {
-
     public function boot()
     {
         parent::boot();
 
         Nova::withBreadcrumbs();
 
-//        Nova::serving(function () {
-//            Nova::provideToScript([
-//                'customLocaleDisplay' => [
-//                    'en' => '<img src = "/flag-en.png" />',
-//                    'et' => '<img src = "/flag-et.png" />',
-//                ]
-//            ]);
-//        });
+        //        Nova::serving(function () {
+        //            Nova::provideToScript([
+        //                'customLocaleDisplay' => [
+        //                    'en' => '<img src = "/flag-en.png" />',
+        //                    'et' => '<img src = "/flag-et.png" />',
+        //                ]
+        //            ]);
+        //        });
 
         Nova::mainMenu(function (Request $request) {
             return $this->menu($request);
         });
 
         Nova::footer(function ($request) {
-            return '<p class="text-center text-xs text-gray-500">&copy; ' . date('Y') . ' All Rights Reserved - 2025 © The Fame.</p>';
+            return '<p class="text-center text-xs text-gray-500">&copy; '.date('Y').' All Rights Reserved - 2025 © The Fame.</p>';
         });
     }
 
@@ -41,10 +40,10 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         // Загружаем все регионы
         $regions = \App\Models\Region::orderBy('name')->get();
 
-
         return [
             MenuSection::make(__('Уведомления'), [
                 MenuItem::resource(\App\Nova\Appointment::class),
+                MenuItem::resource(\App\Nova\AppointmentNotificationSetting::class),
             ])->icon('bell')
                 ->collapsable(),
 
@@ -120,7 +119,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function tools()
     {
         return [
-            new \Badinansoft\LanguageSwitch\LanguageSwitch(),
+            new \Badinansoft\LanguageSwitch\LanguageSwitch,
         ];
     }
 

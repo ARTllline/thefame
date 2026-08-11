@@ -5,6 +5,7 @@ import { readUtmCookies } from '../utils/utm';
 const classPrefix = 'modal';
 const dataPrefix = 'data-modal';
 const $container = document.querySelector(`[${dataPrefix}]`);
+const popup = Notification({ isHidePrev: true });
 
 if ($container) {
     modal();
@@ -15,6 +16,7 @@ export function modal() {
 
     const $formWrapper = $container.querySelector(`[${dataPrefix}-form]`);
     const $successPage = $container.querySelector(`[${dataPrefix}-success]`);
+    const requestErrorMessage = $container.dataset.modalRequestError || 'An error has occurred';
 
     const $nameContainer = $formWrapper.querySelector(`[${dataPrefix}-name]`);
     const $phoneContainer = $formWrapper.querySelector(`[${dataPrefix}-phone]`);
@@ -32,6 +34,11 @@ export function modal() {
     // Ошибочные сообщения
     const $nameErr = $nameContainer.querySelector(`.${classPrefix}__container-input-err-message`);
     const $phoneErr = $phoneContainer.querySelector(`.${classPrefix}__container-input-err-message`);
+    const defaultNameError = $nameErr.textContent;
+    const defaultPhoneError = $phoneErr.textContent;
+
+    let resetTimer = null;
+    let isSubmitting = false;
 
     // Сброс модалки в исходное состояние
     const resetModalState = () => {
@@ -43,18 +50,33 @@ export function modal() {
         $successPage.style.display = 'none';
         $successPage.classList.remove(`${classPrefix}__success-page--active`);
 
+        $nameErr.textContent = defaultNameError;
+        $phoneErr.textContent = defaultPhoneError;
+        $nameErr.style.opacity = '0';
+        $phoneErr.style.opacity = '0';
+        $nameContainer.classList.remove(`${classPrefix}__container-input--error`);
+        $phoneContainer.classList.remove(`${classPrefix}__container-input--error`);
+
         $nameInput.value = '';
         $phoneInput.value = '';
         if ($treatmentInput) $treatmentInput.value = '';
+
+        isSubmitting = false;
+        if ($submitButton) {
+            $submitButton.disabled = false;
+            $submitButton.removeAttribute('aria-busy');
+        }
     };
 
     const closeModal = () => {
         $container.classList.remove(`${classPrefix}--active`);
-        // Даем время на анимацию закрытия перед сбросом контента
-        setTimeout(resetModalState, 400);
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(resetModalState, 400);
     };
 
     const openModal = () => {
+        clearTimeout(resetTimer);
+        resetModalState();
         $container.classList.add(`${classPrefix}--active`);
     };
 
@@ -80,12 +102,10 @@ export function modal() {
         });
     });
 
-    if (!$submitButton || $submitButton.dataset.listenerAdded === 'true') return;
-    $submitButton.dataset.listenerAdded = 'true';
+    if (!$submitButton || $formWrapper.dataset.listenerAdded === 'true') return;
+    $formWrapper.dataset.listenerAdded = 'true';
 
-    let isSubmitting = false;
-
-    $submitButton.addEventListener('click', async (e) => {
+    $formWrapper.addEventListener('submit', async (e) => {
         e.preventDefault();
         await send();
     });
@@ -95,6 +115,8 @@ export function modal() {
 
         $nameErr.style.opacity = '0';
         $phoneErr.style.opacity = '0';
+        $nameContainer.classList.remove(`${classPrefix}__container-input--error`);
+        $phoneContainer.classList.remove(`${classPrefix}__container-input--error`);
 
         const name = $nameInput.value.trim();
         const phone = $phoneInput.value.trim();
@@ -105,12 +127,14 @@ export function modal() {
 
         if (!name) {
             $nameErr.style.opacity = '1';
+            $nameContainer.classList.add(`${classPrefix}__container-input--error`);
             hasError = true;
         }
 
-        const phonePattern = /^\+?\d{10,15}$/;
-        if (!phone || !phonePattern.test(phone)) {
+        const phoneDigits = phone.replace(/\D/g, '');
+        if (phoneDigits.length < 10 || phoneDigits.length > 15) {
             $phoneErr.style.opacity = '1';
+            $phoneContainer.classList.add(`${classPrefix}__container-input--error`);
             hasError = true;
         }
 
@@ -120,6 +144,7 @@ export function modal() {
 
         isSubmitting = true;
         $submitButton.disabled = true;
+        $submitButton.setAttribute('aria-busy', 'true');
 
         try {
             const payload = {
@@ -133,96 +158,61 @@ export function modal() {
                 utm_term: utm.utm_term || null,
                 utm_content: utm.utm_content || null,
                 referrer: utm.referrer || null,
-                landing_page: utm.landing_page || null,
+                from_page: (utm.landing_page || window.location.href).slice(0, 255),
             };
 
-            //console.log('payload', payload);
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            const response = await axios.post('/appointment', payload, {
+                headers: {
+                    Accept: 'application/json',
+                    ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}),
+                },
+            });
 
-
-            $nameInput.value = '';
-            $phoneInput.value = '';
-
-            $formWrapper.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-            $formWrapper.style.opacity = '0';
-            $formWrapper.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                $formWrapper.style.display = 'none';
-                $successPage.style.display = 'block';
-
-                void $successPage.offsetWidth;
-
-                $successPage.classList.add(`${classPrefix}__success-page--active`);
-            }, 300);
-
-
-            // window.dataLayer = window.dataLayer || [];
-            // return;
-
-            const response = await axios.post('/appointment', payload);
-
-            if (response.data.success) {
-                //popup.success({ message: `Success` });
+            if (response.data?.success) {
                 $nameInput.value = '';
                 $phoneInput.value = '';
+                if ($treatmentInput) $treatmentInput.value = '';
 
+                $formWrapper.style.opacity = '0';
                 $formWrapper.style.display = 'none';
                 $successPage.style.display = 'block';
+                void $successPage.offsetWidth;
+                $successPage.classList.add(`${classPrefix}__success-page--active`);
 
                 window.dataLayer = window.dataLayer || [];
-
-                // window.dataLayer.push({
-                //     event: 'form_submit_new',
-                //     form: 'modal_appointment',
-                //     region: region,
-                //     appointment_id: response.data.appointment_id,
-                //     timestamp: Date.now(),
-                //     utm_source: payload.utm_source,
-                //     utm_medium: payload.utm_medium,
-                //     utm_campaign: payload.utm_campaign,
-                //     utm_term: payload.utm_term,
-                //     utm_content: payload.utm_content,
-                //     referrer: payload.referrer,
-                //     landing_page: payload.landing_page
-                // });
-                //
-                // window.dataLayer.push({
-                //     event: 'form_submit',
-                //     form: 'modal_appointment',
-                //     region: region,
-                //     appointment_id: response.data.appointment_id,
-                //     timestamp: Date.now(),
-                //     utm_source: payload.utm_source,
-                //     utm_medium: payload.utm_medium,
-                //     utm_campaign: payload.utm_campaign,
-                //     utm_term: payload.utm_term,
-                //     utm_content: payload.utm_content,
-                //     referrer: payload.referrer,
-                //     landing_page: payload.landing_page
-                // });
-
-
-                //closeModal();
-               // window.location.href = '/thank-you';
             } else {
-                popup.error({ message: `Unexpected response: ${response.status}` });
+                popup.error({ message: response.data?.message || requestErrorMessage });
             }
         } catch (error) {
             if (error.response?.status === 422) {
-                const errors = error.response.data.errors;
+                const errors = error.response.data.errors || {};
                 if (errors.name) {
                     $nameErr.textContent = errors.name[0];
                     $nameErr.style.opacity = '1';
+                    $nameContainer.classList.add(`${classPrefix}__container-input--error`);
                 }
                 if (errors.phone) {
                     $phoneErr.textContent = errors.phone[0];
                     $phoneErr.style.opacity = '1';
+                    $phoneContainer.classList.add(`${classPrefix}__container-input--error`);
+                }
+
+                const unhandledError = Object.entries(errors)
+                    .find(([field]) => !['name', 'phone'].includes(field));
+
+                if (unhandledError) {
+                    popup.error({ message: unhandledError[1][0] || requestErrorMessage });
+                } else if (!errors.name && !errors.phone) {
+                    popup.error({ message: requestErrorMessage });
                 }
             } else {
-                popup.error({ message: `An error has occurred` });
+                popup.error({ message: error.response?.data?.message || requestErrorMessage });
             }
         } finally {
             isSubmitting = false;
             $submitButton.disabled = false;
+            $submitButton.removeAttribute('aria-busy');
         }
     }
 }

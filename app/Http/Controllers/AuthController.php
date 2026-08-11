@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Services\AppointmentNotificationSettings;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -21,48 +21,52 @@ class AuthController extends Controller
      * Если пользователь с таким telegram_id уже зарегистрирован,
      * возвращается сообщение об этом с уже существующими данными пользователя.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function storeUser(Request $request)
+    public function storeUser(Request $request, AppointmentNotificationSettings $settings)
     {
         // Валидация входящих данных
         $validatedData = $request->validate([
             'telegram_id' => 'required|numeric',
-            'first_name'  => 'nullable|string|max:255',
-            'last_name'   => 'nullable|string|max:255',
-            'username'    => 'nullable|string|max:255',
+            'first_name' => 'nullable|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'username' => 'nullable|string|max:255',
         ]);
-
-        // Проверяем, существует ли пользователь с таким telegram_id
-        $existingUser = User::where('telegram_id', $validatedData['telegram_id'])->first();
-        if ($existingUser) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Пользователь уже зарегистрирован',
-                'data'    => $existingUser,
-            ], 200);
-        }
 
         // Формируем имя пользователя из first_name и last_name
-        $name = $validatedData['first_name'];
-        if (!empty($validatedData['last_name'])) {
-            $name .= ' ' . $validatedData['last_name'];
+        $name = $validatedData['first_name'] ?? null;
+        if (! empty($validatedData['last_name'])) {
+            $name .= ' '.$validatedData['last_name'];
         }
+        $name = trim($name ?: ($validatedData['username'] ?? 'Telegram '.$validatedData['telegram_id']));
 
-        // Создаем пользователя с произвольными email и password
-        $user = User::create([
-            'name'             => $name,
-            'telegram_id'      => $validatedData['telegram_id'],
-            'telegram_login'   => $validatedData['username'] ?? null,
-            'telegram_name'    => $name,
+        $user = User::firstOrNew(['telegram_id' => $validatedData['telegram_id']]);
+        $created = ! $user->exists;
+
+        $user->fill([
+            'name' => $name,
+            'telegram_login' => isset($validatedData['username'])
+                ? ltrim($validatedData['username'], '@')
+                : null,
+            'telegram_name' => $name,
         ]);
 
-        // Возвращаем успешный JSON-ответ
+        if ($created) {
+            $user->email = "telegram_{$validatedData['telegram_id']}@telegram.local";
+            $user->password = Str::random(40);
+        }
+
+        $user->save();
+
         return response()->json([
             'success' => true,
-            'message' => 'Пользователь успешно зарегистрирован',
-            'data'    => $user,
-        ], 201);
+            'message' => $created ? 'Telegram-профиль зарегистрирован' : 'Telegram-профиль обновлён',
+            'profile' => [
+                'telegram_id' => (string) $user->telegram_id,
+                'username' => $user->telegram_login,
+                'name' => $user->telegram_name,
+            ],
+            'statuses' => $settings->telegramStatus($user->telegram_id),
+        ], $created ? 201 : 200);
     }
 }

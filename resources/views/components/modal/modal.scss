@@ -231,6 +231,11 @@
         padding-bottom: 13px;
         color: #fff;
         background-color: var(--brightAccent);
+
+        &:disabled {
+            cursor: wait;
+            opacity: .65;
+        }
     }
 
     &__container-subtitle{
@@ -261,6 +266,9 @@
     &__success-page {
         width: 100%;
         max-width: 680px; // Сделали шире на десктопе (было 510px)
+        max-height: calc(100vh - 24px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
 
         // Стартовое состояние для анимации
         opacity: 0;

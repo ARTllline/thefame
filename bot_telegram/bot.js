@@ -1,23 +1,21 @@
 const { Telegraf, Markup } = require('telegraf');
-const axios = require('axios');
 require('dotenv').config();
 
-const requiredEnvironment = ['BOT_TOKEN', 'LARAVEL_API_URL', 'API_TOKEN'];
-const missingEnvironment = requiredEnvironment.filter((name) => !process.env[name]);
+const {
+    createSiteClients,
+    fetchStatusesEverywhere,
+    readSiteConfig,
+    registerProfileEverywhere,
+} = require('./site-clients');
+
+const missingEnvironment = ['BOT_TOKEN'].filter((name) => !process.env[name]);
 
 if (missingEnvironment.length > 0) {
     throw new Error(`Missing environment variables: ${missingEnvironment.join(', ')}`);
 }
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
-const api = axios.create({
-    baseURL: process.env.LARAVEL_API_URL.replace(/\/$/, ''),
-    timeout: 10000,
-    headers: {
-        Authorization: `Bearer ${process.env.API_TOKEN}`,
-        Accept: 'application/json',
-    },
-});
+const sites = createSiteClients(readSiteConfig(process.env));
 
 function mainKeyboard() {
     return Markup.keyboard([
@@ -39,83 +37,102 @@ function profileLabel(ctx) {
     return ctx.from.username ? `@${ctx.from.username}` : `ID ${ctx.from.id}`;
 }
 
-function statusMessage(statuses) {
-    const enabled = Boolean(statuses.enabled ?? statuses.ua ?? statuses.dubai);
+function isEnabled(statuses = {}) {
+    return Boolean(statuses.enabled ?? statuses.ua ?? statuses.dubai);
+}
+
+function statusMessage(results) {
+    const statusLines = results.map((result) => {
+        if (!result.ok) {
+            return `${result.label}: ⚠️ статус временно недоступен`;
+        }
+
+        return `${result.label}: ${isEnabled(result.data.statuses) ? '✅ включены' : '❌ выключены'}`;
+    });
 
     return [
-        `Уведомления этого сайта: ${enabled ? '✅ включены' : '❌ выключены'}`,
+        'Уведомления:',
+        ...statusLines,
         '',
-        'Изменить подписку может администратор сайта.',
+        'Изменить подписку может администратор соответствующего сайта.',
     ].join('\n');
 }
 
-function logApiError(context, error) {
-    console.error(context, {
-        status: error.response?.status,
-        message: error.response?.data?.message || error.message,
-    });
+function logSiteErrors(context, results) {
+    results
+        .filter((result) => !result.ok)
+        .forEach((result) => {
+            console.error(context, {
+                site: result.key,
+                status: result.error.response?.status,
+                message: result.error.response?.data?.message || result.error.message,
+            });
+        });
+}
+
+function successfulResults(results) {
+    return results.filter((result) => result.ok);
 }
 
 async function registerProfile(ctx) {
-    const response = await api.post('/api/store-user', profilePayload(ctx));
-
-    return response.data;
+    return registerProfileEverywhere(sites, profilePayload(ctx));
 }
 
 async function fetchStatuses(ctx) {
-    await registerProfile(ctx);
-
-    const response = await api.get('/api/user/regions', {
-        params: { telegram_id: ctx.from.id },
-    });
-
-    return response.data.statuses;
+    return fetchStatusesEverywhere(sites, profilePayload(ctx));
 }
 
 bot.start(async (ctx) => {
-    try {
-        const data = await registerProfile(ctx);
+    const results = await registerProfile(ctx);
+    const successful = successfulResults(results);
 
+    logSiteErrors('Telegram profile registration failed.', results);
+
+    if (successful.length === 0) {
         await ctx.reply(
-            [
-                `Telegram-профиль ${profileLabel(ctx)} подключён.`,
-                'Теперь администратор может выбрать вас в настройках уведомлений сайта.',
-                '',
-                statusMessage(data.statuses),
-            ].join('\n'),
+            'Не удалось подключить профиль ни к одному сайту. Попробуйте позже.',
             mainKeyboard(),
         );
-    } catch (error) {
-        logApiError('Telegram profile registration failed.', error);
-        await ctx.reply('Не удалось подключить профиль. Попробуйте позже.', mainKeyboard());
+        return;
     }
+
+    const failedLabels = results
+        .filter((result) => !result.ok)
+        .map((result) => result.label);
+
+    const connectionMessage = failedLabels.length === 0
+        ? 'Профиль добавлен в админ-панели обоих сайтов.'
+        : `Профиль пока не добавлен: ${failedLabels.join(', ')}. Повторите /start позже.`;
+
+    await ctx.reply(
+        [
+            `Telegram-профиль ${profileLabel(ctx)} подключён.`,
+            connectionMessage,
+            'Теперь администратор может выбрать вас в настройках уведомлений каждого сайта.',
+            '',
+            statusMessage(results),
+        ].join('\n'),
+        mainKeyboard(),
+    );
 });
 
+async function replyWithStatuses(ctx, errorContext) {
+    const results = await fetchStatuses(ctx);
+
+    logSiteErrors(errorContext, results);
+    await ctx.reply(statusMessage(results), mainKeyboard());
+}
+
 bot.command('status', async (ctx) => {
-    try {
-        await ctx.reply(statusMessage(await fetchStatuses(ctx)), mainKeyboard());
-    } catch (error) {
-        logApiError('Telegram status request failed.', error);
-        await ctx.reply('Не удалось получить статус уведомлений. Попробуйте позже.', mainKeyboard());
-    }
+    await replyWithStatuses(ctx, 'Telegram status request failed.');
 });
 
 bot.hears('Статус уведомлений', async (ctx) => {
-    try {
-        await ctx.reply(statusMessage(await fetchStatuses(ctx)), mainKeyboard());
-    } catch (error) {
-        logApiError('Telegram status request failed.', error);
-        await ctx.reply('Не удалось получить статус уведомлений. Попробуйте позже.', mainKeyboard());
-    }
+    await replyWithStatuses(ctx, 'Telegram status request failed.');
 });
 
 bot.hears('Настройка региона', async (ctx) => {
-    try {
-        await ctx.reply(statusMessage(await fetchStatuses(ctx)), mainKeyboard());
-    } catch (error) {
-        logApiError('Legacy Telegram status request failed.', error);
-        await ctx.reply('Не удалось получить статус уведомлений. Попробуйте позже.', mainKeyboard());
-    }
+    await replyWithStatuses(ctx, 'Legacy Telegram status request failed.');
 });
 
 bot.action(/toggle_(dubai|ua)/, async (ctx) => {
@@ -123,11 +140,13 @@ bot.action(/toggle_(dubai|ua)/, async (ctx) => {
 
     try {
         await ctx.editMessageReplyMarkup({ inline_keyboard: [] });
-        await ctx.reply(statusMessage(await fetchStatuses(ctx)), mainKeyboard());
     } catch (error) {
-        logApiError('Legacy Telegram region button handling failed.', error);
-        await ctx.reply('Не удалось получить актуальный статус. Попробуйте позже.', mainKeyboard());
+        console.error('Legacy Telegram keyboard cleanup failed.', {
+            message: error.message,
+        });
     }
+
+    await replyWithStatuses(ctx, 'Legacy Telegram region button handling failed.');
 });
 
 bot.command('id', (ctx) => {

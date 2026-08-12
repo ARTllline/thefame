@@ -4,7 +4,7 @@
   "main": "bot.js",
   "scripts": {
     "check": "node --check bot.js",
-    "test": "npm run check"
+    "test": "npm run check && node --test"
   },
   "author": "vedutenkonikita149@gmail.com",
   "license": "ISC",

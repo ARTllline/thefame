@@ -1,8 +1,14 @@
 @php
     $classPrefix = 'promo-bar';
     $dataPrefix = 'data-promo-bar';
-    $banner = \App\Models\PromoBanner::where('is_active', 1)->first();
-    $content = $banner ? $banner->getTranslation('content', app()->getLocale()) : null;
+    $banner = \Illuminate\Support\Facades\Schema::hasTable('promo_banners')
+        ? \App\Models\PromoBanner::where('is_active', 1)->first()
+        : null;
+    $content = $banner?->getTranslation('content', app()->getLocale());
+
+    if (! $content && app()->getLocale() === 'uk') {
+        $content = $banner?->getTranslation('content', 'ua');
+    }
 @endphp
 
 @if($banner && $content)

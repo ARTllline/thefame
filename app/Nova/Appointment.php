@@ -45,6 +45,17 @@ class Appointment extends Resource
         return [
             ID::make()->sortable(),
 
+            Textarea::make('Процедура', 'treatment')->onlyOnDetail(),
+            Text::make('Email', 'email')->onlyOnDetail(),
+            Text::make('Цель', 'goal')->onlyOnDetail(),
+            Text::make('Источник формы / страница', 'from_page')->onlyOnDetail(),
+            Text::make('UTM source', 'utm_source')->onlyOnDetail(),
+            Text::make('UTM medium', 'utm_medium')->onlyOnDetail(),
+            Text::make('UTM campaign', 'utm_campaign')->onlyOnDetail(),
+            Text::make('UTM term', 'utm_term')->onlyOnDetail(),
+            Text::make('UTM content', 'utm_content')->onlyOnDetail(),
+            Text::make('Referrer', 'referrer')->onlyOnDetail(),
+
             Text::make('Имя', 'name'),
             Text::make('Телефон', 'phone'),
             Text::make('Регион', 'region'),

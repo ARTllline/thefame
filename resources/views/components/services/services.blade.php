@@ -1,5 +1,7 @@
 @php
     $classPrefix ='services';
+    $routeLocale = request()->route('locale');
+    $serviceRouteName = $routeLocale ? 'localized.service' : 'service';
 @endphp
 
 <div data-region="{{$currentRegion}}" class="{{$classPrefix}}">
@@ -21,7 +23,7 @@
                 @foreach($category->services as $service)
                     <div class="{{$classPrefix}}__card">
 
-                        <a href="{{ route('service', $service->code) }}" class="{{$classPrefix}}__card-link">
+                        <a href="{{ route($serviceRouteName, array_filter(['locale' => $routeLocale, 'service' => $service->code])) }}" class="{{$classPrefix}}__card-link">
 
                             <div class="{{$classPrefix}}__card-img">
                                 <svg class="{{$classPrefix}}__card-moving-svg" viewBox="0 0 249 315" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -40,7 +42,7 @@
                             </div>
                         </a>
 
-                        <a class="link {{$classPrefix}}__card-action" href="{{ route('service', $service->code) }}">
+                        <a class="link {{$classPrefix}}__card-action" href="{{ route($serviceRouteName, array_filter(['locale' => $routeLocale, 'service' => $service->code])) }}">
                             {{ __('static.price') }}
                             <svg class="{{$classPrefix}}__card-action-icon">
                                 <use xlink:href="#link"></use>

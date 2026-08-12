@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Services\AppointmentNotificationSettings;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -53,7 +54,7 @@ class AuthController extends Controller
 
         if ($created) {
             $user->email = "telegram_{$validatedData['telegram_id']}@telegram.local";
-            $user->password = Str::random(40);
+            $user->password = Hash::make(Str::random(64));
         }
 
         $user->save();

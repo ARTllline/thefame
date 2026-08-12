@@ -5,11 +5,20 @@ namespace App\Listeners;
 use App\Events\AppointmentCreated;
 use App\Notifications\NewAppointmentNotification;
 use App\Services\AppointmentNotificationSettings;
+use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
-class SendAppointmentNotifications
+class SendAppointmentNotifications implements ShouldQueueAfterCommit
 {
+    public string $queue = 'notifications';
+
+    public int $tries = 1;
+
+    public int $timeout = 60;
+
+    public bool $failOnTimeout = true;
+
     public function __construct(private AppointmentNotificationSettings $settings) {}
 
     public function handle(AppointmentCreated $event): void

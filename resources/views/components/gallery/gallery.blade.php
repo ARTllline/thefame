@@ -2,7 +2,7 @@
     $classPrefix ='gallery';
     $dataPrefix ='data-gallery';
 
-    $mediaItems = $gallery->getMedia('gallery')->all();
+    $mediaItems = $gallery?->getMedia('gallery')->all() ?? [];
     $chunkSize = 3;
     $total = count($mediaItems);
     $globalIndex = 0;
@@ -29,7 +29,7 @@
                                 <div class="slide-item">
                                     <a href="{{ $media->getUrl() }}"
                                        class="glightbox {{$classPrefix}}__swiper-image-link"
-                                       data-gallery="gallery{{ $gallery->id }}"
+                                       data-gallery="gallery{{ $gallery?->id ?? 'empty' }}"
                                        data-g-index="{{ $globalIndex++ }}">
                                         <img src="{{ $media->getUrl('webp') }}"
                                              alt="{{ __('static.about_us') }}"

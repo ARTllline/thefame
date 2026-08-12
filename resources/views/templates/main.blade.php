@@ -1,6 +1,5 @@
 <!doctype html>
-<html
-        lang="uk">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -34,25 +33,17 @@
         })(window, document, 'script', 'dataLayer', 'GTM-5KV8H8D4');</script>
     <!-- End Google Tag Manager -->
 
-    <?php
-
-    $files = scandir('dist');
-
-    foreach ($files as $file) {
-        if (strstr($file, 'js') && !strstr($file, 'map')) {
-            $js = $file;
-        }
-
-        if (strstr($file, 'css') && !strstr($file, 'map')) {
-            $css = $file;
-        }
-    }
-
-    $inlineStyles = file_get_contents('dist/' . $css);
-    ?>
-    <style>
-        {!! $inlineStyles !!}
-    </style>
+    @php
+        $jsFiles = glob(public_path('dist/main-*.js')) ?: [];
+        $cssFiles = glob(public_path('dist/main-*.css')) ?: [];
+        $js = $jsFiles ? basename(end($jsFiles)) : null;
+        $css = $cssFiles ? end($cssFiles) : null;
+    @endphp
+    @if($css)
+        <style>
+            {!! file_get_contents($css) !!}
+        </style>
+    @endif
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -74,7 +65,9 @@
 @include('components.global-loader.global-loader')
 
 
-<script src="/dist/{{ $js }}"></script>
+@if($js)
+    <script src="{{ asset('dist/'.$js) }}"></script>
+@endif
 
 <!-- Meta Pixel Code -->
 <script>

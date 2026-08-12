@@ -9,40 +9,41 @@ use App\Models\TeamMember;
 use App\Models\Device;
 use App\Models\About;
 use App\Models\Gallery;
-use Illuminate\Http\Request;
 
 class RouteController extends Controller
 {
     public function showHome()
     {
-        // 1. Специальные предложения (без фильтрации по региону)
-        $specialOffers = SpecialOffer::ordered()->get();
+        $siteRegion = $this->siteRegion();
 
-        // 2. Блоки "О нас"
         $aboutMain = About::where('code', 'main')->first();
 
-        // 3. Категории и услуги (без фильтрации по региону)
-        $categories = Category::with(['services' => function ($serviceQuery) {
-            $serviceQuery->with('variants')->ordered();
+        $categories = Category::with(['services' => function ($serviceQuery) use ($siteRegion) {
+            $serviceQuery
+                ->whereHas('region', fn ($regionQuery) => $regionQuery->where('code', $siteRegion))
+                ->with('variants')
+                ->ordered();
         }])
-            ->whereHas('services', function ($query) {
-                $query->where('region_id', 1);
+            ->whereHas('services.region', fn ($query) => $query->where('code', $siteRegion))
+            ->ordered()
+            ->get();
+
+        $team = TeamMember::query()
+            ->where(function ($query) use ($siteRegion) {
+                $query->whereHas('region', fn ($regionQuery) => $regionQuery->where('code', $siteRegion))
+                    ->orWhereDoesntHave('region');
             })
             ->ordered()
             ->get();
 
-        // 4. Команда
-        $team = TeamMember::ordered()->get();
-
-        // 5. Галерея
         $gallery = Gallery::first();
 
-        // 6. Оборудование (если планируете выводить на лендинге)
-        $devices = Device::where('region_id', 1)->ordered()->get();
+        $devices = Device::query()
+            ->whereHas('region', fn ($query) => $query->where('code', $siteRegion))
+            ->ordered()
+            ->get();
 
-        // Передаем всё на единую страницу
         return view('home', compact(
-            'specialOffers',
             'aboutMain',
             'categories',
             'team',
@@ -54,7 +55,10 @@ class RouteController extends Controller
     // Оставляем методы для детальных страниц, если они открываются отдельно (например, по клику из лендинга)
     public function showService(string $service)
     {
-        $service = Service::where('code', $service)->first();
+        $service = Service::query()
+            ->where('code', $service)
+            ->whereHas('region', fn ($query) => $query->where('code', $this->siteRegion()))
+            ->firstOrFail();
 
         $service->load([
             'variants' => function ($query) {
@@ -66,6 +70,13 @@ class RouteController extends Controller
         ]);
 
         return view('service-card', compact('service'));
+    }
+
+    private function siteRegion(): string
+    {
+        return config('notifications.appointments.site_region', 'dubai') === 'ua'
+            ? 'ua'
+            : 'dubai';
     }
 
     public function showSpecialOffer(SpecialOffer $offer)

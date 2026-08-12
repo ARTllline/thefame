@@ -46,6 +46,11 @@ require __DIR__.'/../vendor/autoload.php';
 
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
+// cPanel deployments may keep the Laravel application outside the domain's
+// document root. The directory containing this front controller is always the
+// real public path, both there and in a standard Laravel installation.
+$app->usePublicPath(__DIR__);
+
 $kernel = $app->make(Kernel::class);
 
 $response = $kernel->handle(

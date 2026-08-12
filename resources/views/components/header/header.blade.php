@@ -1,12 +1,20 @@
 @php
     $classPrefix = 'header';
     $dataPrefix = 'data-header';
-
-    $links = \App\Models\SocialLink::all();
+    $routeName = Request::route()?->getName();
+    $isHome = in_array($routeName, ['home', 'localized.home'], true);
+    $routeLocale = request()->route('locale');
+    $homeUrl = $routeLocale
+        ? route('localized.home', ['locale' => $routeLocale])
+        : route('home');
+    $links = \App\Models\SocialLink::where(function ($query) {
+        $query->whereHas('region', fn ($regionQuery) => $regionQuery->where('code', 'dubai'))
+            ->orWhereDoesntHave('region');
+    })->get();
 @endphp
 
 <div
-    {{$dataPrefix}} class="{{$classPrefix}} {{ Request::route()->getName() !== 'home' ? $classPrefix . '--dark' : '' }}">
+    {{$dataPrefix}} class="{{$classPrefix}} {{ ! $isHome ? $classPrefix . '--dark' : '' }}">
     <div class="{{$classPrefix}}__mobile-menu">
         <button data-modal-open class="button-round {{$classPrefix}}__mobile-menu-button">
             <svg class="phone-svg" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
@@ -26,7 +34,7 @@
             </svg>
         </button>
         <div class="{{$classPrefix}}__mobile-menu-logo">
-            <a @if(Request::route()->getName() == 'home')href="#hero"@else href="{{route('home')}}"@endif>
+            <a href="{{ $isHome ? '#hero' : $homeUrl }}">
                 <img src="{{ asset('img/logo-dubai.png')}}" alt="Logo">
             </a>
         </div>
@@ -41,12 +49,12 @@
     </div>
 
     <div class="{{$classPrefix}}__menu">
-        <a @if(Request::route()->getName() == 'home')href="#hero"@else href="{{route('home')}}"@endif class="{{$classPrefix}}__menu-logo">
+        <a href="{{ $isHome ? '#hero' : $homeUrl }}" class="{{$classPrefix}}__menu-logo">
             <img src="{{ asset('img/logo-dubai.png')}}" alt="Logo">
         </a>
 
         <ul class="{{$classPrefix}}__menu-list">
-            @if(Request::route()->getName() == 'home')
+            @if($isHome)
                 <li class="{{$classPrefix}}__menu-list-item"><a href="#About_The_Fame" class="{{$classPrefix}}__menu-list-item-title">{{__('static.about')}}</a></li>
                 <li class="{{$classPrefix}}__menu-list-item"><a href="#Services_&_Price" class="{{$classPrefix}}__menu-list-item-title">{{__('static.services')}}</a></li>
                 <li class="{{$classPrefix}}__menu-list-item"><a href="#Our_Devices" class="{{$classPrefix}}__menu-list-item-title">{{__('static.devices')}}</a></li>

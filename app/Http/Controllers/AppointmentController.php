@@ -18,6 +18,7 @@ class AppointmentController extends Controller
             'email' => 'nullable|email|max:255',
             'goal' => 'required|string|max:255',
             'region' => 'nullable|string|max:255',
+            'from_page' => 'nullable|string|max:255',
 
             // UTM
             'utm_source' => 'nullable|string|max:255',

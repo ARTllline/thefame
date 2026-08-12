@@ -49,6 +49,7 @@ return [
     'appointment_call' => 'Или позвони нам:',
     'appointment_error_name' => 'Поле не может быть пустым',
     'appointment_error_phone' => 'Неправильный номер телефона',
+    'appointment_request_error' => 'Не удалось отправить заявку. Проверьте соединение и попробуйте ещё раз.',
     'appointment_success' => 'Заявка отправлена!',
 
     'nav_category' => 'По категории',

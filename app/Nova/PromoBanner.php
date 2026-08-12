@@ -29,7 +29,7 @@ class PromoBanner extends Resource
 
             Text::make('Текст', 'content')
                 ->translatable([
-                    'ua' => 'Українська',
+                    'uk' => 'Українська',
                     'en' => 'English',
                     'ru' => 'Русский',
                 ])

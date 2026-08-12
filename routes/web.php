@@ -1,23 +1,21 @@
 <?php
 
 use App\Http\Controllers\AppointmentController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\RegionController;
+use App\Http\Controllers\RouteController;
 use Illuminate\Support\Facades\Route;
 
-$locale = request()->segment(1);
-$urlLocales = ['ru', 'ua', 'en'];
+Route::controller(RouteController::class)->group(function () {
+    Route::get('/', 'showHome')->name('home');
+    Route::get('/services/{service}', 'showService')->name('service');
+});
 
-if (!in_array($locale, $urlLocales)) {
-    $locale = '';
-}
-
-Route::group([
-    'prefix' => $locale,
-], function () {
-    Route::get('/', [\App\Http\Controllers\RouteController::class, 'showHome'])->name('home');
-    Route::get('/services/{service}', [\App\Http\Controllers\RouteController::class, 'showService'])->name('service');
+Route::prefix('{locale}')
+    ->where(['locale' => 'ru|ua|en'])
+    ->name('localized.')
+    ->controller(RouteController::class)
+    ->group(function () {
+        Route::get('/', 'showHome')->name('home');
+        Route::get('/services/{service}', 'showService')->name('service');
 });
 
 Route::post('/appointment', [AppointmentController::class, 'store'])->name('appointments.store');

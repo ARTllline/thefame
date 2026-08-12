@@ -2,11 +2,15 @@
 
 namespace Tests\Feature;
 
+use App\Events\AppointmentCreated;
+use App\Listeners\SendAppointmentNotifications;
 use App\Notifications\NewAppointmentNotification;
 use App\Services\AppointmentNotificationSettings;
 use App\Services\TelegramService;
+use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Notifications\AnonymousNotifiable;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 use Mockery;
 use RuntimeException;
@@ -15,6 +19,26 @@ use Tests\TestCase;
 class AppointmentNotificationFlowTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_appointment_response_queues_notifications_without_waiting_for_delivery(): void
+    {
+        Event::fake([AppointmentCreated::class]);
+        Notification::fake();
+
+        $this->postJson('/appointment', [
+            'name' => 'Queued Notification',
+            'phone' => '+971500000000',
+            'region' => 'Dubai',
+        ])->assertOk()->assertJson(['success' => true]);
+
+        $this->assertDatabaseHas('appointments', ['name' => 'Queued Notification']);
+        Notification::assertNothingSent();
+        Event::assertDispatched(AppointmentCreated::class);
+
+        $listener = app(SendAppointmentNotifications::class);
+        $this->assertInstanceOf(ShouldQueueAfterCommit::class, $listener);
+        $this->assertSame('notifications', $listener->queue);
+    }
 
     public function test_new_appointment_is_saved_and_routed_to_enabled_channels(): void
     {
@@ -34,12 +58,16 @@ class AppointmentNotificationFlowTest extends TestCase
             'name' => 'Test Client',
             'phone' => '+380000000000',
             'region' => 'Київ',
+            'treatment' => 'Consultation',
+            'from_page' => 'promo_appointment: https://thefame.ae/en',
         ]);
 
         $response->assertOk()->assertJson(['success' => true]);
         $this->assertDatabaseHas('appointments', [
             'name' => 'Test Client',
             'phone' => '+380000000000',
+            'treatment' => 'Consultation',
+            'from_page' => 'promo_appointment: https://thefame.ae/en',
         ]);
 
         Notification::assertSentOnDemandTimes(NewAppointmentNotification::class, 3);

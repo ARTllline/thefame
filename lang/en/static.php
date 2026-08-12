@@ -60,6 +60,7 @@ return [
     'appointment_call' => 'Or call us:',
     'appointment_error_name' => 'Field cannot be empty',
     'appointment_error_phone' => 'Incorrect phone number',
+    'appointment_request_error' => 'We could not send your request. Check your connection and try again.',
     'appointment_success' => 'Booking sent!',
 
 

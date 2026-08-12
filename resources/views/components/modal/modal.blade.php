@@ -2,10 +2,26 @@
     $classPrefix ='modal';
     $dataPrefix ='data-modal';
     $currentRegionName = 'Dubai';
+    $callUs = \App\Models\CallUs::first();
+    $location = \App\Models\Location::first();
+    $socialLinks = \App\Models\SocialLink::where(function ($query) {
+        $query->whereHas('region', fn ($regionQuery) => $regionQuery->where('code', 'dubai'))
+            ->orWhereDoesntHave('region');
+    })->get();
+    $whatsApp = $socialLinks->first(fn ($link) => strcasecmp((string) $link->platform, 'WhatsApp') === 0);
+    $instagram = $socialLinks->first(fn ($link) => strcasecmp((string) $link->platform, 'Instagram') === 0);
+    $phone = $callUs?->phone_dubai ?: $location?->phone ?: '+971 52 577 6016';
+    $email = $callUs?->email_dubai ?: $location?->email ?: 'thefameclinicdmcc@gmail.com';
+    $address = $location?->title ?: 'Fortune Tower, JLT Cluster C, Office 1704, Dubai, UAE';
+    $phoneHref = preg_replace('/[^\d+]/', '', $phone);
+    $whatsAppUrl = $whatsApp?->url ?: 'https://wa.me/971525776016';
+    $instagramUrl = $instagram?->url ?: 'https://instagram.com/the.fame.dubai';
 @endphp
 
-<div {{$dataPrefix}} class="{{$classPrefix}}">
-    <div {{$dataPrefix}}-form class="{{$classPrefix}}__form">
+<div {{$dataPrefix}}
+     data-modal-request-error="{{ __('static.appointment_request_error') }}"
+     class="{{$classPrefix}}">
+    <form {{$dataPrefix}}-form class="{{$classPrefix}}__form" novalidate>
         <div class="{{$classPrefix}}__container">
             <div {{$dataPrefix}}-close class="{{$classPrefix}}__container-close"></div>
 
@@ -35,15 +51,16 @@
             </div>
 
             <input {{$dataPrefix}}-region type="hidden" name="region" value="{{$currentRegionName}}">
+            <input {{$dataPrefix}}-form-type type="hidden" name="form_type" value="standard">
 
-            <button {{$dataPrefix}}-submit class="button button-clip {{$classPrefix}}__container-button">
+            <button type="submit" {{$dataPrefix}}-submit class="button button-clip {{$classPrefix}}__container-button">
                 <span class="clip">
                     <span>{{__('static.sign_up')}}</span>
                     <span>{{__('static.sign_up')}}</span>
                 </span>
             </button>
         </div>
-    </div>
+    </form>
 
     <div {{$dataPrefix}}-success class="{{$classPrefix}}__success-page" style="display: none;">
         <div class="{{$classPrefix}}__container {{$classPrefix}}__container--success">
@@ -58,16 +75,16 @@
 
             <div class="{{$classPrefix}}__success-contacts">
                 <p class="{{$classPrefix}}__success-contacts-title">{{__('static.modal_success_contacts_title')}}</p>
-                <a href="tel:+971525776016" class="contact-link">📞 +971 52 577 6016</a>
-                <a href="mailto:thefameclinicdmcc@gmail.com" class="contact-link">✉️ thefameclinicdmcc@gmail.com</a>
-                <span class="contact-link">📍 Fortune Tower, JLT Cluster C, Office 1704, Dubai, UAE</span>
+                <a href="tel:{{ $phoneHref }}" class="contact-link">📞 {{ $phone }}</a>
+                <a href="mailto:{{ $email }}" class="contact-link">✉️ {{ $email }}</a>
+                <span class="contact-link">📍 {{ $address }}</span>
 
-                <a href="https://wa.me/971525776016" target="_blank" class="button {{$classPrefix}}__success-wa-btn">{{__('static.modal_success_wa_btn')}}</a>
+                <a href="{{ $whatsAppUrl }}" target="_blank" rel="noopener noreferrer" class="button {{$classPrefix}}__success-wa-btn">{{__('static.modal_success_wa_btn')}}</a>
             </div>
 
             <div class="{{$classPrefix}}__success-social">
                 <p>{{__('static.modal_success_social_title')}}</p>
-                <a href="https://instagram.com/the.fame.dubai" target="_blank" class="social-link">@the.fame.dubai</a>
+                <a href="{{ $instagramUrl }}" target="_blank" rel="noopener noreferrer" class="social-link">@the.fame.dubai</a>
             </div>
         </div>
     </div>

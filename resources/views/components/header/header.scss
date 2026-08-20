@@ -403,6 +403,14 @@
         padding: 0;
         gap: 30px;
 
+        &--mobile-only {
+            display: none;
+
+            @include mobile-screen {
+                display: flex;
+            }
+        }
+
         @include mobile-screen {
             flex-direction: column;
             align-items: center; // Центрируем пункты меню на мобилках

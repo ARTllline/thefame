@@ -55,6 +55,16 @@ class RouteController extends Controller
     // Оставляем методы для детальных страниц, если они открываются отдельно (например, по клику из лендинга)
     public function showService(string $service)
     {
+        return $this->renderService($service);
+    }
+
+    public function showLocalizedService(string $locale, string $service)
+    {
+        return $this->renderService($service);
+    }
+
+    private function renderService(string $service)
+    {
         $service = Service::query()
             ->where('code', $service)
             ->whereHas('region', fn ($query) => $query->where('code', $this->siteRegion()))

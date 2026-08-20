@@ -7,6 +7,7 @@
     $homeUrl = $routeLocale
         ? route('localized.home', ['locale' => $routeLocale])
         : route('home');
+    $homeAnchorPrefix = $isHome ? '' : $homeUrl;
     $links = \App\Models\SocialLink::where(function ($query) {
         $query->whereHas('region', fn ($regionQuery) => $regionQuery->where('code', 'dubai'))
             ->orWhereDoesntHave('region');
@@ -34,7 +35,7 @@
             </svg>
         </button>
         <div class="{{$classPrefix}}__mobile-menu-logo">
-            <a href="{{ $isHome ? '#hero' : $homeUrl }}">
+            <a href="{{$homeAnchorPrefix}}#hero">
                 <img src="{{ asset('img/logo-dubai.png')}}" alt="Logo">
             </a>
         </div>
@@ -53,15 +54,13 @@
             <img src="{{ asset('img/logo-dubai.png')}}" alt="Logo">
         </a>
 
-        <ul class="{{$classPrefix}}__menu-list">
-            @if($isHome)
-                <li class="{{$classPrefix}}__menu-list-item"><a href="#About_The_Fame" class="{{$classPrefix}}__menu-list-item-title">{{__('static.about')}}</a></li>
-                <li class="{{$classPrefix}}__menu-list-item"><a href="#Services_&_Price" class="{{$classPrefix}}__menu-list-item-title">{{__('static.services')}}</a></li>
-                <li class="{{$classPrefix}}__menu-list-item"><a href="#Our_Devices" class="{{$classPrefix}}__menu-list-item-title">{{__('static.devices')}}</a></li>
-                <li class="{{$classPrefix}}__menu-list-item"><a href="#Before_After" class="{{$classPrefix}}__menu-list-item-title">{{__('static.gallery')}}</a></li>
-                <li class="{{$classPrefix}}__menu-list-item"><a href="#Our_Team" class="{{$classPrefix}}__menu-list-item-title">{{__('static.team')}}</a></li>
-                <li class="{{$classPrefix}}__menu-list-item"><a href="#Contacts" class="{{$classPrefix}}__menu-list-item-title">{{__('static.locations')}}</a></li>
-            @endif
+        <ul class="{{$classPrefix}}__menu-list {{ ! $isHome ? $classPrefix . '__menu-list--mobile-only' : '' }}">
+            <li class="{{$classPrefix}}__menu-list-item"><a href="{{$homeAnchorPrefix}}#About_The_Fame" class="{{$classPrefix}}__menu-list-item-title">{{__('static.about')}}</a></li>
+            <li class="{{$classPrefix}}__menu-list-item"><a href="{{$homeAnchorPrefix}}#Services_&_Price" class="{{$classPrefix}}__menu-list-item-title">{{__('static.services')}}</a></li>
+            <li class="{{$classPrefix}}__menu-list-item"><a href="{{$homeAnchorPrefix}}#Our_Devices" class="{{$classPrefix}}__menu-list-item-title">{{__('static.devices')}}</a></li>
+            <li class="{{$classPrefix}}__menu-list-item"><a href="{{$homeAnchorPrefix}}#Before_After" class="{{$classPrefix}}__menu-list-item-title">{{__('static.gallery')}}</a></li>
+            <li class="{{$classPrefix}}__menu-list-item"><a href="{{$homeAnchorPrefix}}#Our_Team" class="{{$classPrefix}}__menu-list-item-title">{{__('static.team')}}</a></li>
+            <li class="{{$classPrefix}}__menu-list-item"><a href="{{$homeAnchorPrefix}}#Contacts" class="{{$classPrefix}}__menu-list-item-title">{{__('static.locations')}}</a></li>
         </ul>
 
         <div class="{{$classPrefix}}__menu-bottom">

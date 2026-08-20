@@ -15,7 +15,7 @@ Route::prefix('{locale}')
     ->controller(RouteController::class)
     ->group(function () {
         Route::get('/', 'showHome')->name('home');
-        Route::get('/services/{service}', 'showService')->name('service');
+        Route::get('/services/{service}', 'showLocalizedService')->name('service');
 });
 
 Route::post('/appointment', [AppointmentController::class, 'store'])->name('appointments.store');
